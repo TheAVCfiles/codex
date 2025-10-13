@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────
+# Codex Folio #001: Lilith Loop in 6/8
+# Author: Allison Van Cura (@TheAVCfiles)
+# Dedication: this one’s for you
+# License: Codex License v1.0 (see ../CODEX_LICENSE_V1.md)
+# Redistribution, execution, or monetization without an active Codex agreement is prohibited.
+# Glitch traces discovered during performance must cite the PyRouette™ system.
+# Timestamp (UTC): 2025-07-29T13:22:41Z
+# ─────────────────────────────────────────────
+
+header:
+  title: "Codex Folio #001 — Lilith Loop in 6/8"
+  tempo: 66bpm
+  meter: 6/8
+  style: "Balanchinian glitch"
+  version: v1.0
+  license: "Codex License v1.0"
+
+principal: aurora
+shadow: echo
+
+phrase "spiral invocation":
+  aurora:
+    first_position — tendu_devant ↗ [2] adagio
+    tendu_devant — retiré ↻ [2] legato
+    retiré — arabesque ✶ [4] glitch
+  echo:
+    mirror(aurora) offset [1] breath
+
+phrase "glitch pivot":
+  aurora:
+    arabesque — attitude ↘ [3] fractured
+    attitude — penché ↻ [3] sostenuto
+    penché — bourrée_en_arrière [2] shimmer
+  echo:
+    tendu_a_la_seconde — enveloppé [4] echo
+
+loop 2x "aurora recursion":
+  aurora:
+    plié_fifth — relevé ↻ [2] pulse
+    relevé — ouvert_port_de_bras ↗ [2] luminous
+  echo:
+    sustain pose("shadow_fold") [4] hush
+
+reverence:
+  aurora:
+    soussus — ouverture_de_bras [2] crystalline
+    ouverture_de_bras — first_position [1] grounded
+  echo:
+    dissolve("backline") [3]
+
+export:
+  - glisscode_pdf
+  - encroix_score
+  - metadata_json
