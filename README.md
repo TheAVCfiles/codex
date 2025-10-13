@@ -19,26 +19,40 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 
 ### Quick Start - DTG System
 
+<<<<<<< HEAD
 1. **Deploy the Cloudflare Worker**:
 
+=======
+1. **Deploy the Cloudflare Worker**: 
+>>>>>>> origin/codex/finalize-and-deliver-codex-folio-#001
    ```bash
    # Deploy api/worker.js to your Cloudflare Workers account
    wrangler deploy api/worker.js
    ```
 
 2. **Try the Demo**:
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/codex/finalize-and-deliver-codex-folio-#001
    ```bash
    # Open the interactive demo
    open public/logger-demo.html
    ```
 
 3. **Run Data Processing**:
+<<<<<<< HEAD
 
    ```bash
    # Validate CSV headers
    node scripts/csv_headers.mjs validate
 
+=======
+   ```bash
+   # Validate CSV headers
+   node scripts/csv_headers.mjs validate
+   
+>>>>>>> origin/codex/finalize-and-deliver-codex-folio-#001
    # Process event batches
    node scripts/normalize_batch.mjs process events.json analytics
    ```
@@ -621,6 +635,7 @@ Have you discovered a vulnerability or have concerns about model output? Please 
 ## License
 
 This repository is licensed under the [Apache-2.0 License](LICENSE).
+<<<<<<< HEAD
 
 ---
 
@@ -640,3 +655,5 @@ A workflow is available at `.github/workflows/smallwallets-toolbox.yml`. It runs
 
 1. Lints `smallwallets-openapi.json` with `@redocly/cli`.
 2. Verifies `postman.collection.json` is up to date with `python scripts/generate_postman_collection.py --check`.
+=======
+>>>>>>> origin/codex/finalize-and-deliver-codex-folio-#001
