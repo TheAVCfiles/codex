@@ -19,28 +19,41 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 
 ### Quick Start - DTG System
 
-1. **Deploy the Cloudflare Worker**: 
+1. **Run the local FastAPI server (optional)**:
+
+   ```bash
+   # Install dependencies for the FastAPI application
+   pip install -r api/requirements.txt
+
+   # Start the local API for development and testing
+   uvicorn api:app --reload --port 8000
+   ```
+
+2. **Deploy the Cloudflare Worker**:
+
    ```bash
    # Deploy api/worker.js to your Cloudflare Workers account
    wrangler deploy api/worker.js
    ```
 
-2. **Try the Demo**:
+3. **Try the Demo**:
+
    ```bash
    # Open the interactive demo
    open public/logger-demo.html
    ```
 
-3. **Run Data Processing**:
+4. **Run Data Processing**:
+
    ```bash
    # Validate CSV headers
    node scripts/csv_headers.mjs validate
-   
+
    # Process event batches
    node scripts/normalize_batch.mjs process events.json analytics
    ```
 
-4. **View Privacy Policy**:
+5. **View Privacy Policy**:
    ```bash
    # Review the Zero Loss, Zero Surprise framework
    open public/zero-loss-zero-surprise.html
