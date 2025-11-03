@@ -63,7 +63,35 @@
     </div>
     {% endif %}
 
-    {% if narrative %}
+    {% if narrative_bundle %}
+    <div class="section">
+      <h3>{{ narrative_bundle.headline }}</h3>
+      <p>{{ narrative_bundle.body }}</p>
+      {% if narrative_bundle.sensory_prompts %}
+      <ul>
+        {% for prompt in narrative_bundle.sensory_prompts %}
+        <li>{{ prompt }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if narrative_bundle.interface_cues %}
+      <div class="caption">Interface Cues:</div>
+      <ul>
+        {% for cue in narrative_bundle.interface_cues %}
+        <li>{{ cue }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if narrative_bundle.affirmations %}
+      <div class="caption">Affirmations:</div>
+      <ul>
+        {% for affirmation in narrative_bundle.affirmations %}
+        <li>{{ affirmation }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% elif narrative %}
     <div class="section">
       <h3>Insights</h3>
       <p>{{ narrative }}</p>

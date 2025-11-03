@@ -113,6 +113,17 @@ def build_preview(output_dir: Path | None = None) -> Path:
         output_pdf=None,
         title="KOLL Strategy — Client Preview",
         narrative=True,
+        narrative_profile={
+            "persona_name": "Visionary Integrator",
+            "intention": "multi-sensory onboarding",
+            "sensory_modes": ["visual", "auditory", "kinesthetic"],
+            "spiritual_theme": "synchronicity",
+            "affirmations": [
+                "I welcome signals as sacred choreography.",
+                "Every data pulse re-centers my embodied intuition.",
+            ],
+        },
+        narrative_interface_channels=["voice", "touch", "AR"],
         astrology_enabled=True,
         transits_csv=str(transits_csv),
     )
