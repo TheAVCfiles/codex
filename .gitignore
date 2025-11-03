@@ -81,3 +81,8 @@ CHANGELOG.ignore.md
 # nix related
 .direnv
 .envrc
+
+# ops league artifacts
+ops/operations_dashboard.csv
+ops/leoduct_league.csv
+ops/leoduct_leaderboard.html
