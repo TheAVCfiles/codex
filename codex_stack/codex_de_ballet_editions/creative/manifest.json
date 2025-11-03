@@ -1,0 +1,10 @@
+{
+  "type": "edition",
+  "name": "creative",
+  "assets": [
+    "sessions/brief_template.md",
+    "assets/custom_rights.json"
+  ],
+  "license": "codex-creative-v1",
+  "includes": ["interpreter"]
+}

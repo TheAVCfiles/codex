@@ -1,0 +1,7 @@
+{
+  "type": "connectors",
+  "name": "mcp_connectors",
+  "version": "0.1.0",
+  "providers": ["google_workspace", "dropbox", "notion", "crm"],
+  "docs": ["README.md"]
+}
