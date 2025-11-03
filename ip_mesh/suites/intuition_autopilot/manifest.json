@@ -1,0 +1,15 @@
+{
+  "type": "suite",
+  "name": "intuition_autopilot",
+  "version": "0.1.0",
+  "includes": ["koll_core", "mayfleur_core", "ui_td"],
+  "entrypoints": [
+    {
+      "scheduler": "ops/autopilot_scheduler.py"
+    }
+  ],
+  "outputs": ["ops/mesh.json"],
+  "licensing": {
+    "tier": "prototype"
+  }
+}

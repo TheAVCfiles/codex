@@ -1,0 +1,12 @@
+{
+  "type": "interface",
+  "name": "ui_td",
+  "version": "0.1.0",
+  "bridges": [
+    {
+      "from": "koll_core:EI",
+      "to": "mayfleur_core:osc.lights.percent"
+    }
+  ],
+  "depends_on": ["koll_core", "mayfleur_core"]
+}

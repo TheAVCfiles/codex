@@ -1,0 +1,34 @@
+{
+  "type": "engine",
+  "name": "koll_core",
+  "version": "0.1.0",
+  "inputs": {
+    "data": ["datasets/sim_data.csv", "datasets/asset_*.csv"],
+    "configs": ["configs/koll_config.yaml", "configs/koll_portfolio.yaml"]
+  },
+  "outputs": {
+    "reports": ["reports/equity_curve.jpeg", "reports/ei_last_day.jpeg"],
+    "tables": ["outputs/*.csv"]
+  },
+  "parameters": {
+    "am_window": 30,
+    "vm_short": 10,
+    "vm_long": 50,
+    "vm_norm": 240,
+    "ei_weights": [0.6, 0.4],
+    "low_quantile": 0.6,
+    "high_quantile": 0.9,
+    "risk_breaker_dd": 0.1
+  },
+  "docs": ["README 3.md"],
+  "depends_on": [],
+  "security": {
+    "restricted": ["api_keys", "live_endpoints"]
+  },
+  "provenance": [
+    "features.py",
+    "backtest.py",
+    "strategy_koll.py",
+    "data_adapters.py"
+  ]
+}

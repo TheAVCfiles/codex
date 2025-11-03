@@ -1,0 +1,19 @@
+version: 0.1.0
+name: koll_core_demo
+data:
+  csv: ip_mesh/engines/koll_core/datasets/sim_data.csv
+parameters:
+  am_window: 30
+  vm_short: 10
+  vm_long: 50
+  vm_norm: 240
+  ei_weights: [0.6, 0.4]
+  quantiles:
+    low: 0.6
+    high: 0.9
+risk:
+  max_drawdown: 0.1
+outputs:
+  reports:
+    - ip_mesh/engines/koll_core/reports/equity_curve.jpeg
+    - ip_mesh/engines/koll_core/reports/ei_last_day.jpeg

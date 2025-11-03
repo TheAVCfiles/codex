@@ -1,0 +1,286 @@
+{
+  "nodes": {
+    "suite:intuition_autopilot": {
+      "type": "suite",
+      "name": "intuition_autopilot",
+      "version": "0.1.0",
+      "path": "suites/intuition_autopilot",
+      "hash": "eb027b5ddf156d24",
+      "metadata": {
+        "includes": ["koll_core", "mayfleur_core", "ui_td"],
+        "entrypoints": [
+          {
+            "scheduler": "ops/autopilot_scheduler.py"
+          }
+        ],
+        "outputs": ["ops/mesh.json"],
+        "licensing": {
+          "tier": "prototype"
+        }
+      }
+    },
+    "suite:koll_finance_ritual": {
+      "type": "suite",
+      "name": "koll_finance_ritual",
+      "version": "0.1.0",
+      "path": "suites/koll_finance_ritual",
+      "hash": "ca2c995241fa32f5",
+      "metadata": {
+        "includes": ["koll_core", "mythematics_docs"],
+        "entrypoints": [
+          {
+            "cli": "python engines/koll_core/backtest.py --config engines/koll_core/configs/koll_config.yaml"
+          }
+        ],
+        "outputs": ["engines/koll_core/reports/*"],
+        "licensing": {
+          "tier": "private-edition"
+        }
+      }
+    },
+    "suite:decrypt_pedagogy": {
+      "type": "suite",
+      "name": "decrypt_pedagogy",
+      "version": "0.1.0",
+      "path": "suites/decrypt_pedagogy",
+      "hash": "99fd7f00ec81e3da",
+      "metadata": {
+        "includes": ["decrypt_assets", "mythematics_docs"],
+        "entrypoints": [
+          {
+            "docs": "narrative/decrypt_assets/development_plan.md"
+          }
+        ],
+        "outputs": ["narrative/decrypt_assets/*"],
+        "licensing": {
+          "tier": "curriculum"
+        }
+      }
+    },
+    "suite:mayfleur_embodiment": {
+      "type": "suite",
+      "name": "mayfleur_embodiment",
+      "version": "0.1.0",
+      "path": "suites/mayfleur_embodiment",
+      "hash": "d6f824383ec2b17b",
+      "metadata": {
+        "includes": ["mayfleur_core", "ui_td"],
+        "entrypoints": [
+          {
+            "touchdesigner": "engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox"
+          }
+        ],
+        "outputs": ["engines/mayfleur_core/touchdesigner/*.tox"],
+        "licensing": {
+          "tier": "studio"
+        }
+      }
+    },
+    "interface:ui_web": {
+      "type": "interface",
+      "name": "ui_web",
+      "version": "0.1.0",
+      "path": "interfaces/ui_web",
+      "hash": "4aff71069acebdee",
+      "metadata": {
+        "routes": [
+          {
+            "path": "/api/koll/ei",
+            "method": "GET",
+            "source": "koll_core"
+          }
+        ],
+        "depends_on": ["koll_core"]
+      }
+    },
+    "interface:ui_td": {
+      "type": "interface",
+      "name": "ui_td",
+      "version": "0.1.0",
+      "path": "interfaces/ui_td",
+      "hash": "ef70c06473b1eded",
+      "metadata": {
+        "bridges": [
+          {
+            "from": "koll_core:EI",
+            "to": "mayfleur_core:osc.lights.percent"
+          }
+        ],
+        "depends_on": ["koll_core", "mayfleur_core"]
+      }
+    },
+    "engine:koll_core": {
+      "type": "engine",
+      "name": "koll_core",
+      "version": "0.1.0",
+      "path": "engines/koll_core",
+      "hash": "48f002eb1542640d",
+      "metadata": {
+        "inputs": {
+          "data": ["datasets/sim_data.csv", "datasets/asset_*.csv"],
+          "configs": ["configs/koll_config.yaml", "configs/koll_portfolio.yaml"]
+        },
+        "outputs": {
+          "reports": ["reports/equity_curve.jpeg", "reports/ei_last_day.jpeg"],
+          "tables": ["outputs/*.csv"]
+        },
+        "parameters": {
+          "am_window": 30,
+          "vm_short": 10,
+          "vm_long": 50,
+          "vm_norm": 240,
+          "ei_weights": [0.6, 0.4],
+          "low_quantile": 0.6,
+          "high_quantile": 0.9,
+          "risk_breaker_dd": 0.1
+        },
+        "docs": ["README 3.md"],
+        "depends_on": [],
+        "security": {
+          "restricted": ["api_keys", "live_endpoints"]
+        },
+        "provenance": [
+          "features.py",
+          "backtest.py",
+          "strategy_koll.py",
+          "data_adapters.py"
+        ]
+      }
+    },
+    "data:koll_csv_bundle": {
+      "type": "data",
+      "name": "koll_csv_bundle",
+      "version": "0.1.0",
+      "path": "engines/koll_core/datasets",
+      "hash": "4329674a000d0ff8",
+      "metadata": {
+        "tables": [
+          "datasets/sim_data.csv",
+          "datasets/asset_a.csv",
+          "datasets/asset_b.csv",
+          "datasets/asset_c.csv"
+        ],
+        "schemas": [
+          {
+            "time": "datetime",
+            "price": "float",
+            "mentions": "int?",
+            "sentiment": "float?",
+            "volume": "float?"
+          }
+        ],
+        "used_by": ["koll_core"]
+      }
+    },
+    "engine:mayfleur_core": {
+      "type": "engine",
+      "name": "mayfleur_core",
+      "version": "0.1.0",
+      "path": "engines/mayfleur_core",
+      "hash": "ec1a03ec0cd79d86",
+      "metadata": {
+        "inputs": {
+          "osc_ports": {
+            "lights": 9004,
+            "grid": 9002,
+            "marley": 9001,
+            "aqua": 9003
+          },
+          "uniforms": {
+            "uPercent": "percent/100.0"
+          }
+        },
+        "outputs": {
+          "tox": ["touchdesigner/Mayfleur_Receiver.tox"]
+        },
+        "docs": [
+          "touchdesigner/TouchDesigner_TOX_Recipe.md",
+          "touchdesigner/TouchDesigner_TOX_Recipe_Nodes.json"
+        ],
+        "depends_on": [],
+        "provenance": ["touchdesigner/td_dat_script.py"]
+      }
+    },
+    "narrative:mythematics_docs": {
+      "type": "narrative",
+      "name": "mythematics_docs",
+      "version": "0.1.0",
+      "path": "narrative/mythematics_docs",
+      "hash": "9b561fe6a226422f",
+      "metadata": {
+        "docs": ["somatic_manifest.md", "glossary.md"],
+        "links": [
+          {
+            "concept": "Glitch as Entry",
+            "used_by": ["koll_core"]
+          },
+          {
+            "concept": "Poem as Proof",
+            "used_by": ["koll_core", "mayfleur_core"]
+          }
+        ]
+      }
+    },
+    "narrative:decrypt_assets": {
+      "type": "narrative",
+      "name": "decrypt_assets",
+      "version": "0.1.0",
+      "path": "narrative/decrypt_assets",
+      "hash": "51fbf5e2948d0039",
+      "metadata": {
+        "docs": ["development_plan.md"],
+        "links": []
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "koll_core"
+    },
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "mayfleur_core"
+    },
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "ui_td"
+    },
+    {
+      "from": "suite:koll_finance_ritual",
+      "to": "koll_core"
+    },
+    {
+      "from": "suite:koll_finance_ritual",
+      "to": "mythematics_docs"
+    },
+    {
+      "from": "suite:decrypt_pedagogy",
+      "to": "decrypt_assets"
+    },
+    {
+      "from": "suite:decrypt_pedagogy",
+      "to": "mythematics_docs"
+    },
+    {
+      "from": "suite:mayfleur_embodiment",
+      "to": "mayfleur_core"
+    },
+    {
+      "from": "suite:mayfleur_embodiment",
+      "to": "ui_td"
+    },
+    {
+      "from": "interface:ui_web",
+      "to": "koll_core"
+    },
+    {
+      "from": "interface:ui_td",
+      "to": "koll_core"
+    },
+    {
+      "from": "interface:ui_td",
+      "to": "mayfleur_core"
+    }
+  ]
+}

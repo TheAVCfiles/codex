@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    {
+      "name": "oscin_lights",
+      "type": "oscin",
+      "port": 9004,
+      "outputs": ["math_percent"]
+    },
+    {
+      "name": "math_percent",
+      "type": "math",
+      "operation": "multiply",
+      "parameter": 0.01,
+      "outputs": ["uniform_percent"]
+    },
+    {
+      "name": "uniform_percent",
+      "type": "uniform",
+      "uniform": "uPercent",
+      "inputs": ["math_percent"]
+    }
+  ]
+}
