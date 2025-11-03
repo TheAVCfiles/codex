@@ -1,0 +1,13 @@
+{
+  "type": "interface",
+  "name": "ui_web",
+  "version": "0.1.0",
+  "routes": [
+    {
+      "path": "/api/koll/ei",
+      "method": "GET",
+      "source": "koll_core"
+    }
+  ],
+  "depends_on": ["koll_core"]
+}

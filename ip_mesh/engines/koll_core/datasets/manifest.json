@@ -1,0 +1,21 @@
+{
+  "type": "data",
+  "name": "koll_csv_bundle",
+  "version": "0.1.0",
+  "tables": [
+    "datasets/sim_data.csv",
+    "datasets/asset_a.csv",
+    "datasets/asset_b.csv",
+    "datasets/asset_c.csv"
+  ],
+  "schemas": [
+    {
+      "time": "datetime",
+      "price": "float",
+      "mentions": "int?",
+      "sentiment": "float?",
+      "volume": "float?"
+    }
+  ],
+  "used_by": ["koll_core"]
+}

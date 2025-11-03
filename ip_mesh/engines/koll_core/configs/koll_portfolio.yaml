@@ -1,0 +1,17 @@
+version: 0.1.0
+portfolio:
+  assets:
+    - name: Asset A
+      dataset: ip_mesh/engines/koll_core/datasets/asset_a.csv
+    - name: Asset B
+      dataset: ip_mesh/engines/koll_core/datasets/asset_b.csv
+    - name: Asset C
+      dataset: ip_mesh/engines/koll_core/datasets/asset_c.csv
+  top_n: 2
+  rebalance_days: 5
+  risk:
+    max_drawdown: 0.12
+    vol_target: 0.15
+  quantiles:
+    low: 0.55
+    high: 0.92

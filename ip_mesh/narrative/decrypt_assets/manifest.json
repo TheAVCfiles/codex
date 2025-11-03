@@ -1,0 +1,7 @@
+{
+  "type": "narrative",
+  "name": "decrypt_assets",
+  "version": "0.1.0",
+  "docs": ["development_plan.md"],
+  "links": []
+}
