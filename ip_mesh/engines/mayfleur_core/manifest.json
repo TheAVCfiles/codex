@@ -1,0 +1,16 @@
+{
+  "type": "engine",
+  "name": "mayfleur_core",
+  "version": "0.1.0",
+  "inputs": {
+    "osc_ports": { "lights": 9004, "grid": 9002, "marley": 9001, "aqua": 9003 },
+    "uniforms": { "uPercent": "percent/100.0" }
+  },
+  "outputs": { "tox": ["touchdesigner/Mayfleur_Receiver.tox"] },
+  "docs": [
+    "touchdesigner/TouchDesigner_TOX_Recipe.md",
+    "touchdesigner/TouchDesigner_TOX_Recipe_Nodes.json"
+  ],
+  "depends_on": [],
+  "provenance": ["touchdesigner/td_dat_script.py"]
+}
