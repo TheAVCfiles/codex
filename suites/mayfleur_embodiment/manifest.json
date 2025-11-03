@@ -1,0 +1,17 @@
+{
+  "type": "suite",
+  "name": "mayfleur_embodiment",
+  "version": "0.1.0",
+  "includes": ["mayfleur_core", "ui_td", "mythematics_docs"],
+  "description": "Embodied visualization/haptics: TouchDesigner receiver + OSC bridges driven by percent/uPercent.",
+  "entrypoints": [
+    {
+      "cli": "python interfaces/ui_td/receiver_bridge.py"
+    }
+  ],
+  "outputs": ["engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox"],
+  "notes": [
+    "OSC ports: lights=9004, grid=9002, marley=9001, aqua=9003",
+    "GLSL uniform uPercent = percent/100.0"
+  ]
+}
