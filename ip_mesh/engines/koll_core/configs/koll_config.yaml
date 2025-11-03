@@ -1,0 +1,19 @@
+# Single-asset configuration for KOLL backtests
+# Anchors back to the EI quantiles/risk recipes in the docs.
+data:
+  primary: engines/koll_core/datasets/sim_data.csv
+  supplemental:
+    - engines/koll_core/datasets/asset_a.csv
+features:
+  am_window: 30
+  vm_short: 10
+  vm_long: 50
+  vm_norm: 240
+strategy:
+  ei_weights: [0.6, 0.4]
+  low_quantile: 0.60
+  high_quantile: 0.90
+risk:
+  risk_breaker_dd: 0.10
+outputs:
+  path: engines/koll_core/outputs

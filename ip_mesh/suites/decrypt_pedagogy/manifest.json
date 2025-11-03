@@ -1,0 +1,7 @@
+{
+  "type": "suite",
+  "name": "decrypt_pedagogy",
+  "version": "0.1.0",
+  "includes": ["decrypt_assets", "mythematics_docs"],
+  "entrypoints": [{ "cli": "echo 'Deploy curriculum assets'" }]
+}
