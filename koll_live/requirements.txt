@@ -1,0 +1,5 @@
+pandas
+numpy
+matplotlib
+jinja2
+reportlab
