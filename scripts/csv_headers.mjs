@@ -151,18 +151,41 @@ async function processFile(filePath) {
  */
 async function main() {
   const args = process.argv.slice(2);
-  const command = args[0];
-  
-  // Get data directory path
-  const dataDir = path.join(process.cwd(), 'data');
+  const normalizedArgs = [];
+  let dataDir = path.join(process.cwd(), 'data');
+
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+
+    if (arg === '--data-dir') {
+      const next = args[i + 1];
+      if (!next) {
+        console.error('❌ Missing value for --data-dir option.');
+        process.exit(1);
+      }
+      dataDir = path.resolve(next);
+      i += 1;
+    } else if (arg.startsWith('--data-dir=')) {
+      const value = arg.slice('--data-dir='.length);
+      if (!value) {
+        console.error('❌ Missing value for --data-dir option.');
+        process.exit(1);
+      }
+      dataDir = path.resolve(value);
+    } else {
+      normalizedArgs.push(arg);
+    }
+  }
+
+  const command = normalizedArgs[0];
   
   try {
     await fs.access(dataDir);
   } catch {
-    console.error('❌ Data directory not found. Run this script from the project root.');
+    console.error(`❌ Data directory not found: ${dataDir}`);
     process.exit(1);
   }
-  
+
   if (command === 'validate') {
     console.log('🔍 Validating CSV headers...');
     
@@ -210,17 +233,21 @@ async function main() {
 📋 CSV Headers Management Tool
 
 Usage:
-  node csv_headers.mjs <command>
+  node csv_headers.mjs <command> [--data-dir <path>]
 
 Commands:
   validate    Check if CSV headers match expected schema
-  fix         Fix CSV headers by rewriting them correctly  
+  fix         Fix CSV headers by rewriting them correctly
   list        Show expected headers for all CSV files
+
+Options:
+  --data-dir <path>  Override the default ./data directory
 
 Examples:
   node csv_headers.mjs validate
   node csv_headers.mjs fix
   node csv_headers.mjs list
+  node csv_headers.mjs validate --data-dir ../other-data
 `);
     process.exit(1);
   }
