@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.neon.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "scripts/neon/**/*.ts",
+    "vitest.neon.config.ts"
+  ],
+  "exclude": []
+}
