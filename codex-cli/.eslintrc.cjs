@@ -16,7 +16,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json"],
+    project: ["./tsconfig.json", "./scripts/tsconfig.json"],
   },
   plugins: ["import", "react-hooks", "react-refresh"],
   rules: {
@@ -90,6 +90,13 @@ module.exports = {
     "react-hooks/exhaustive-deps": "error",
   },
   overrides: [
+    {
+      files: ["scripts/**/*.{js,ts}"],
+      rules: {
+        "no-console": "off",
+        "no-await-in-loop": "off",
+      },
+    },
     {
       // apply only to files under tests/
       files: ["tests/**/*.{ts,tsx,js,jsx}"],
