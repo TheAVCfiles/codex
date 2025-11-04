@@ -1,0 +1,61 @@
+name: Provision Neon DB (Preview)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  neon:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: echo "store_path=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.store_path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build scripts
+        run: pnpm run --if-present build
+
+      - name: Provision Neon resources
+        id: neon
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+          DB_NAME: decrypt_${{ github.event.pull_request.number }}
+          DB_ROLE: neondb_owner
+          PARENT_BRANCH_ID: ${{ secrets.NEON_PARENT_BRANCH_ID }}
+        run: pnpm exec node dist/bootstrap_db.js
+
+      - name: Write URIs
+        run: |
+          echo "${URIS_JSON}" > uris.json
+        env:
+          URIS_JSON: ${{ steps.neon.outputs.uris || '' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: neon-uris
+          path: uris.json
