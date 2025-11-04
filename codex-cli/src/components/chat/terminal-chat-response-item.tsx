@@ -13,10 +13,10 @@ import type { FileOpenerScheme } from "src/utils/config";
 import { useTerminalSize } from "../../hooks/use-terminal-size";
 import { collapseXmlBlocks } from "../../utils/file-tag-utils";
 import { parseToolCall, parseToolCallOutput } from "../../utils/parsers";
+import { createPatchedTerminalRenderer } from "../../utils/patched-terminal-renderer";
 import chalk, { type ForegroundColorName } from "chalk";
 import { Box, Text } from "ink";
 import { parse, setOptions } from "marked";
-import TerminalRenderer from "marked-terminal";
 import path from "path";
 import React, { useEffect, useMemo } from "react";
 import { formatCommandForDisplay } from "src/format-command.js";
@@ -288,8 +288,10 @@ export function Markdown({
 
     // Configure marked for this specific render
     setOptions({
-      // @ts-expect-error missing parser, space props
-      renderer: new TerminalRenderer({ ...options, width: size.columns }),
+      renderer: createPatchedTerminalRenderer({
+        ...options,
+        width: size.columns,
+      }),
     });
     const parsed = parse(linkifiedMarkdown, { async: false }).trim();
 
