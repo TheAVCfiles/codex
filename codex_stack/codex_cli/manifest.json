@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "codex_cli",
+  "version": "0.1.0",
+  "exports": ["bin/codex"],
+  "commands": ["init", "connect", "run", "report"],
+  "depends_on": ["connectors", "dtg_worker", "ledger_demo"],
+  "security": {
+    "env": ["CODEX_API", "LEDGER_URL"]
+  },
+  "docs": ["README.md"]
+}

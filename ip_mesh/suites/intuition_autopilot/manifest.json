@@ -1,0 +1,8 @@
+{
+  "type": "suite",
+  "name": "intuition_autopilot",
+  "version": "0.1.0",
+  "includes": ["koll_core", "mayfleur_core", "ui_td", "mythematics_docs"],
+  "entrypoints": [{ "cli": "python ops/autopilot_scheduler.py" }],
+  "filters": ["birth_chart_layer"]
+}

@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [{ "src": "api/**/*.js", "use": "@vercel/node" }],
+  "routes": [
+    { "src": "/api/fits", "dest": "/api/fits/index.js" },
+    { "src": "/api/fits/(?<name>[^/]+)", "dest": "/api/fits/[name].js" },
+    { "src": "/api/kofi-webhook", "dest": "/api/kofi-webhook.js" }
+  ]
+}

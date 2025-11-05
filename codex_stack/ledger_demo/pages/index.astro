@@ -1,0 +1,27 @@
+---
+import StatCard from "../components/StatCard.astro";
+
+const stats = [
+  { label: "Total Events", value: "—" },
+  { label: "Sentient Cents Minted", value: "—" },
+  { label: "Grace Index", value: "—" },
+  { label: "Active Licenses", value: "—" }
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Codex Ledger Transparency</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Sentient Cents Transparency</h1>
+      <p>Embed this dashboard to showcase event-to-earnings telemetry.</p>
+      <section class="stats">
+        {stats.map((stat) => <StatCard label={stat.label} value={stat.value} />)}
+      </section>
+    </main>
+  </body>
+</html>
