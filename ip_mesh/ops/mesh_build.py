@@ -24,26 +24,48 @@ def find_manifests() -> list[str]:
 
 
 def build_mesh() -> dict:
+    manifests = [(mf, load_manifest(mf)) for mf in find_manifests()]
+
     nodes: dict[str, dict] = {}
-    edges: list[dict[str, str]] = []
-    for mf in find_manifests():
-        m = load_manifest(mf)
-        name = m["name"]
-        node_id = f"{m['type']}:{name}"
+    nodes_by_name: dict[str, set[str]] = {}
+    for mf, manifest in manifests:
+        name = manifest["name"]
+        node_id = f"{manifest['type']}:{name}"
         nodes[node_id] = {
-            "type": m["type"],
+            "type": manifest["type"],
             "name": name,
-            "version": m.get("version", "0.0.0"),
+            "version": manifest.get("version", "0.0.0"),
             "path": os.path.relpath(os.path.dirname(mf), ROOT),
             "hash": hash_file(mf),
             "metadata": {
                 k: v
-                for k, v in m.items()
+                for k, v in manifest.items()
                 if k not in ["name", "type", "version"]
             },
         }
-        for dep in m.get("depends_on", []) + m.get("includes", []):
-            edges.append({"from": node_id, "to": dep})
+        nodes_by_name.setdefault(name, set()).add(node_id)
+
+    def resolve_dependency(dep: str) -> str:
+        if ":" in dep:
+            if dep not in nodes:
+                raise KeyError(f"Unknown dependency id '{dep}'")
+            return dep
+
+        candidates = nodes_by_name.get(dep)
+        if not candidates:
+            raise KeyError(f"Unknown dependency name '{dep}'")
+        if len(candidates) > 1:
+            raise ValueError(
+                f"Ambiguous dependency '{dep}' matches multiple nodes: {sorted(candidates)}"
+            )
+        return next(iter(candidates))
+
+    edges: list[dict[str, str]] = []
+    for _, manifest in manifests:
+        node_id = f"{manifest['type']}:{manifest['name']}"
+        for dep in manifest.get("depends_on", []) + manifest.get("includes", []):
+            edges.append({"from": node_id, "to": resolve_dependency(dep)})
+
     return {"nodes": nodes, "edges": edges}
 
 

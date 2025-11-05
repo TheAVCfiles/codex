@@ -1,87 +1,11 @@
 {
   "nodes": {
-    "suite:intuition_autopilot": {
-      "type": "suite",
-      "name": "intuition_autopilot",
-      "version": "0.1.0",
-      "path": "suites/intuition_autopilot",
-      "hash": "eb027b5ddf156d24",
-      "metadata": {
-        "includes": ["koll_core", "mayfleur_core", "ui_td"],
-        "entrypoints": [
-          {
-            "scheduler": "ops/autopilot_scheduler.py"
-          }
-        ],
-        "outputs": ["ops/mesh.json"],
-        "licensing": {
-          "tier": "prototype"
-        }
-      }
-    },
-    "suite:koll_finance_ritual": {
-      "type": "suite",
-      "name": "koll_finance_ritual",
-      "version": "0.1.0",
-      "path": "suites/koll_finance_ritual",
-      "hash": "ca2c995241fa32f5",
-      "metadata": {
-        "includes": ["koll_core", "mythematics_docs"],
-        "entrypoints": [
-          {
-            "cli": "python engines/koll_core/backtest.py --config engines/koll_core/configs/koll_config.yaml"
-          }
-        ],
-        "outputs": ["engines/koll_core/reports/*"],
-        "licensing": {
-          "tier": "private-edition"
-        }
-      }
-    },
-    "suite:decrypt_pedagogy": {
-      "type": "suite",
-      "name": "decrypt_pedagogy",
-      "version": "0.1.0",
-      "path": "suites/decrypt_pedagogy",
-      "hash": "99fd7f00ec81e3da",
-      "metadata": {
-        "includes": ["decrypt_assets", "mythematics_docs"],
-        "entrypoints": [
-          {
-            "docs": "narrative/decrypt_assets/development_plan.md"
-          }
-        ],
-        "outputs": ["narrative/decrypt_assets/*"],
-        "licensing": {
-          "tier": "curriculum"
-        }
-      }
-    },
-    "suite:mayfleur_embodiment": {
-      "type": "suite",
-      "name": "mayfleur_embodiment",
-      "version": "0.1.0",
-      "path": "suites/mayfleur_embodiment",
-      "hash": "d6f824383ec2b17b",
-      "metadata": {
-        "includes": ["mayfleur_core", "ui_td"],
-        "entrypoints": [
-          {
-            "touchdesigner": "engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox"
-          }
-        ],
-        "outputs": ["engines/mayfleur_core/touchdesigner/*.tox"],
-        "licensing": {
-          "tier": "studio"
-        }
-      }
-    },
     "interface:ui_web": {
       "type": "interface",
       "name": "ui_web",
       "version": "0.1.0",
       "path": "interfaces/ui_web",
-      "hash": "4aff71069acebdee",
+      "hash": "636ba8985595055d",
       "metadata": {
         "routes": [
           {
@@ -98,7 +22,7 @@
       "name": "ui_td",
       "version": "0.1.0",
       "path": "interfaces/ui_td",
-      "hash": "ef70c06473b1eded",
+      "hash": "269bc6996e128ba2",
       "metadata": {
         "bridges": [
           {
@@ -114,7 +38,7 @@
       "name": "koll_core",
       "version": "0.1.0",
       "path": "engines/koll_core",
-      "hash": "48f002eb1542640d",
+      "hash": "e96c47502fd49c09",
       "metadata": {
         "inputs": {
           "data": ["datasets/sim_data.csv", "datasets/asset_*.csv"],
@@ -152,7 +76,7 @@
       "name": "koll_csv_bundle",
       "version": "0.1.0",
       "path": "engines/koll_core/datasets",
-      "hash": "4329674a000d0ff8",
+      "hash": "c96ab9018279faba",
       "metadata": {
         "tables": [
           "datasets/sim_data.csv",
@@ -177,7 +101,7 @@
       "name": "mayfleur_core",
       "version": "0.1.0",
       "path": "engines/mayfleur_core",
-      "hash": "ec1a03ec0cd79d86",
+      "hash": "32e23781d4b12064",
       "metadata": {
         "inputs": {
           "osc_ports": {
@@ -201,12 +125,23 @@
         "provenance": ["touchdesigner/td_dat_script.py"]
       }
     },
+    "narrative:decrypt_assets": {
+      "type": "narrative",
+      "name": "decrypt_assets",
+      "version": "0.1.0",
+      "path": "narrative/decrypt_assets",
+      "hash": "cad932c78c9fb580",
+      "metadata": {
+        "docs": ["development_plan.md"],
+        "links": []
+      }
+    },
     "narrative:mythematics_docs": {
       "type": "narrative",
       "name": "mythematics_docs",
       "version": "0.1.0",
       "path": "narrative/mythematics_docs",
-      "hash": "9b561fe6a226422f",
+      "hash": "e37a6a5e613d7b88",
       "metadata": {
         "docs": ["somatic_manifest.md", "glossary.md"],
         "links": [
@@ -221,66 +156,131 @@
         ]
       }
     },
-    "narrative:decrypt_assets": {
-      "type": "narrative",
-      "name": "decrypt_assets",
+    "suite:koll_finance_ritual": {
+      "type": "suite",
+      "name": "koll_finance_ritual",
       "version": "0.1.0",
-      "path": "narrative/decrypt_assets",
-      "hash": "51fbf5e2948d0039",
+      "path": "suites/koll_finance_ritual",
+      "hash": "057a3dcab4a6a47a",
       "metadata": {
-        "docs": ["development_plan.md"],
-        "links": []
+        "includes": ["koll_core", "mythematics_docs"],
+        "entrypoints": [
+          {
+            "cli": "python engines/koll_core/backtest.py --config engines/koll_core/configs/koll_config.yaml"
+          }
+        ],
+        "outputs": ["engines/koll_core/reports/*"],
+        "licensing": {
+          "tier": "private-edition"
+        }
+      }
+    },
+    "suite:intuition_autopilot": {
+      "type": "suite",
+      "name": "intuition_autopilot",
+      "version": "0.1.0",
+      "path": "suites/intuition_autopilot",
+      "hash": "491ecaa69bd9ee4f",
+      "metadata": {
+        "includes": ["koll_core", "mayfleur_core", "ui_td"],
+        "entrypoints": [
+          {
+            "scheduler": "ops/autopilot_scheduler.py"
+          }
+        ],
+        "outputs": ["ops/mesh.json"],
+        "licensing": {
+          "tier": "prototype"
+        }
+      }
+    },
+    "suite:mayfleur_embodiment": {
+      "type": "suite",
+      "name": "mayfleur_embodiment",
+      "version": "0.1.0",
+      "path": "suites/mayfleur_embodiment",
+      "hash": "b662b9787a7e02cf",
+      "metadata": {
+        "includes": ["mayfleur_core", "ui_td"],
+        "entrypoints": [
+          {
+            "touchdesigner": "engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox"
+          }
+        ],
+        "outputs": ["engines/mayfleur_core/touchdesigner/*.tox"],
+        "licensing": {
+          "tier": "studio"
+        }
+      }
+    },
+    "suite:decrypt_pedagogy": {
+      "type": "suite",
+      "name": "decrypt_pedagogy",
+      "version": "0.1.0",
+      "path": "suites/decrypt_pedagogy",
+      "hash": "341427636e299c93",
+      "metadata": {
+        "includes": ["decrypt_assets", "mythematics_docs"],
+        "entrypoints": [
+          {
+            "docs": "narrative/decrypt_assets/development_plan.md"
+          }
+        ],
+        "outputs": ["narrative/decrypt_assets/*"],
+        "licensing": {
+          "tier": "curriculum"
+        }
       }
     }
   },
   "edges": [
     {
-      "from": "suite:intuition_autopilot",
-      "to": "koll_core"
-    },
-    {
-      "from": "suite:intuition_autopilot",
-      "to": "mayfleur_core"
-    },
-    {
-      "from": "suite:intuition_autopilot",
-      "to": "ui_td"
-    },
-    {
-      "from": "suite:koll_finance_ritual",
-      "to": "koll_core"
-    },
-    {
-      "from": "suite:koll_finance_ritual",
-      "to": "mythematics_docs"
-    },
-    {
-      "from": "suite:decrypt_pedagogy",
-      "to": "decrypt_assets"
-    },
-    {
-      "from": "suite:decrypt_pedagogy",
-      "to": "mythematics_docs"
-    },
-    {
-      "from": "suite:mayfleur_embodiment",
-      "to": "mayfleur_core"
-    },
-    {
-      "from": "suite:mayfleur_embodiment",
-      "to": "ui_td"
-    },
-    {
       "from": "interface:ui_web",
-      "to": "koll_core"
+      "to": "engine:koll_core"
     },
     {
       "from": "interface:ui_td",
-      "to": "koll_core"
+      "to": "engine:koll_core"
     },
     {
       "from": "interface:ui_td",
-      "to": "mayfleur_core"
+      "to": "engine:mayfleur_core"
+    },
+    {
+      "from": "suite:koll_finance_ritual",
+      "to": "engine:koll_core"
+    },
+    {
+      "from": "suite:koll_finance_ritual",
+      "to": "narrative:mythematics_docs"
+    },
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "engine:koll_core"
+    },
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "engine:mayfleur_core"
+    },
+    {
+      "from": "suite:intuition_autopilot",
+      "to": "interface:ui_td"
+    },
+    {
+      "from": "suite:mayfleur_embodiment",
+      "to": "engine:mayfleur_core"
+    },
+    {
+      "from": "suite:mayfleur_embodiment",
+      "to": "interface:ui_td"
+    },
+    {
+      "from": "suite:decrypt_pedagogy",
+      "to": "narrative:decrypt_assets"
+    },
+    {
+      "from": "suite:decrypt_pedagogy",
+      "to": "narrative:mythematics_docs"
     }
   ]
 }
