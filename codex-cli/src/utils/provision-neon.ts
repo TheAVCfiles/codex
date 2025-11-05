@@ -245,30 +245,6 @@ export async function provisionNeon({
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(
-        `Failed to create database '${name}'. Attempting rollback.`,
-      );
-      if (endpointId) {
-        try {
-          await fetch(`${API_BASE}/projects/${org}/endpoints/${endpointId}`, {
-            method: "DELETE",
-            headers,
-          });
-        } catch {
-          // Best effort cleanup.
-        }
-      }
-      if (branchId) {
-        try {
-          await fetch(`${API_BASE}/projects/${org}/branches/${branchId}`, {
-            method: "DELETE",
-            headers,
-          });
-        } catch {
-          // Best effort cleanup.
-        }
-      }
-
       throw new Error(
         `Neon database creation failed (${response.status}): ${errorText}`,
       );
@@ -279,7 +255,31 @@ export async function provisionNeon({
     console.log(`Database '${name}' created.`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("Error in database creation:", message);
+    console.error(
+      "Error in database creation, rolling back endpoint and branch:",
+      message,
+    );
+    if (endpointId) {
+      try {
+        await fetch(`${API_BASE}/projects/${org}/endpoints/${endpointId}`, {
+          method: "DELETE",
+          headers,
+        });
+      } catch {
+        // Best effort cleanup.
+      }
+    }
+    if (branchId) {
+      try {
+        await fetch(`${API_BASE}/projects/${org}/branches/${branchId}`, {
+          method: "DELETE",
+          headers,
+        });
+      } catch {
+        // Best effort cleanup.
+      }
+    }
+
     throw error;
   }
 
