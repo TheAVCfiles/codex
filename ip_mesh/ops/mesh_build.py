@@ -2,6 +2,7 @@ import json
 import hashlib
 import os
 import glob
+import datetime
 
 ROOT = os.path.dirname(os.path.dirname(__file__))
 
@@ -25,20 +26,41 @@ def find_manifests():
 
 def build_mesh():
     nodes, edges = {}, []
+    build_timestamp = datetime.datetime.now(datetime.UTC).isoformat()
+    
     for mf in find_manifests():
         m = load_manifest(mf)
         node_id = f"{m['type']}:{m['name']}"
+        node_path = os.path.dirname(mf)
+        
+        # Check if node directory exists and is accessible
+        path_exists = os.path.exists(node_path) and os.path.isdir(node_path)
+        
         nodes[node_id] = {
             "type": m["type"],
             "name": m["name"],
             "version": m.get("version", "0.0.0"),
-            "path": os.path.relpath(os.path.dirname(mf), ROOT),
+            "path": os.path.relpath(node_path, ROOT),
             "hash": hash_file(mf),
             "metadata": {k: v for k, v in m.items() if k not in ["name", "type", "version"]},
+            "status": {
+                "path_exists": path_exists,
+                "last_scanned": build_timestamp,
+                "manifest_valid": True
+            }
         }
         for dep in m.get("depends_on", []) + m.get("includes", []):
             edges.append({"from": node_id, "to": dep})
-    return {"nodes": nodes, "edges": edges}
+    
+    return {
+        "nodes": nodes,
+        "edges": edges,
+        "meta": {
+            "built_at": build_timestamp,
+            "total_nodes": len(nodes),
+            "total_edges": len(edges)
+        }
+    }
 
 
 if __name__ == "__main__":

@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "start_time": "2025-11-08T21:42:59.794101",
+  "end_time": "2025-11-08T21:42:59.968419",
+  "duration_seconds": 0.174318,
+  "total_nodes": 11,
+  "total_edges": 13,
+  "executed": 4,
+  "successful": 4,
+  "failed": 0,
+  "degraded": 0,
+  "execution_log": [
+    {
+      "node_id": "suite:koll_finance_ritual",
+      "status": "success",
+      "exit_code": 0,
+      "stdout": "Signals evaluated. Risk breaker threshold=10.00. triggers=12\n",
+      "stderr": "",
+      "duration_seconds": 0.045066,
+      "timestamp": "2025-11-08T21:42:59.839394",
+      "error_message": null,
+      "fallback_used": true
+    },
+    {
+      "node_id": "suite:intuition_autopilot",
+      "status": "success",
+      "exit_code": 0,
+      "stdout": "mesh \u2192 /home/runner/work/codex/codex/ip_mesh/ops/mesh.json  nodes=11 edges=13\nSignals evaluated. Risk breaker threshold=10.00. triggers=12\nAUTOPILOT @ 2025-11-08T21:42:59.860997\n> /usr/bin/python /home/runner/work/codex/codex/ip_mesh/ops/mesh_build.py\n> /usr/bin/python /home/runner/work/codex/codex/ip_mesh/engines/koll_core/backtest.py --config /home/runner/work/codex/codex/ip_mesh/engines/koll_core/configs/koll_config.yaml\n",
+      "stderr": "/home/runner/work/codex/codex/ip_mesh/ops/autopilot_scheduler.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  print(\"AUTOPILOT @\", datetime.datetime.utcnow().isoformat())\n",
+      "duration_seconds": 0.093354,
+      "timestamp": "2025-11-08T21:42:59.932804",
+      "error_message": null,
+      "fallback_used": true
+    },
+    {
+      "node_id": "suite:decrypt_pedagogy",
+      "status": "success",
+      "exit_code": 0,
+      "stdout": "'Deploy curriculum assets'\n",
+      "stderr": "",
+      "duration_seconds": 0.002562,
+      "timestamp": "2025-11-08T21:42:59.935422",
+      "error_message": null,
+      "fallback_used": true
+    },
+    {
+      "node_id": "suite:mayfleur_embodiment",
+      "status": "success",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.032904,
+      "timestamp": "2025-11-08T21:42:59.968374",
+      "error_message": null,
+      "fallback_used": true
+    }
+  ],
+  "node_status": {
+    "engine:mayfleur_core": "pending",
+    "engine:koll_core": "pending",
+    "interface:ui_td": "pending",
+    "interface:ui_web": "pending",
+    "suite:koll_finance_ritual": "success",
+    "suite:intuition_autopilot": "success",
+    "suite:decrypt_pedagogy": "success",
+    "suite:mayfleur_embodiment": "success",
+    "data:koll_csv_bundle": "pending",
+    "narrative:mythematics_docs": "pending",
+    "narrative:decrypt_assets": "pending"
+  }
+}
