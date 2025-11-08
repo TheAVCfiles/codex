@@ -1,0 +1,379 @@
+name: MVP Health Check & Rollback
+
+on:
+  schedule:
+    # Run health check every hour
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      check_type:
+        description: "Type of health check"
+        required: false
+        default: "full"
+        type: choice
+        options:
+          - full
+          - quick
+          - critical-only
+      auto_rollback:
+        description: "Automatically rollback on failure"
+        required: false
+        default: "false"
+        type: boolean
+
+env:
+  HEALTH_THRESHOLD_WARNING: 80
+  HEALTH_THRESHOLD_CRITICAL: 60
+
+jobs:
+  health-check:
+    name: "❤️ MVP Health Check"
+    runs-on: ubuntu-latest
+    outputs:
+      health_score: ${{ steps.calculate.outputs.score }}
+      status: ${{ steps.calculate.outputs.status }}
+      critical_failures: ${{ steps.calculate.outputs.critical_failures }}
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: "🔍 Check Critical Files"
+        id: files
+        run: |
+          echo "Checking critical MVP files..."
+
+          critical_files=(
+            "public/logger-demo.html"
+            "public/zero-loss-zero-surprise.html"
+            "public/choreography-dashboard.html"
+            "api/worker.js"
+            ".github/workflows/ingest.yml"
+            ".github/workflows/balances.yml"
+            ".github/workflows/pipeline-orchestrator.yml"
+            "scripts/csv_headers.mjs"
+            "scripts/normalize_batch.mjs"
+          )
+
+          score=100
+          missing_files=()
+
+          for file in "${critical_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "  ✓ $file"
+            else
+              echo "  ✗ $file (MISSING)"
+              missing_files+=("$file")
+              score=$((score - 10))
+            fi
+          done
+
+          echo "files_score=$score" >> $GITHUB_OUTPUT
+          echo "missing_count=${#missing_files[@]}" >> $GITHUB_OUTPUT
+
+          if [ ${#missing_files[@]} -gt 0 ]; then
+            echo "missing_files=${missing_files[*]}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: "🔧 Check Workflow Validity"
+        id: workflows
+        run: |
+          echo "Validating workflow files..."
+
+          score=100
+          invalid_count=0
+
+          for workflow in .github/workflows/*.yml; do
+            if ! grep -q "^name:" "$workflow"; then
+              echo "  ✗ $workflow - missing 'name' field"
+              score=$((score - 5))
+              invalid_count=$((invalid_count + 1))
+            else
+              echo "  ✓ $(basename $workflow)"
+            fi
+          done
+
+          echo "workflows_score=$score" >> $GITHUB_OUTPUT
+          echo "invalid_count=$invalid_count" >> $GITHUB_OUTPUT
+
+      - name: "📊 Check Data Integrity"
+        id: data
+        run: |
+          echo "Checking data files integrity..."
+
+          score=100
+
+          # Check if data directory exists
+          if [ ! -d "data" ]; then
+            echo "  ✗ Data directory missing"
+            score=0
+          else
+            echo "  ✓ Data directory exists"
+            
+            # Check CSV files
+            csv_count=$(find data -name "*.csv" 2>/dev/null | wc -l)
+            echo "  ℹ️ Found $csv_count CSV files"
+            
+            # Check proof ledger
+            if [ -f "data/proof_ledger.json" ]; then
+              if jq empty data/proof_ledger.json 2>/dev/null; then
+                echo "  ✓ Proof ledger valid"
+              else
+                echo "  ✗ Proof ledger corrupted"
+                score=$((score - 20))
+              fi
+            fi
+            
+            # Check balances directory
+            if [ -d "data/balances" ]; then
+              echo "  ✓ Balances directory exists"
+              balance_files=$(find data/balances -name "*.json" 2>/dev/null | wc -l)
+              echo "  ℹ️ Found $balance_files balance files"
+            fi
+          fi
+
+          echo "data_score=$score" >> $GITHUB_OUTPUT
+
+      - name: "🌐 Check Public Assets"
+        id: assets
+        run: |
+          echo "Checking public assets..."
+
+          score=100
+
+          # Check HTML files are valid
+          for html in public/*.html; do
+            if [ -f "$html" ]; then
+              if grep -q "</html>" "$html"; then
+                echo "  ✓ $(basename $html) - valid structure"
+              else
+                echo "  ✗ $(basename $html) - potentially malformed"
+                score=$((score - 10))
+              fi
+            fi
+          done
+
+          echo "assets_score=$score" >> $GITHUB_OUTPUT
+
+      - name: "📦 Check Dependencies"
+        id: deps
+        run: |
+          echo "Checking dependencies..."
+
+          score=100
+
+          if [ -f "package.json" ]; then
+            echo "  ✓ package.json exists"
+            
+            # Check for critical dependencies
+            if jq -e '.devDependencies' package.json > /dev/null; then
+              echo "  ✓ devDependencies defined"
+            fi
+            
+            if jq -e '.scripts' package.json > /dev/null; then
+              echo "  ✓ scripts defined"
+            fi
+          else
+            echo "  ✗ package.json missing"
+            score=$((score - 20))
+          fi
+
+          if [ -f "pnpm-lock.yaml" ]; then
+            echo "  ✓ pnpm-lock.yaml exists"
+          else
+            echo "  ⚠️ pnpm-lock.yaml missing"
+            score=$((score - 10))
+          fi
+
+          echo "deps_score=$score" >> $GITHUB_OUTPUT
+
+      - name: "💰 Calculate Overall Health Score"
+        id: calculate
+        run: |
+          files_score=${{ steps.files.outputs.files_score }}
+          workflows_score=${{ steps.workflows.outputs.workflows_score }}
+          data_score=${{ steps.data.outputs.data_score }}
+          assets_score=${{ steps.assets.outputs.assets_score }}
+          deps_score=${{ steps.deps.outputs.deps_score }}
+
+          # Weighted average
+          overall_score=$(( (files_score * 30 + workflows_score * 25 + data_score * 20 + assets_score * 15 + deps_score * 10) / 100 ))
+
+          echo "score=$overall_score" >> $GITHUB_OUTPUT
+
+          # Determine status
+          if [ $overall_score -ge ${{ env.HEALTH_THRESHOLD_WARNING }} ]; then
+            status="healthy"
+            emoji="✅"
+          elif [ $overall_score -ge ${{ env.HEALTH_THRESHOLD_CRITICAL }} ]; then
+            status="warning"
+            emoji="⚠️"
+          else
+            status="critical"
+            emoji="🚨"
+          fi
+
+          echo "status=$status" >> $GITHUB_OUTPUT
+
+          # Critical failures
+          critical_failures=0
+          if [ ${{ steps.files.outputs.missing_count }} -gt 2 ]; then
+            critical_failures=$((critical_failures + 1))
+          fi
+          if [ $data_score -lt 50 ]; then
+            critical_failures=$((critical_failures + 1))
+          fi
+
+          echo "critical_failures=$critical_failures" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "================================"
+          echo "$emoji MVP HEALTH SCORE: $overall_score/100"
+          echo "================================"
+          echo "Status: $status"
+          echo "Critical Failures: $critical_failures"
+          echo ""
+          echo "Breakdown:"
+          echo "  Files:     $files_score/100"
+          echo "  Workflows: $workflows_score/100"
+          echo "  Data:      $data_score/100"
+          echo "  Assets:    $assets_score/100"
+          echo "  Deps:      $deps_score/100"
+
+      - name: "📊 Generate Health Report"
+        run: |
+          mkdir -p tmp/health
+
+          cat > tmp/health/health-report.md << EOF
+          # MVP Health Report - $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          ## Overall Health Score: ${{ steps.calculate.outputs.score }}/100
+
+          **Status:** ${{ steps.calculate.outputs.status }}
+
+          ## Component Scores
+
+          | Component | Score | Status |
+          |-----------|-------|--------|
+          | Critical Files | ${{ steps.files.outputs.files_score }}/100 | $([ ${{ steps.files.outputs.files_score }} -ge 80 ] && echo "✅" || echo "⚠️") |
+          | Workflows | ${{ steps.workflows.outputs.workflows_score }}/100 | $([ ${{ steps.workflows.outputs.workflows_score }} -ge 80 ] && echo "✅" || echo "⚠️") |
+          | Data Integrity | ${{ steps.data.outputs.data_score }}/100 | $([ ${{ steps.data.outputs.data_score }} -ge 80 ] && echo "✅" || echo "⚠️") |
+          | Public Assets | ${{ steps.assets.outputs.assets_score }}/100 | $([ ${{ steps.assets.outputs.assets_score }} -ge 80 ] && echo "✅" || echo "⚠️") |
+          | Dependencies | ${{ steps.deps.outputs.deps_score }}/100 | $([ ${{ steps.deps.outputs.deps_score }} -ge 80 ] && echo "✅" || echo "⚠️") |
+
+          ## Issues Detected
+          EOF
+
+          if [ ${{ steps.files.outputs.missing_count }} -gt 0 ]; then
+            echo "- ⚠️ Missing critical files: ${{ steps.files.outputs.missing_count }}" >> tmp/health/health-report.md
+          fi
+
+          if [ ${{ steps.workflows.outputs.invalid_count }} -gt 0 ]; then
+            echo "- ⚠️ Invalid workflows: ${{ steps.workflows.outputs.invalid_count }}" >> tmp/health/health-report.md
+          fi
+
+          echo "" >> tmp/health/health-report.md
+          echo "Generated by: \`${{ github.workflow }}\`" >> tmp/health/health-report.md
+
+          cat tmp/health/health-report.md
+
+      - name: "🎬 Upload Health Report"
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-report-${{ github.run_number }}
+          path: tmp/health/
+
+  rollback-check:
+    name: "🔄 Rollback Assessment"
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: needs.health-check.outputs.status == 'critical' || needs.health-check.outputs.critical_failures > 0
+    steps:
+      - name: "📥 Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+
+      - name: "🔍 Find Last Healthy Commit"
+        id: find-healthy
+        run: |
+          echo "Searching for last healthy commit..."
+
+          # Get recent commits
+          git log --oneline -20 > tmp/commits.txt
+
+          # Look for commits before recent changes
+          last_good_commit=$(git log --oneline -20 | head -10 | tail -1 | awk '{print $1}')
+
+          echo "last_healthy_commit=$last_good_commit" >> $GITHUB_OUTPUT
+          echo "Found potential rollback point: $last_good_commit"
+
+      - name: "⚠️ Rollback Decision"
+        id: decision
+        run: |
+          health_score=${{ needs.health-check.outputs.health_score }}
+          auto_rollback=${{ github.event.inputs.auto_rollback }}
+
+          echo "Health Score: $health_score"
+          echo "Auto Rollback: $auto_rollback"
+
+          if [ "$auto_rollback" = "true" ] && [ $health_score -lt 60 ]; then
+            echo "should_rollback=true" >> $GITHUB_OUTPUT
+            echo "🚨 CRITICAL: Auto-rollback triggered"
+          else
+            echo "should_rollback=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Manual intervention required"
+          fi
+
+      - name: "📋 Create Rollback Plan"
+        if: steps.decision.outputs.should_rollback == 'true'
+        run: |
+          cat > tmp/rollback-plan.md << EOF
+          # Rollback Plan
+
+          ## Current Status
+          - Health Score: ${{ needs.health-check.outputs.health_score }}/100
+          - Status: ${{ needs.health-check.outputs.status }}
+          - Critical Failures: ${{ needs.health-check.outputs.critical_failures }}
+
+          ## Rollback Target
+          - Commit: ${{ steps.find-healthy.outputs.last_healthy_commit }}
+
+          ## Actions Required
+          1. Review this rollback plan
+          2. Manually execute: \`git revert HEAD~5..HEAD\`
+          3. Test changes locally
+          4. Create PR with rollback changes
+          5. Deploy after review
+
+          ## Notes
+          - This is an automated assessment
+          - Manual review strongly recommended
+          - Backup current state before proceeding
+          EOF
+
+          cat tmp/rollback-plan.md
+
+  notify-status:
+    name: "📢 Notify Status"
+    runs-on: ubuntu-latest
+    needs: [health-check]
+    if: always()
+    steps:
+      - name: "📊 Summary"
+        run: |
+          echo "## MVP Health Check Summary"
+          echo ""
+          echo "**Health Score:** ${{ needs.health-check.outputs.health_score }}/100"
+          echo "**Status:** ${{ needs.health-check.outputs.status }}"
+          echo "**Critical Failures:** ${{ needs.health-check.outputs.critical_failures }}"
+          echo ""
+
+          if [ "${{ needs.health-check.outputs.status }}" = "healthy" ]; then
+            echo "✅ MVP is healthy and stable"
+          elif [ "${{ needs.health-check.outputs.status }}" = "warning" ]; then
+            echo "⚠️ MVP has some issues that need attention"
+          else
+            echo "🚨 MVP is in critical state - immediate action required"
+          fi
