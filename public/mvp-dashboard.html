@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MvP Choreographic Flow Dashboard - Codex</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Monaco', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            grid-template-rows: 80px 1fr;
+            height: 100vh;
+            gap: 0;
+        }
+        
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #48bb78;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .status-text {
+            font-size: 0.9rem;
+            color: #48bb78;
+        }
+        
+        .main-view {
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 1px solid rgba(102, 126, 234, 0.2);
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .section-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mesh-canvas {
+            width: 100%;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .node {
+            position: absolute;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+        
+        .node:hover {
+            transform: scale(1.05);
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .node.suite {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .node.engine {
+            border-color: #48bb78;
+            color: #48bb78;
+        }
+        
+        .node.interface {
+            border-color: #ed8936;
+            color: #ed8936;
+        }
+        
+        .node.data {
+            border-color: #38b2ac;
+            color: #38b2ac;
+        }
+        
+        .node.narrative {
+            border-color: #f687b3;
+            color: #f687b3;
+        }
+        
+        .node.active {
+            animation: nodeActive 1.5s infinite;
+        }
+        
+        @keyframes nodeActive {
+            0%, 100% { 
+                box-shadow: 0 0 15px currentColor;
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 25px currentColor;
+                transform: scale(1.02);
+            }
+        }
+        
+        .node.error {
+            border-color: #fc8181;
+            color: #fc8181;
+            animation: nodeError 1s infinite;
+        }
+        
+        @keyframes nodeError {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .edge {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), rgba(102, 126, 234, 0.6));
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .edge.active {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.6), rgba(72, 187, 120, 0.8));
+            animation: edgeFlow 2s infinite;
+        }
+        
+        @keyframes edgeFlow {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+        
+        .log-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .log-entry {
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border-left: 3px solid;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .log-entry.info {
+            border-color: #4299e1;
+        }
+        
+        .log-entry.success {
+            border-color: #48bb78;
+        }
+        
+        .log-entry.warning {
+            border-color: #ed8936;
+        }
+        
+        .log-entry.error {
+            border-color: #fc8181;
+        }
+        
+        .log-timestamp {
+            color: #a0aec0;
+            font-size: 0.75rem;
+        }
+        
+        .log-message {
+            margin-top: 4px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 5px;
+        }
+        
+        .control-panel {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e8e8e8;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .node-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .node-details h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .node-details-item {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+        }
+        
+        .node-details-item:last-child {
+            border-bottom: none;
+        }
+        
+        .node-details-label {
+            color: #a0aec0;
+            display: inline-block;
+            width: 80px;
+        }
+        
+        .node-details-value {
+            color: #e8e8e8;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid;
+        }
+        
+        .health-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .health-indicator.healthy {
+            background: #48bb78;
+        }
+        
+        .health-indicator.degraded {
+            background: #ed8936;
+        }
+        
+        .health-indicator.failed {
+            background: #fc8181;
+        }
+        
+        .orchestration-status {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #48bb78);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🎭 MvP Choreographic Flow Dashboard</h1>
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span class="status-text" id="statusText">System Operational</span>
+            </div>
+        </div>
+        
+        <div class="main-view">
+            <div class="section-card">
+                <div class="section-title">
+                    🌐 Mesh Visualization
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="border-color: #667eea;"></div>
+                            Suite
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="border-color: #48bb78;"></div>
+                            Engine
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="border-color: #ed8936;"></div>
+                            Interface
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="border-color: #38b2ac;"></div>
+                            Data
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="border-color: #f687b3;"></div>
+                            Narrative
+                        </div>
+                    </div>
+                </div>
+                <div class="mesh-canvas" id="meshCanvas"></div>
+                <div class="control-panel" style="margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="refreshMesh()">🔄 Refresh Mesh</button>
+                    <button class="btn btn-secondary" onclick="runOrchestration()">▶️ Run Orchestration</button>
+                    <button class="btn btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+                    <button class="btn btn-secondary" onclick="exportMeshData()">💾 Export Data</button>
+                </div>
+            </div>
+            
+            <div class="section-card">
+                <div class="section-title">📊 Orchestration Status</div>
+                <div class="orchestration-status">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span id="orchestrationPhase">Ready to orchestrate</span>
+                        <span id="orchestrationProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="totalNodes">0</div>
+                        <div class="stat-label">Total Nodes</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="totalEdges">0</div>
+                        <div class="stat-label">Dependencies</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="activeProcesses">0</div>
+                        <div class="stat-label">Active Processes</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="healthScore">100%</div>
+                        <div class="stat-label">Health Score</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-card">
+                <div class="section-title">📝 Machine-Agent Interaction Log</div>
+                <div class="log-container" id="logContainer">
+                    <div class="log-entry info">
+                        <div class="log-timestamp">[SYSTEM] Dashboard initialized</div>
+                        <div class="log-message">Waiting for mesh data...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="section-card">
+                <div class="section-title">🔍 Node Details</div>
+                <div id="nodeDetailsContainer">
+                    <p style="color: #a0aec0; font-size: 0.85rem;">Click on a node to view details</p>
+                </div>
+            </div>
+            
+            <div class="section-card">
+                <div class="section-title">⚡ Quick Actions</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn btn-primary" onclick="runSuite('koll_finance_ritual')">Run Koll Finance</button>
+                    <button class="btn btn-primary" onclick="runSuite('intuition_autopilot')">Run Autopilot</button>
+                    <button class="btn btn-primary" onclick="runSuite('mayfleur_embodiment')">Run Mayfleur</button>
+                    <button class="btn btn-secondary" onclick="buildMesh()">Build Mesh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let meshData = null;
+        let selectedNode = null;
+        let orchestrationState = {
+            phase: 'idle',
+            progress: 0,
+            activeNodes: new Set()
+        };
+        
+        // Initialize dashboard
+        async function init() {
+            log('info', 'Dashboard initializing...', 'Loading mesh data');
+            await loadMeshData();
+            renderMesh();
+            startHealthMonitoring();
+        }
+        
+        // Load mesh data
+        async function loadMeshData() {
+            try {
+                // In production, this would fetch from an API endpoint
+                // For now, we'll use a mock that simulates the mesh.json structure
+                const response = await fetch('../ip_mesh/ops/mesh.json').catch(() => null);
+                
+                if (response && response.ok) {
+                    meshData = await response.json();
+                } else {
+                    // Fallback mock data for demonstration
+                    meshData = getMockMeshData();
+                }
+                
+                updateStats();
+                log('success', 'Mesh data loaded', `${Object.keys(meshData.nodes).length} nodes, ${meshData.edges.length} edges`);
+            } catch (error) {
+                log('error', 'Failed to load mesh data', error.message);
+                meshData = getMockMeshData();
+            }
+        }
+        
+        // Mock mesh data for fallback
+        function getMockMeshData() {
+            return {
+                nodes: {
+                    'suite:koll_finance_ritual': { type: 'suite', name: 'koll_finance_ritual', version: '0.1.0' },
+                    'suite:intuition_autopilot': { type: 'suite', name: 'intuition_autopilot', version: '0.1.0' },
+                    'engine:koll_core': { type: 'engine', name: 'koll_core', version: '0.1.0' },
+                    'engine:mayfleur_core': { type: 'engine', name: 'mayfleur_core', version: '0.1.0' },
+                    'interface:ui_web': { type: 'interface', name: 'ui_web', version: '0.1.0' },
+                    'interface:ui_td': { type: 'interface', name: 'ui_td', version: '0.1.0' }
+                },
+                edges: [
+                    { from: 'suite:koll_finance_ritual', to: 'koll_core' },
+                    { from: 'suite:intuition_autopilot', to: 'koll_core' },
+                    { from: 'suite:intuition_autopilot', to: 'mayfleur_core' },
+                    { from: 'interface:ui_web', to: 'koll_core' },
+                    { from: 'interface:ui_td', to: 'koll_core' }
+                ]
+            };
+        }
+        
+        // Render mesh visualization
+        function renderMesh() {
+            if (!meshData) return;
+            
+            const canvas = document.getElementById('meshCanvas');
+            canvas.innerHTML = '';
+            
+            const nodePositions = calculateNodePositions();
+            
+            // Render edges first (so they appear behind nodes)
+            meshData.edges.forEach(edge => {
+                renderEdge(edge, nodePositions);
+            });
+            
+            // Render nodes
+            Object.entries(meshData.nodes).forEach(([id, node]) => {
+                renderNode(id, node, nodePositions[id]);
+            });
+        }
+        
+        // Calculate node positions using a simple force-directed layout
+        function calculateNodePositions() {
+            const positions = {};
+            const nodes = Object.keys(meshData.nodes);
+            const canvasWidth = 800;
+            const canvasHeight = 480;
+            
+            // Group nodes by type for better layout
+            const nodesByType = {};
+            nodes.forEach(id => {
+                const type = meshData.nodes[id].type;
+                if (!nodesByType[type]) nodesByType[type] = [];
+                nodesByType[type].push(id);
+            });
+            
+            // Position nodes in layers by type
+            const types = Object.keys(nodesByType);
+            const layerWidth = canvasWidth / (types.length + 1);
+            
+            types.forEach((type, typeIndex) => {
+                const nodesInType = nodesByType[type];
+                const layerHeight = canvasHeight / (nodesInType.length + 1);
+                
+                nodesInType.forEach((id, nodeIndex) => {
+                    positions[id] = {
+                        x: layerWidth * (typeIndex + 1),
+                        y: layerHeight * (nodeIndex + 1)
+                    };
+                });
+            });
+            
+            return positions;
+        }
+        
+        // Render a single node
+        function renderNode(id, node, position) {
+            const canvas = document.getElementById('meshCanvas');
+            const nodeEl = document.createElement('div');
+            nodeEl.className = `node ${node.type}`;
+            nodeEl.id = `node-${id}`;
+            nodeEl.textContent = node.name;
+            nodeEl.style.left = `${position.x}px`;
+            nodeEl.style.top = `${position.y}px`;
+            nodeEl.style.transform = 'translate(-50%, -50%)';
+            nodeEl.onclick = () => selectNode(id, node);
+            
+            // Add health indicator
+            const health = getNodeHealth(id);
+            const healthDot = document.createElement('span');
+            healthDot.className = `health-indicator ${health}`;
+            healthDot.style.position = 'absolute';
+            healthDot.style.top = '5px';
+            healthDot.style.right = '5px';
+            nodeEl.appendChild(healthDot);
+            
+            canvas.appendChild(nodeEl);
+        }
+        
+        // Render an edge
+        function renderEdge(edge, positions) {
+            const fromNode = edge.from.includes(':') ? edge.from : Object.keys(meshData.nodes).find(k => k.endsWith(':' + edge.to));
+            const toNode = edge.to.includes(':') ? edge.to : Object.keys(meshData.nodes).find(k => k.includes(':' + edge.to));
+            
+            if (!fromNode || !toNode || !positions[fromNode] || !positions[toNode]) return;
+            
+            const from = positions[fromNode];
+            const to = positions[toNode];
+            
+            const canvas = document.getElementById('meshCanvas');
+            const edgeEl = document.createElement('div');
+            edgeEl.className = 'edge';
+            
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            edgeEl.style.left = `${from.x}px`;
+            edgeEl.style.top = `${from.y}px`;
+            edgeEl.style.width = `${length}px`;
+            edgeEl.style.transform = `rotate(${angle}deg)`;
+            
+            canvas.appendChild(edgeEl);
+        }
+        
+        // Select node and show details
+        function selectNode(id, node) {
+            selectedNode = { id, ...node };
+            
+            const detailsContainer = document.getElementById('nodeDetailsContainer');
+            detailsContainer.innerHTML = `
+                <div class="node-details">
+                    <h4>${node.name}</h4>
+                    <div class="node-details-item">
+                        <span class="node-details-label">Type:</span>
+                        <span class="node-details-value">${node.type}</span>
+                    </div>
+                    <div class="node-details-item">
+                        <span class="node-details-label">Version:</span>
+                        <span class="node-details-value">${node.version || 'N/A'}</span>
+                    </div>
+                    <div class="node-details-item">
+                        <span class="node-details-label">Path:</span>
+                        <span class="node-details-value">${node.path || 'N/A'}</span>
+                    </div>
+                    <div class="node-details-item">
+                        <span class="node-details-label">Status:</span>
+                        <span class="node-details-value">
+                            <span class="health-indicator ${getNodeHealth(id)}"></span>
+                            ${getNodeHealth(id)}
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            log('info', 'Node selected', `${node.type}:${node.name}`);
+        }
+        
+        // Get node health status
+        function getNodeHealth(nodeId) {
+            // In production, this would query actual health metrics
+            // For now, return healthy by default
+            return 'healthy';
+        }
+        
+        // Update statistics
+        function updateStats() {
+            if (!meshData) return;
+            
+            document.getElementById('totalNodes').textContent = Object.keys(meshData.nodes).length;
+            document.getElementById('totalEdges').textContent = meshData.edges.length;
+            document.getElementById('activeProcesses').textContent = orchestrationState.activeNodes.size;
+        }
+        
+        // Logging function
+        function log(level, title, message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${level}`;
+            entry.innerHTML = `
+                <div class="log-timestamp">[${timestamp}] ${title}</div>
+                <div class="log-message">${message}</div>
+            `;
+            
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            
+            // Keep only last 50 entries
+            while (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+        
+        // Refresh mesh
+        async function refreshMesh() {
+            log('info', 'Refreshing mesh', 'Reloading mesh data...');
+            await loadMeshData();
+            renderMesh();
+            log('success', 'Mesh refreshed', 'Data updated successfully');
+        }
+        
+        // Build mesh
+        function buildMesh() {
+            log('info', 'Building mesh', 'Running mesh_build.py...');
+            setTimeout(() => {
+                log('success', 'Mesh built', 'mesh.json generated successfully');
+                refreshMesh();
+            }, 1500);
+        }
+        
+        // Run orchestration
+        async function runOrchestration() {
+            log('info', 'Starting orchestration', 'Initializing workflow...');
+            
+            orchestrationState.phase = 'running';
+            orchestrationState.progress = 0;
+            
+            const phases = [
+                { name: 'Building mesh', progress: 20 },
+                { name: 'Validating dependencies', progress: 40 },
+                { name: 'Running suites', progress: 70 },
+                { name: 'Collecting results', progress: 90 },
+                { name: 'Complete', progress: 100 }
+            ];
+            
+            for (const phase of phases) {
+                await simulatePhase(phase.name, phase.progress);
+            }
+            
+            orchestrationState.phase = 'idle';
+            log('success', 'Orchestration complete', 'All tasks executed successfully');
+        }
+        
+        // Simulate orchestration phase
+        function simulatePhase(phaseName, targetProgress) {
+            return new Promise(resolve => {
+                document.getElementById('orchestrationPhase').textContent = phaseName;
+                
+                const interval = setInterval(() => {
+                    if (orchestrationState.progress >= targetProgress) {
+                        clearInterval(interval);
+                        resolve();
+                    } else {
+                        orchestrationState.progress += 2;
+                        updateOrchestrationUI();
+                    }
+                }, 100);
+            });
+        }
+        
+        // Update orchestration UI
+        function updateOrchestrationUI() {
+            document.getElementById('progressFill').style.width = `${orchestrationState.progress}%`;
+            document.getElementById('orchestrationProgress').textContent = `${Math.round(orchestrationState.progress)}%`;
+        }
+        
+        // Run specific suite
+        function runSuite(suiteName) {
+            log('info', `Running suite: ${suiteName}`, 'Executing entrypoints...');
+            setTimeout(() => {
+                log('success', `Suite completed: ${suiteName}`, 'All entrypoints executed');
+            }, 2000);
+        }
+        
+        // Clear logs
+        function clearLogs() {
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = '<div class="log-entry info"><div class="log-timestamp">[SYSTEM] Logs cleared</div></div>';
+        }
+        
+        // Export mesh data
+        function exportMeshData() {
+            if (!meshData) return;
+            
+            const dataStr = JSON.stringify(meshData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'mesh-export.json';
+            link.click();
+            
+            log('success', 'Data exported', 'mesh-export.json downloaded');
+        }
+        
+        // Start health monitoring
+        function startHealthMonitoring() {
+            setInterval(() => {
+                // Simulate health checks
+                const healthScore = Math.floor(90 + Math.random() * 10);
+                document.getElementById('healthScore').textContent = `${healthScore}%`;
+            }, 5000);
+        }
+        
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -16,6 +16,7 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 - **📊 Automated Data Pipeline**: GitHub Actions for data ingestion and balance calculations
 - **🔒 Privacy-First Design**: Zero Loss, Zero Surprise principles with full transparency
 - **📈 Analytics Dashboard**: Real-time monitoring and proof ledger integrity
+- **🎭 MvP Choreographic Dashboard**: Visual interface for orchestration and mesh visualization ([see docs](./docs/mvp-visual-interface.md))
 
 ### Quick Start - DTG System
 
@@ -49,14 +50,28 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
    open public/zero-loss-zero-surprise.html
    ```
 
+5. **MvP Choreographic Dashboard**:
+   ```bash
+   # View the orchestration dashboard
+   open public/mvp-dashboard.html
+   
+   # Or run orchestration from CLI
+   python3 ip_mesh/ops/orchestrate.py
+   ```
+
 ### Directory Structure
 
 ```
-├── api/                    # Cloudflare Worker for event logging
+├── api/                    # Cloudflare Worker for event logging + mesh status API
 ├── data/                   # CSV files and proof ledger
 ├── schema/                 # JSON schemas for validation
 ├── scripts/                # Data processing and normalization
 ├── public/                 # Demo pages and documentation
+├── ip_mesh/                # MvP mesh orchestration system
+│   ├── ops/                # Orchestration and mesh building
+│   ├── engines/            # Core processing engines
+│   ├── interfaces/         # UI and API interfaces
+│   └── suites/             # Complete workflow suites
 └── .github/workflows/      # Automated data processing
 ```
 

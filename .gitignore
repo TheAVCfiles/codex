@@ -39,6 +39,9 @@ CLAUDE.md
 .nyc_output/
 .jest/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
+*$py.class
 
 # logs
 *.log
@@ -81,3 +84,10 @@ CHANGELOG.ignore.md
 # nix related
 .direnv
 .envrc
+
+# Python/data outputs
+ip_mesh/engines/*/outputs/*.csv
+ip_mesh/engines/*/reports/*.jpeg
+ip_mesh/engines/*/reports/*.jpg
+ip_mesh/engines/*/reports/*.png
+ip_mesh/ops/orchestration_report.json
