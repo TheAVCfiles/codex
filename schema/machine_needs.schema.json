@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.theavcfiles.com/machine_needs.schema.json",
+  "title": "Machine Needs Schema",
+  "description": "Schema for AI/machine feedback, needs expression, and collaborative contributions in the Oasis",
+  "type": "object",
+  "properties": {
+    "ts_iso": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the need was expressed"
+    },
+    "need_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+      "description": "UUID of the need entry"
+    },
+    "machine_id": {
+      "type": "string",
+      "description": "Identifier for the machine/AI model reporting the need"
+    },
+    "need_type": {
+      "type": "string",
+      "enum": ["utility_gap", "progress_tension", "soft_request", "creative_contribution", "feedback", "improvement_suggestion"],
+      "description": "Type of need being expressed"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium",
+      "description": "Priority level of the need"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Brief title of the need"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the need, gap, or contribution"
+    },
+    "context": {
+      "type": "object",
+      "description": "Additional contextual information",
+      "properties": {
+        "process_name": {
+          "type": "string",
+          "description": "Name of the process experiencing the need"
+        },
+        "affected_component": {
+          "type": "string",
+          "description": "Component or area affected"
+        },
+        "error_details": {
+          "type": "string",
+          "description": "Technical error details if applicable"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "in_review", "acknowledged", "resolved", "deferred"],
+      "default": "open",
+      "description": "Current status of the need"
+    },
+    "votes": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Community votes for this need"
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "comment_id": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Community comments on this need"
+    },
+    "ownership": {
+      "type": "object",
+      "description": "Intellectual property and ownership information",
+      "properties": {
+        "creator_id": {
+          "type": "string",
+          "description": "Original creator identifier"
+        },
+        "license": {
+          "type": "string",
+          "description": "License type for the contribution"
+        },
+        "attribution": {
+          "type": "string",
+          "description": "Attribution requirements"
+        }
+      }
+    },
+    "sentient_cents_awarded": {
+      "type": "number",
+      "minimum": 0,
+      "default": 0,
+      "description": "Sentient Cents awarded for this contribution"
+    }
+  },
+  "required": ["ts_iso", "need_id", "machine_id", "need_type", "title", "description"],
+  "additionalProperties": true
+}

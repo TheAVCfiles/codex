@@ -12,7 +12,10 @@ const SENTIENT_CENTS_RULES = {
   submit: 0.10,       // 10 cents per form submission
   deploy: 1.00,       // 100 cents per deployment
   mint: 0.00,         // No earning for minting itself
-  validate: 0.25      // 25 cents per validation
+  validate: 0.25,     // 25 cents per validation
+  machine_need: 0.50, // 50 cents for reporting a need
+  community_vote: 0.05, // 5 cents per vote
+  comment: 0.10       // 10 cents per comment
 };
 
 // Helper function to generate UUID v4
@@ -74,6 +77,62 @@ function validateEvent(event) {
   }
   
   return true;
+}
+
+// Validate machine need data
+function validateMachineNeed(need) {
+  const required = ['machine_id', 'need_type', 'title', 'description'];
+  const validTypes = ['utility_gap', 'progress_tension', 'soft_request', 'creative_contribution', 'feedback', 'improvement_suggestion'];
+  const validPriorities = ['low', 'medium', 'high', 'critical'];
+  
+  for (const field of required) {
+    if (!need[field]) {
+      throw new Error(`Missing required field: ${field}`);
+    }
+  }
+  
+  if (!validTypes.includes(need.need_type)) {
+    throw new Error(`Invalid need_type: ${need.need_type}`);
+  }
+  
+  if (need.priority && !validPriorities.includes(need.priority)) {
+    throw new Error(`Invalid priority: ${need.priority}`);
+  }
+  
+  return true;
+}
+
+// Process and enrich machine need data
+async function processMachineNeed(needData) {
+  const now = new Date().toISOString();
+  const need_id = generateUUID();
+  
+  // Build complete need object
+  const need = {
+    ts_iso: now,
+    need_id,
+    machine_id: needData.machine_id,
+    need_type: needData.need_type,
+    priority: needData.priority || 'medium',
+    title: needData.title,
+    description: needData.description,
+    context: needData.context || {},
+    status: 'open',
+    votes: 0,
+    comments: [],
+    ownership: needData.ownership || {
+      creator_id: needData.machine_id,
+      license: 'CC-BY-SA-4.0',
+      attribution: 'Community contribution'
+    },
+    sentient_cents_awarded: 0.50 // Base reward for submitting a need
+  };
+  
+  // Calculate hash of the need data
+  const needJson = JSON.stringify(need, Object.keys(need).sort());
+  need.hash_sha256 = await calculateSHA256(needJson);
+  
+  return need;
 }
 
 // Process and enrich event data
@@ -242,6 +301,205 @@ export default {
           total_balance: 0,
           last_updated: new Date().toISOString(),
           note: 'Balance calculation not yet implemented - requires aggregation job'
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Machine needs endpoints - Submit a need
+      if (path === '/oasis/needs' && request.method === 'POST') {
+        const needData = await request.json();
+        validateMachineNeed(needData);
+        
+        const need = await processMachineNeed(needData);
+        
+        // Store need in KV storage
+        const needKey = `need:${need.need_id}`;
+        await env.DTG_EVENTS.put(needKey, JSON.stringify(need));
+        
+        // Add to needs index
+        let needsIndex = [];
+        try {
+          const existingIndex = await env.DTG_EVENTS.get('needs:index');
+          if (existingIndex) {
+            needsIndex = JSON.parse(existingIndex);
+          }
+        } catch (e) {
+          console.warn('Failed to load needs index:', e);
+        }
+        
+        needsIndex.push({
+          need_id: need.need_id,
+          need_type: need.need_type,
+          priority: need.priority,
+          title: need.title,
+          status: need.status,
+          ts_iso: need.ts_iso,
+          votes: need.votes
+        });
+        
+        await env.DTG_EVENTS.put('needs:index', JSON.stringify(needsIndex));
+        
+        return new Response(JSON.stringify({
+          success: true,
+          need_id: need.need_id,
+          sentient_cents_awarded: need.sentient_cents_awarded,
+          hash: need.hash_sha256
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Get all machine needs
+      if (path === '/oasis/needs' && request.method === 'GET') {
+        const status = url.searchParams.get('status') || null;
+        const needType = url.searchParams.get('type') || null;
+        
+        let needsIndex = [];
+        try {
+          const existingIndex = await env.DTG_EVENTS.get('needs:index');
+          if (existingIndex) {
+            needsIndex = JSON.parse(existingIndex);
+          }
+        } catch (e) {
+          console.warn('Failed to load needs index:', e);
+        }
+        
+        // Filter based on query parameters
+        let filteredNeeds = needsIndex;
+        if (status) {
+          filteredNeeds = filteredNeeds.filter(n => n.status === status);
+        }
+        if (needType) {
+          filteredNeeds = filteredNeeds.filter(n => n.need_type === needType);
+        }
+        
+        // Sort by votes (descending) and timestamp (newest first)
+        filteredNeeds.sort((a, b) => {
+          if (b.votes !== a.votes) {
+            return b.votes - a.votes;
+          }
+          return new Date(b.ts_iso) - new Date(a.ts_iso);
+        });
+        
+        return new Response(JSON.stringify({ needs: filteredNeeds }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Get a specific machine need
+      if (path.startsWith('/oasis/needs/') && request.method === 'GET') {
+        const needId = path.split('/')[3];
+        const needKey = `need:${needId}`;
+        const needData = await env.DTG_EVENTS.get(needKey);
+        
+        if (!needData) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Need not found'
+          }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+        
+        return new Response(needData, {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Vote on a machine need
+      if (path.startsWith('/oasis/needs/') && path.endsWith('/vote') && request.method === 'POST') {
+        const needId = path.split('/')[3];
+        const needKey = `need:${needId}`;
+        const needData = await env.DTG_EVENTS.get(needKey);
+        
+        if (!needData) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Need not found'
+          }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+        
+        const need = JSON.parse(needData);
+        need.votes = (need.votes || 0) + 1;
+        
+        // Update the need
+        await env.DTG_EVENTS.put(needKey, JSON.stringify(need));
+        
+        // Update the index
+        let needsIndex = [];
+        try {
+          const existingIndex = await env.DTG_EVENTS.get('needs:index');
+          if (existingIndex) {
+            needsIndex = JSON.parse(existingIndex);
+          }
+        } catch (e) {
+          console.warn('Failed to load needs index:', e);
+        }
+        
+        const indexEntry = needsIndex.find(n => n.need_id === needId);
+        if (indexEntry) {
+          indexEntry.votes = need.votes;
+        }
+        await env.DTG_EVENTS.put('needs:index', JSON.stringify(needsIndex));
+        
+        return new Response(JSON.stringify({
+          success: true,
+          need_id: needId,
+          votes: need.votes,
+          sentient_cents_earned: 0.05
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      
+      // Add comment to a machine need
+      if (path.startsWith('/oasis/needs/') && path.endsWith('/comment') && request.method === 'POST') {
+        const needId = path.split('/')[3];
+        const { author, content } = await request.json();
+        
+        if (!author || !content) {
+          throw new Error('Missing required fields: author, content');
+        }
+        
+        const needKey = `need:${needId}`;
+        const needData = await env.DTG_EVENTS.get(needKey);
+        
+        if (!needData) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Need not found'
+          }), {
+            status: 404,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+        
+        const need = JSON.parse(needData);
+        if (!need.comments) {
+          need.comments = [];
+        }
+        
+        const comment = {
+          comment_id: generateUUID(),
+          author,
+          timestamp: new Date().toISOString(),
+          content
+        };
+        
+        need.comments.push(comment);
+        
+        // Update the need
+        await env.DTG_EVENTS.put(needKey, JSON.stringify(need));
+        
+        return new Response(JSON.stringify({
+          success: true,
+          comment_id: comment.comment_id,
+          sentient_cents_earned: 0.10
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
