@@ -33,11 +33,16 @@ env:
   CHOREOGRAPHY_MODE: enabled
   STAGE_TIMEOUT: 600
 
+permissions:
+  contents: read
+
 jobs:
   # Stage 1: Validation - First dancer enters the stage
   validation-dance:
     name: "🎭 Validation Dance"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: |
       github.event_name != 'workflow_dispatch' || 
       github.event.inputs.stage == 'all' || 
@@ -108,6 +113,8 @@ jobs:
     name: "🎭 Testing Dance"
     runs-on: ubuntu-latest
     needs: validation-dance
+    permissions:
+      contents: read
     if: |
       always() && 
       (github.event_name != 'workflow_dispatch' || 
@@ -192,6 +199,8 @@ jobs:
     name: "🎭 Deployment Dance"
     runs-on: ubuntu-latest
     needs: [validation-dance, testing-dance]
+    permissions:
+      contents: read
     if: |
       always() && 
       (github.event_name != 'workflow_dispatch' || 
@@ -279,6 +288,8 @@ jobs:
     name: "🎭 Grand Finale - Performance Summary"
     runs-on: ubuntu-latest
     needs: [validation-dance, testing-dance, deployment-dance]
+    permissions:
+      contents: read
     if: always()
     steps:
       - name: "📥 Gather All Performers"

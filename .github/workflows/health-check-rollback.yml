@@ -25,10 +25,15 @@ env:
   HEALTH_THRESHOLD_WARNING: 80
   HEALTH_THRESHOLD_CRITICAL: 60
 
+permissions:
+  contents: read
+
 jobs:
   health-check:
     name: "❤️ MVP Health Check"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       health_score: ${{ steps.calculate.outputs.score }}
       status: ${{ steps.calculate.outputs.status }}
@@ -288,6 +293,8 @@ jobs:
     name: "🔄 Rollback Assessment"
     runs-on: ubuntu-latest
     needs: health-check
+    permissions:
+      contents: read
     if: needs.health-check.outputs.status == 'critical' || needs.health-check.outputs.critical_failures > 0
     steps:
       - name: "📥 Checkout"
@@ -359,6 +366,7 @@ jobs:
     name: "📢 Notify Status"
     runs-on: ubuntu-latest
     needs: [health-check]
+    permissions: {}
     if: always()
     steps:
       - name: "📊 Summary"
