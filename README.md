@@ -5,6 +5,14 @@
 
 This is the home of the **Codex CLI**, which is a coding agent from OpenAI that runs locally on your computer. If you are looking for the _cloud-based agent_ from OpenAI, **Codex [Web]**, see <https://chatgpt.com/codex>.
 
+## 🎰 Codex Vending Machine - Live Demo
+
+**[🚀 View the Live Demo](https://codex-vending-machine.vercel.app)**
+
+[![Codex Vending Machine](https://github.com/user-attachments/assets/a0978ace-fc65-4a46-9046-73d058c00138)](https://codex-vending-machine.vercel.app)
+
+Experience an interactive showcase of the Codex ecosystem with our beautiful, dark-mode vending machine UI. Browse MVPs, services, and intellectual property in a cinematic interface. [Learn more →](./vending-machine-demo/)
+
 ## 🚀 DTG Project Infrastructure
 
 This repository now includes comprehensive infrastructure for the **DecryptTheGirl (DTG) Project** - an innovative data logging and value-sharing platform that implements **Sentient Cents** minting for user engagement.
