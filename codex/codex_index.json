@@ -1,0 +1,34 @@
+{
+  "version": "0.1.0",
+  "nodes": [
+    {
+      "id": "C27",
+      "title": "The Math of How They Profited Off Her Silence",
+      "path": "nodes/C27_math_of_silence.md",
+      "mode": "C",
+      "status": "canon"
+    },
+    {
+      "id": "surface_27_slipped_stitch",
+      "title": "The Slipped Stitch",
+      "path": "nodes/AURORA-17_slipped_stitch.json",
+      "mode": "surface",
+      "status": "canon"
+    }
+  ],
+  "constellations": [
+    {
+      "id": "constellation_shadow_vocab",
+      "title": "Shadow Vocabulary",
+      "path": "constellations/constellation_shadow_vocab.json"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "Room001",
+      "title": "Glitch as Entry",
+      "path": "rooms/Room001_GlitchAsEntry.json"
+    }
+  ],
+  "maps": []
+}
