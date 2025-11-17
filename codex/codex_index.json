@@ -1,0 +1,19 @@
+{
+  "series": {
+    "C": {
+      "label": "Broadcast / Feedback / Analysis",
+      "nodes": ["C26", "C27", "C28", "C29", "C30", "C31", "C32", "C33", "C34"]
+    }
+  },
+  "rooms": {
+    "Room001_GlitchAsEntry": {
+      "entry_nodes": ["C04", "B05", "C26"]
+    },
+    "Room004_TransmissionCorrupt": {
+      "entry_nodes": ["C26", "C27", "C32"]
+    },
+    "Room008_Mothernet": {
+      "entry_nodes": ["C30", "C34"]
+    }
+  }
+}
