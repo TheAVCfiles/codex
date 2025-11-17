@@ -1,0 +1,6 @@
+{
+  "id": "Room001",
+  "title": "Glitch as Entry",
+  "entry_nodes": ["C04", "B05", "C26"],
+  "modes": ["surface", "cipher", "echo"]
+}
