@@ -1,0 +1,16 @@
+{
+  "id": "AURORA-17",
+  "title": "The Stitch That Dropped Itself",
+  "surface": "the poem text...",
+  "cipher": {
+    "zodiac": "Pisces",
+    "glitch": "G-004",
+    "tarot": "The Signal",
+    "mode": "slip-stitch"
+  },
+  "echo": {
+    "appears_in": ["Chapter 4", "Room 002", "Mothernet Seed 5"],
+    "returns_as": "C4 Caesarian Shift",
+    "foreshadows": ["Room 008 Mothernet", "The Broadcast Breaks"]
+  }
+}
