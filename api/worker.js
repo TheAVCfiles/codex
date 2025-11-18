@@ -132,6 +132,62 @@ async function storeEvent(event, env) {
   return event.event_id;
 }
 
+async function listAllEventKeys(env) {
+  const keys = [];
+  let cursor;
+
+  while (true) {
+    const result = await env.DTG_EVENTS.list({ prefix: 'event:', cursor });
+    keys.push(...result.keys.map((key) => key.name));
+
+    if (result.list_complete || !result.cursor) {
+      break;
+    }
+
+    cursor = result.cursor;
+  }
+
+  return keys;
+}
+
+export async function getReaderBalance(readerId, env) {
+  const eventKeys = await listAllEventKeys(env);
+  let total = 0;
+  let lastUpdated = null;
+
+  for (const key of eventKeys) {
+    const raw = await env.DTG_EVENTS.get(key);
+    if (!raw) continue;
+
+    try {
+      const event = JSON.parse(raw);
+      if (event.reader_id !== readerId) continue;
+
+      if (typeof event.sentient_cents_earned === 'number') {
+        total += event.sentient_cents_earned;
+      }
+
+      if (event.ts_iso) {
+        const ts = new Date(event.ts_iso);
+        if (!Number.isNaN(ts.valueOf())) {
+          if (!lastUpdated || ts > lastUpdated) {
+            lastUpdated = ts;
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to parse event', key, error);
+    }
+  }
+
+  return {
+    reader_id: readerId,
+    total_balance: Math.round(total * 100) / 100,
+    last_updated: lastUpdated ? lastUpdated.toISOString() : null,
+    source: 'events_kv'
+  };
+}
+
 // Main request handler
 export default {
   async fetch(request, env, ctx) {
@@ -234,15 +290,10 @@ export default {
       // Get Sentient Cents balance for a reader
       if (path.startsWith('/balance/') && request.method === 'GET') {
         const readerId = path.split('/')[2];
-        
-        // This would typically aggregate from all events for the reader
-        // For now, return a placeholder implementation
-        return new Response(JSON.stringify({
-          reader_id: readerId,
-          total_balance: 0,
-          last_updated: new Date().toISOString(),
-          note: 'Balance calculation not yet implemented - requires aggregation job'
-        }), {
+
+        const balance = await getReaderBalance(readerId, env);
+
+        return new Response(JSON.stringify(balance), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
