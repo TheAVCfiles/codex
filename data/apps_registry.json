@@ -1,0 +1,46 @@
+[
+  {
+    "id": "coding-coach",
+    "name": "Coding Coach",
+    "category": "AI Tools",
+    "description": "AI-powered code reviewer with JSON feedback",
+    "techStack": ["React", "Claude Sonnet 4", "Tailwind"],
+    "image": "/assets/coding-coach-thumb.png",
+    "status": "Beta",
+    "ipProof": "CID:Qm12345abcd",
+    "repo": "https://github.com/TheAVCfiles/coding-coach",
+    "license": "PyRouette Hybrid License v1",
+    "monetization": {
+      "model": "Freemium",
+      "revenue": "$120/mo",
+      "platform": "Stripe"
+    },
+    "actions": {
+      "open": "/apps/coding-coach",
+      "edit": "/editor/coding-coach",
+      "docs": "/docs/coding-coach"
+    }
+  },
+  {
+    "id": "prd-creator",
+    "name": "PRD Creator",
+    "category": "Content Tools",
+    "description": "One-pager generator with markdown preview",
+    "techStack": ["React", "Claude Streaming"],
+    "image": "/assets/prd-thumb.png",
+    "status": "Live",
+    "ipProof": "CID:Qm6789xyz",
+    "repo": "https://github.com/TheAVCfiles/coding-coach",
+    "license": "PyRouette Hybrid License v1",
+    "monetization": {
+      "model": "Subscription",
+      "revenue": "$240/mo",
+      "platform": "Gumroad"
+    },
+    "actions": {
+      "open": "/apps/prd",
+      "edit": "/editor/prd",
+      "docs": "/docs/prd"
+    }
+  }
+]

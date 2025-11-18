@@ -40,5 +40,19 @@
     "hash": "5fb6987ecfc26f624567944b8e040bc5feea499df92f2e79ece6fd9e48498fed",
     "action": "click",
     "reader_id": "test-user-2"
+  },
+  {
+    "timestamp": "2025-02-14T18:00:00Z",
+    "event_id": "4377ca94-4322-4821-8a95-b6bc8e0b8178",
+    "hash": "cfdd2502be785396621d8ce49a5aef4548936a696b8518ef59c77bdabb09d888",
+    "action": "mint",
+    "reader_id": "avc-ledger"
+  },
+  {
+    "timestamp": "2025-02-14T18:05:00Z",
+    "event_id": "aa317118-d516-47e8-ad0c-423cfb64a6dd",
+    "hash": "9e4ec26dad22a6866cd9172853c54357077700440ebbf02ae0c0446c76255f41",
+    "action": "mint",
+    "reader_id": "avc-ledger"
   }
 ]
