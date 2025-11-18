@@ -1,0 +1,13 @@
+{
+  "id": "poem_004_caesarian_shift",
+  "title": "Caesarian Shift",
+  "surface": "The poem as the reader sees it.",
+  "cipher": "Encrypted or rotated meaning. Your system logic.",
+  "echo": "The emotional or myth-tech resonance.",
+  "tags": ["mothernet", "birth", "glitch"],
+  "links": ["poem_003_signal", "poem_009_static"],
+  "media": {
+    "audio": "audio/poem_004.mp3",
+    "video": "video/poem_004_overlay.mp4"
+  }
+}
