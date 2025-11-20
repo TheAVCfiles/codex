@@ -1,0 +1,14 @@
+{
+  "name": "intuition_autopilot",
+  "description": "KOLL autopilot suite pushing EI signals to TouchDesigner receivers",
+  "steps": [
+    {
+      "task": "generate_levels",
+      "command": "python engines/koll_core/update_predictive_levels.py --config engines/koll_core/configs/levels_override.yaml"
+    },
+    {
+      "task": "broadcast_osc",
+      "command": "touchdesigner --project autopilot.toe"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@yourorg/codex",
+  "version": "0.1.0",
+  "bin": {
+    "codex": "bin/codex"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^11"
+  },
+  "devDependencies": {
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

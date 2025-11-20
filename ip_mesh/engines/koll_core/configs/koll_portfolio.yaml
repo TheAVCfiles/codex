@@ -1,0 +1,17 @@
+# Multi-asset allocation spec for KOLL.
+portfolio:
+  assets:
+    - symbol: ASSET_A
+      path: engines/koll_core/datasets/asset_a.csv
+    - symbol: ASSET_B
+      path: engines/koll_core/datasets/asset_b.csv
+    - symbol: ASSET_C
+      path: engines/koll_core/datasets/asset_c.csv
+  top_n: 2
+  rebalance: daily
+  quantiles:
+    low: 0.60
+    high: 0.90
+  risk:
+    breaker_drawdown: 0.10
+    target_vol: 0.18
