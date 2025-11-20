@@ -1,0 +1,19 @@
+# ops/avc-agent.yml
+product:
+  id: decrypt-girl-starter
+  title: "Cipher Starter Kit"
+  short_desc: "Starter kit: poems, decoder wheel, audio"
+  price_cents: 2200
+  currency: usd
+  image: /assets/cipher-starter.png
+  slug: cipher-starter-kit
+  release_branch: release/cipher-starter-kit
+deploy:
+  build_command: "npm run build"
+  publish_branch: "release/cipher-starter-kit"
+  vercel_project: "theavcfiles-studio"
+notifications:
+  slack_channel: "#studio-sales"   # used for Slack message (or webhook)
+meta:
+  tags: ["journal","cipher","digital"]
+  sku: "DG-ST-001"
