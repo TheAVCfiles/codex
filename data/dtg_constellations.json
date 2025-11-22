@@ -1,0 +1,36 @@
+[
+  {
+    "id": "surface_26_dropped_stitch",
+    "title": "The Dropped Stitch",
+    "mode": "surface",
+    "content": "A child refuses to cry when an adult lashes out. The moment slips sideways. Something more complex forms beneath the silence.",
+    "links": ["cipher_26_authority_fracture", "echo_26_portal"],
+    "tags": ["childhood", "stillness", "authority-crack", "perception"]
+  },
+  {
+    "id": "cipher_26_authority_fracture",
+    "title": "Authority Fracture",
+    "mode": "cipher",
+    "content": "The adult panics at the child's emotional stability. The real rupture is visible only in the system architecture: their power depended on her tears.",
+    "links": ["surface_26_dropped_stitch", "echo_26_portal"],
+    "tags": ["system", "perceived-threat", "counterpoint", "psychology"]
+  },
+  {
+    "id": "echo_26_portal",
+    "title": "The First Portal",
+    "mode": "echo",
+    "content": "The child's stillness becomes the first true rebellion: precision over panic. A dropped stitch becomes a doorway, not a flaw.",
+    "links": ["surface_26_dropped_stitch", "cipher_26_authority_fracture"],
+    "tags": ["becoming", "pathway", "myth-tech", "origin"]
+  },
+  {
+    "id": "constellation_dropped_pattern",
+    "title": "The Dropped Pattern",
+    "nodes": [
+      "surface_26_dropped_stitch",
+      "cipher_26_authority_fracture",
+      "echo_26_portal"
+    ],
+    "description": "The child’s refusal to break reveals the system’s weakness and her own mythic becoming. A dropped stitch opens a portal."
+  }
+]
