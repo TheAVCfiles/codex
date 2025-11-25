@@ -1,0 +1,10 @@
+{
+  "id": "constellation_birthglitch",
+  "title": "Birth Glitch",
+  "nodes": [
+    "poem_001_glitch_as_entry",
+    "poem_004_caesarian_shift",
+    "poem_012_broadcast_break"
+  ],
+  "description": "A three-node arc exploring rupture, emergence, and recursion."
+}
