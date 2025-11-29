@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercury Kernel — Walkable Solar Plexus OS</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: white;
+        }
+        
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* UI Overlay - Mercury Kernel Style */
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(217, 115, 86, 0.15));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(217, 115, 86, 0.3);
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 320px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        #ui-overlay h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            background: linear-gradient(to right, #a78bfa, #f472b6, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        #ui-overlay .subtitle {
+            font-size: 12px;
+            color: #c084fc;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .instruction {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 8px 0;
+            padding-left: 4px;
+        }
+        
+        /* Astro HUD */
+        #astro-hud {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 16px;
+            border-radius: 16px;
+            min-width: 280px;
+        }
+        
+        .astro-planet {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .astro-planet:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .planet-glyph {
+            font-size: 24px;
+            width: 32px;
+            text-align: center;
+        }
+        
+        .planet-info { flex: 1; }
+        .planet-name {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .planet-sign { font-size: 14px; font-weight: 600; }
+        
+        .planet-strength {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        
+        .planet-strength-fill {
+            height: 100%;
+            background: linear-gradient(to right, #10b981, #fbbf24);
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+        
+        /* Trading HUD */
+        #trading-hud {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(217, 115, 86, 0.15), rgba(239, 68, 68, 0.15));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(217, 115, 86, 0.3);
+            padding: 16px;
+            border-radius: 16px;
+            min-width: 300px;
+        }
+        
+        .trade-signal {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .signal-jete { border-left-color: #10b981; }
+        .signal-coda { border-left-color: #ef4444; }
+        .signal-fermata { border-left-color: #f59e0b; }
+        
+        .signal-icon { font-size: 24px; }
+        
+        /* Dialogue System */
+        #dialogue-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 255, 0.95));
+            color: #1f2937;
+            padding: 24px;
+            border-radius: 20px;
+            max-width: 650px;
+            width: 90%;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(217, 115, 86, 0.3);
+        }
+        
+        #dialogue-name {
+            margin: 0 0 12px 0;
+            color: #D97356;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .dialogue-persona {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(217, 115, 86, 0.1);
+            border-radius: 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 8px;
+        }
+        
+        #dialogue-content {
+            margin: 12px 0;
+            line-height: 1.8;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 15px;
+        }
+        
+        .dialogue-option {
+            background: linear-gradient(135deg, #f3f4f6, #ffffff);
+            border: 2px solid #D97356;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .dialogue-option:hover {
+            background: linear-gradient(135deg, #D97356, #c85a3f);
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(217, 115, 86, 0.3);
+        }
+        
+        .provenance-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #10b981;
+            margin-left: 8px;
+        }
+        
+        /* Market Ticker */
+        #market-ticker {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(31, 41, 55, 0.7));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            gap: 24px;
+        }
+        
+        .ticker-item { display: flex; flex-direction: column; gap: 4px; }
+        .ticker-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ticker-value { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .ticker-change { font-size: 11px; }
+        .positive { color: #10b981; }
+        .negative { color: #ef4444; }
+        
+        /* Interaction Prompt */
+        #interaction-prompt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            display: none;
+            font-size: 14px;
+            border: 1px solid rgba(217, 115, 86, 0.5);
+        }
+        
+        /* Floating Effects */
+        .floating-text {
+            position: absolute;
+            color: #fbbf24;
+            font-size: 28px;
+            font-weight: 900;
+            pointer-events: none;
+            animation: floatUp 2s ease-out forwards;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5), 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1.3); }
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(217, 115, 86, 0.3);
+            border-radius: 50%;
+            border-top-color: #D97356;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Mode Selector */
+        #mode-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 11px;
+            text-align: center;
+        }
+        
+        .mode-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .mode-btn.active {
+            background: linear-gradient(135deg, #D97356, #c85a3f);
+            border-color: #D97356;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <!-- Mercury Kernel UI Overlay -->
+    <div id="ui-overlay">
+        <h2>MERCURY KERNEL</h2>
+        <p class="subtitle">☿ Solar Plexus Lens</p>
+        <p class="instruction">🎮 WASD to move • Arrow keys to look</p>
+        <p class="instruction">🗣️ Press E near advisors to talk</p>
+        <p class="instruction">💃 SPACE to dance (joy boost)</p>
+        <p class="instruction">🎯 ESC to close dialogs</p>
+        
+        <div id="mode-selector">
+            <button class="mode-btn active" data-mode="editor">📝 Editor</button>
+            <button class="mode-btn" data-mode="empath">💙 Empath</button>
+            <button class="mode-btn" data-mode="manager">🎯 Manager</button>
+        </div>
+    </div>
+    
+    <!-- Astro HUD -->
+    <div id="astro-hud">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #a78bfa;">
+            ✨ BIRTH CHART
+        </div>
+        <div class="astro-planet" data-planet="sun">
+            <div class="planet-glyph">☉</div>
+            <div class="planet-info">
+                <div class="planet-name">Sun</div>
+                <div class="planet-sign">Scorpio 7°</div>
+                <div class="planet-strength">
+                    <div class="planet-strength-fill" style="width: 85%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="astro-planet" data-planet="moon">
+            <div class="planet-glyph">☽</div>
+            <div class="planet-info">
+                <div class="planet-name">Moon</div>
+                <div class="planet-sign">Pisces 13°</div>
+                <div class="planet-strength">
+                    <div class="planet-strength-fill" style="width: 72%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="astro-planet" data-planet="rising">
+            <div class="planet-glyph">↗</div>
+            <div class="planet-info">
+                <div class="planet-name">Rising</div>
+                <div class="planet-sign">Cancer</div>
+                <div class="planet-strength">
+                    <div class="planet-strength-fill" style="width: 90%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Trading HUD -->
+    <div id="trading-hud">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #fbbf24;">
+            🎭 TRADING SIGNALS
+        </div>
+        <div id="active-signals"></div>
+        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="color: rgba(255,255,255,0.6);">Portfolio:</span>
+                <span style="font-weight: 700; color: #10b981;">$<span id="portfolio-value">100,000</span></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Market Ticker -->
+    <div id="market-ticker">
+        <div class="ticker-item">
+            <div class="ticker-label">S&P 500</div>
+            <div class="ticker-value" id="sp500-price">4,800</div>
+            <div class="ticker-change positive" id="sp500-change">+0.0</div>
+        </div>
+        <div class="ticker-item">
+            <div class="ticker-label">VIX</div>
+            <div class="ticker-value" id="vix-value">15.5</div>
+            <div class="ticker-change" id="vix-status">Low</div>
+        </div>
+        <div class="ticker-item">
+            <div class="ticker-label">BTC</div>
+            <div class="ticker-value" id="btc-price">45.0k</div>
+            <div class="ticker-change positive" id="btc-change">+0.0</div>
+        </div>
+    </div>
+    
+    <!-- Dialogue Box -->
+    <div id="dialogue-box">
+        <h3 id="dialogue-name">Advisor <span class="dialogue-persona" id="dialogue-persona">EDITOR</span></h3>
+        <div id="dialogue-content"></div>
+        <div id="dialogue-options"></div>
+    </div>
+    
+    <!-- Interaction Prompt -->
+    <div id="interaction-prompt">Press E to talk</div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ======================
+        // MERCURY KERNEL ENGINE
+        // ======================
+        
+        // Current mode (Editor/Empath/Manager)
+        let currentMode = 'editor';
+        let joyBoost = 0;
+        
+        const canvasContainer = document.getElementById('canvas-container');
+        const dialogueBox = document.getElementById('dialogue-box');
+        const dialogueName = document.getElementById('dialogue-name');
+        const dialoguePersona = document.getElementById('dialogue-persona');
+        const dialogueContent = document.getElementById('dialogue-content');
+        const dialogueOptions = document.getElementById('dialogue-options');
+        const interactionPrompt = document.getElementById('interaction-prompt');
+        const activeSignals = document.getElementById('active-signals');
+        const portfolioValueEl = document.getElementById('portfolio-value');
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0f);
+        scene.fog = new THREE.Fog(0x0a0a0f, 15, 60);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 8);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        canvasContainer.appendChild(renderer.domElement);
+        
+        // Lighting - Mystical purple/orange glow
+        const ambientLight = new THREE.AmbientLight(0x8b5cf6, 0.4);
+        scene.add(ambientLight);
+        
+        const keyLight = new THREE.DirectionalLight(0xd97356, 0.6);
+        keyLight.position.set(10, 20, 10);
+        keyLight.castShadow = true;
+        keyLight.shadow.camera.near = 0.1;
+        keyLight.shadow.camera.far = 60;
+        keyLight.shadow.camera.left = -40;
+        keyLight.shadow.camera.right = 40;
+        keyLight.shadow.camera.top = 40;
+        keyLight.shadow.camera.bottom = -40;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        scene.add(keyLight);
+        
+        const fillLight = new THREE.PointLight(0xa78bfa, 0.5, 30);
+        fillLight.position.set(-10, 8, -10);
+        scene.add(fillLight);
+        
+        const rimLight = new THREE.PointLight(0xfbbf24, 0.4, 25);
+        rimLight.position.set(5, 5, 15);
+        scene.add(rimLight);
+        
+        // Floor - Mystical gradient
+        const floorGeometry = new THREE.PlaneGeometry(50, 50);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x1a1a2e,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+        
+        // Add glowing floor pattern
+        const gridHelper = new THREE.GridHelper(50, 25, 0x8b5cf6, 0x6b21a8);
+        gridHelper.position.y = 0.01;
+        scene.add(gridHelper);
+        
+        // Trading Stations (replacing desks)
+        function createTradingStation(x, z, signalType) {
+            const group = new THREE.Group();
+            
+            // Platform
+            const platformGeometry = new THREE.CylinderGeometry(1.2, 1.5, 0.3, 6);
+            const platformColors = {
+                'JETÉ': 0x10b981,
+                'CODA': 0xef4444,
+                'FERMATA': 0xf59e0b
+            };
+            const platformMaterial = new THREE.MeshStandardMaterial({ 
+                color: platformColors[signalType] || 0x8b5cf6,
+                emissive: platformColors[signalType] || 0x8b5cf6,
+                emissiveIntensity: 0.3,
+                roughness: 0.3,
+                metalness: 0.7
+            });
+            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+            platform.position.y = 0.15;
+            platform.castShadow = true;
+            platform.receiveShadow = true;
+            group.add(platform);
+            
+            // Hologram pillar
+            const pillarGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 8);
+            const pillarMaterial = new THREE.MeshStandardMaterial({
+                color: platformColors[signalType] || 0x8b5cf6,
+                transparent: true,
+                opacity: 0.6,
+                emissive: platformColors[signalType] || 0x8b5cf6,
+                emissiveIntensity: 0.5
+            });
+            const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+            pillar.position.y = 1.3;
+            group.add(pillar);
+            
+            // Signal orb
+            const orbGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const orbMaterial = new THREE.MeshStandardMaterial({
+                color: platformColors[signalType] || 0x8b5cf6,
+                emissive: platformColors[signalType] || 0x8b5cf6,
+                emissiveIntensity: 0.8,
+                transparent: true,
+                opacity: 0.8
+            });
+            const orb = new THREE.Mesh(orbGeometry, orbMaterial);
+            orb.position.y = 2.5;
+            orb.castShadow = true;
+            group.add(orb);
+            
+            group.position.set(x, 0, z);
+            group.userData = { type: 'station', signal: signalType, orb };
+            return group;
+        }
+        
+        // Add trading stations
+        const station1 = createTradingStation(-12, -8, 'JETÉ');
+        const station2 = createTradingStation(0, -8, 'FERMATA');
+        const station3 = createTradingStation(12, -8, 'CODA');
+        const station4 = createTradingStation(-12, 8, 'JETÉ');
+        const station5 = createTradingStation(12, 8, 'CODA');
+        scene.add(station1, station2, station3, station4, station5);
+        
+        // Advisor/Character creation
+        function createAdvisor(name, persona, color, x, z) {
+            const group = new THREE.Group();
+            const bodyGeometry = new THREE.CapsuleGeometry(0.4, 1.4, 8, 16);
+            const bodyMaterial = new THREE.MeshStandardMaterial({
+                color,
+                emissive: color,
+                emissiveIntensity: 0.4,
+                metalness: 0.2,
+                roughness: 0.3
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.castShadow = true;
+            body.position.y = 1.2;
+            group.add(body);
+            
+            const haloGeometry = new THREE.RingGeometry(0.55, 0.65, 32);
+            const haloMaterial = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+            const halo = new THREE.Mesh(haloGeometry, haloMaterial);
+            halo.rotation.x = Math.PI / 2;
+            halo.position.y = 2.1;
+            group.add(halo);
+            
+            const emitter = new THREE.PointLight(color, 1, 5);
+            emitter.position.y = 1.8;
+            group.add(emitter);
+            
+            group.position.set(x, 0, z);
+            group.userData = { type: 'advisor', name, persona };
+            scene.add(group);
+            return group;
+        }
+        
+        const advisors = [
+            createAdvisor('Ari', 'Editor', 0xd97356, -6, -2),
+            createAdvisor('Mira', 'Empath', 0x10b981, 0, 3),
+            createAdvisor('Sol', 'Manager', 0xa78bfa, 6, -2)
+        ];
+        
+        // Dialogue content
+        const dialogueLibrary = {
+            editor: [
+                "We script clarity. Keep sentences tight and luminous.",
+                "Your draft is a ritual. Prune until the signal sings.",
+                "Remember: provenance is a spell. Cite your sources." 
+            ],
+            empath: [
+                "Breathe into the timeline. How does this decision feel?",
+                "Every signal is an emotional wave—surf it, don't drown.",
+                "Care threads the network together. Leave places better than you found them." 
+            ],
+            manager: [
+                "Roadmaps are constellations—align the stars, steer the fleet.",
+                "Ship in small, shining increments. Momentum is magic.",
+                "Protect the cadence. Protect the team." 
+            ]
+        };
+        
+        const personaTitles = {
+            editor: 'EDITOR',
+            empath: 'EMPATH',
+            manager: 'MANAGER'
+        };
+        
+        function openDialogue(advisor) {
+            const personaKey = advisor.userData.persona.toLowerCase();
+            dialogueName.innerHTML = `${advisor.userData.name} <span class="dialogue-persona" id="dialogue-persona">${advisor.userData.persona.toUpperCase()}</span>`;
+            const lines = dialogueLibrary[personaKey] || dialogueLibrary.editor;
+            const mainLine = lines[Math.floor(Math.random() * lines.length)];
+            dialogueContent.innerHTML = `<p>${mainLine}</p><p class="provenance-badge">solar plexus verified</p>`;
+            dialogueOptions.innerHTML = '';
+            const options = [
+                { text: 'Request signal sync', action: () => appendDialogue('Signal sync confirmed. Orbiting next waypoint...') },
+                { text: 'Log gratitude', action: () => appendDialogue('Gratitude logged. Resonance rising.') }
+            ];
+            options.forEach(opt => {
+                const btn = document.createElement('div');
+                btn.className = 'dialogue-option';
+                btn.textContent = opt.text;
+                btn.addEventListener('click', () => opt.action());
+                dialogueOptions.appendChild(btn);
+            });
+            dialogueBox.style.display = 'block';
+        }
+        
+        function appendDialogue(text) {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = text;
+            dialogueContent.appendChild(paragraph);
+            dialogueContent.scrollTop = dialogueContent.scrollHeight;
+        }
+        
+        function closeDialogue() {
+            dialogueBox.style.display = 'none';
+        }
+        
+        // Input management
+        const keys = {};
+        const velocity = new THREE.Vector3();
+        let yaw = 0;
+        let pitch = 0;
+        const moveSpeed = 0.08;
+        
+        window.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+            if (e.code === 'Space') {
+                triggerJoyBoost();
+            }
+            if (e.code === 'KeyE') {
+                const target = getNearbyAdvisor();
+                if (target) {
+                    openDialogue(target);
+                }
+            }
+            if (e.code === 'Escape') {
+                closeDialogue();
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => { keys[e.code] = false; });
+        
+        function updateMovement() {
+            if (keys['ArrowLeft']) yaw += 0.02;
+            if (keys['ArrowRight']) yaw -= 0.02;
+            if (keys['ArrowUp']) pitch = Math.min(pitch + 0.02, 0.5);
+            if (keys['ArrowDown']) pitch = Math.max(pitch - 0.02, -0.5);
+            
+            const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw) * -1);
+            const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0, 1, 0)).normalize();
+            
+            velocity.set(0, 0, 0);
+            if (keys['KeyW']) velocity.add(forward);
+            if (keys['KeyS']) velocity.sub(forward);
+            if (keys['KeyA']) velocity.sub(right);
+            if (keys['KeyD']) velocity.add(right);
+            if (velocity.length() > 0) velocity.normalize().multiplyScalar(moveSpeed * (1 + joyBoost));
+            camera.position.add(velocity);
+            camera.rotation.set(pitch, yaw, 0);
+        }
+        
+        // Joy boost floating text
+        function triggerJoyBoost() {
+            joyBoost = 0.3;
+            const text = document.createElement('div');
+            text.className = 'floating-text';
+            text.textContent = 'JOY +';
+            const rect = canvasContainer.getBoundingClientRect();
+            text.style.left = `${Math.random() * rect.width}px`;
+            text.style.top = `${rect.height / 2 + Math.random() * 60 - 30}px`;
+            canvasContainer.appendChild(text);
+            setTimeout(() => text.remove(), 2000);
+            setTimeout(() => { joyBoost = 0; }, 1200);
+        }
+        
+        // Interaction detection
+        function getNearbyAdvisor() {
+            let closest = null;
+            let minDist = 3.2;
+            advisors.forEach(advisor => {
+                const dist = advisor.position.distanceTo(camera.position);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = advisor;
+                }
+            });
+            return closest;
+        }
+        
+        function updateInteractionPrompt() {
+            const nearby = getNearbyAdvisor();
+            interactionPrompt.style.display = nearby ? 'block' : 'none';
+        }
+        
+        // Trading signals data
+        const signals = [
+            { type: 'JETÉ', asset: 'ETH', conviction: 0.86, note: 'Momentum + positive funding' },
+            { type: 'CODA', asset: 'QQQ', conviction: 0.64, note: 'Earnings compression risk' },
+            { type: 'FERMATA', asset: 'GLD', conviction: 0.72, note: 'Macro pause, wait for CPI' }
+        ];
+        
+        function renderSignals() {
+            activeSignals.innerHTML = '';
+            signals.forEach(signal => {
+                const row = document.createElement('div');
+                row.className = `trade-signal signal-${signal.type.toLowerCase()}`;
+                row.innerHTML = `
+                    <span class="signal-icon">${signal.type === 'JETÉ' ? '🟢' : signal.type === 'CODA' ? '🔴' : '🟡'}</span>
+                    <div style="flex:1; margin-left: 10px;">
+                        <div style="font-weight: 700;">${signal.asset} · ${signal.type}</div>
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.7);">${signal.note}</div>
+                    </div>
+                    <div style="font-family: monospace;">${Math.round(signal.conviction * 100)}%</div>
+                `;
+                activeSignals.appendChild(row);
+            });
+        }
+        renderSignals();
+        
+        function updatePortfolio() {
+            const newValue = 100000 + Math.sin(Date.now() / 1500) * 1200 + joyBoost * 500;
+            portfolioValueEl.textContent = newValue.toFixed(0);
+        }
+        
+        // Market ticker animation
+        const tickerTargets = {
+            sp: 4800,
+            vix: 15.5,
+            btc: 45
+        };
+        
+        function animateTicker() {
+            tickerTargets.sp += (Math.random() - 0.5) * 4;
+            tickerTargets.vix += (Math.random() - 0.5) * 0.3;
+            tickerTargets.btc += (Math.random() - 0.5) * 0.4;
+            
+            const spPrice = document.getElementById('sp500-price');
+            const spChange = document.getElementById('sp500-change');
+            const vixValue = document.getElementById('vix-value');
+            const vixStatus = document.getElementById('vix-status');
+            const btcPrice = document.getElementById('btc-price');
+            const btcChange = document.getElementById('btc-change');
+            
+            const spDelta = (Math.random() - 0.5) * 0.2;
+            const btcDelta = (Math.random() - 0.5) * 0.4;
+            
+            spPrice.textContent = tickerTargets.sp.toFixed(0);
+            spChange.textContent = `${spDelta >= 0 ? '+' : ''}${spDelta.toFixed(2)}`;
+            spChange.className = `ticker-change ${spDelta >= 0 ? 'positive' : 'negative'}`;
+            
+            vixValue.textContent = tickerTargets.vix.toFixed(1);
+            vixStatus.textContent = tickerTargets.vix < 15 ? 'Low' : tickerTargets.vix < 22 ? 'Moderate' : 'Spike';
+            vixStatus.className = `ticker-change ${tickerTargets.vix < 20 ? 'positive' : 'negative'}`;
+            
+            btcPrice.textContent = `${tickerTargets.btc.toFixed(1)}k`;
+            btcChange.textContent = `${btcDelta >= 0 ? '+' : ''}${btcDelta.toFixed(2)}`;
+            btcChange.className = `ticker-change ${btcDelta >= 0 ? 'positive' : 'negative'}`;
+        }
+        setInterval(animateTicker, 1200);
+        
+        // Mode selector
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                const persona = personaTitles[currentMode] || 'EDITOR';
+                dialoguePersona.textContent = persona;
+                appendDialogue(`Mode set to ${persona}.`);
+            });
+        });
+        
+        // Animate orbs
+        function animateStations(time) {
+            [station1, station2, station3, station4, station5].forEach((station, idx) => {
+                const orb = station.userData.orb;
+                orb.position.y = 2.5 + Math.sin(time * 0.002 + idx) * 0.3;
+                orb.material.opacity = 0.7 + Math.sin(time * 0.003 + idx) * 0.2;
+            });
+        }
+        
+        function tick(time) {
+            updateMovement();
+            updateInteractionPrompt();
+            animateStations(time);
+            updatePortfolio();
+            renderer.render(scene, camera);
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
