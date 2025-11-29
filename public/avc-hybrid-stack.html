@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AVC Hybrid Stack™ — Cognitive Operating System</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #040305;
+      --text: #f3f1f4;
+      --muted: #c4bfd0;
+      --accent: #ff6bd6;
+      --accent-soft: rgba(255, 107, 214, 0.1);
+      --panel: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.12);
+      --font-body: "Space Grotesk", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: "Literata", "Iowan Old Style", "Palatino", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 25% 0%, rgba(255, 107, 214, 0.12), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(86, 95, 255, 0.13), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      padding: clamp(24px, 5vw, 72px);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(36px, 7vw, 64px);
+      margin: 0;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      margin-top: 12px;
+      font-size: clamp(16px, 2.3vw, 20px);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .abstract {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: clamp(20px, 4vw, 32px);
+      background: var(--panel);
+      font-family: var(--font-serif);
+      font-size: clamp(18px, 2.8vw, 22px);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 16px;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin: 0 0 12px 0;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .layer {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 160px;
+    }
+
+    .layer strong {
+      font-size: 17px;
+      letter-spacing: 0.02em;
+    }
+
+    .layer small {
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .applications {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 14px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .author {
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .logos {
+      display: flex;
+      gap: 12px;
+    }
+
+    .logo-pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 20px;
+      letter-spacing: 0.1em;
+      font-size: 13px;
+      text-transform: uppercase;
+      background: var(--accent-soft);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>The AVC Hybrid Stack™</h1>
+      <p class="tagline">A cognitive operating system for myth-tech, embodied computation, and portable identity architecture</p>
+    </header>
+
+    <section class="abstract">
+      The AVC Hybrid Stack™ is a seven-layer cognitive operating system that fuses choreographic reasoning, symbolic compression,
+      and narrative-state computation. This architecture provides a structured method for embodied AI design, recursive meaning
+      processing, and sovereign authorship in digital systems. It powers Decrypt the Girl, MythOS™, and the identity serialization
+      method known as Poetic State Tokens (PSTs).
+    </section>
+
+    <section>
+      <p class="section-title">Architecture</p>
+      <div class="architecture">
+        <div class="layer">
+          <small>01</small>
+          <strong>Lineage Kernel</strong>
+          <p>Triadic source-code (Mother → Self → Sister). Defines the system’s organizational constant.</p>
+        </div>
+        <div class="layer">
+          <small>02</small>
+          <strong>Proprioceptive Engine</strong>
+          <p>Movement-cognition layer. Processes ideas as spatial transitions and choreographic logic.</p>
+        </div>
+        <div class="layer">
+          <small>03</small>
+          <strong>Cypher Stack</strong>
+          <p>Surface / Cipher / Echo. Triadic meaning compression + transformation.</p>
+        </div>
+        <div class="layer">
+          <small>04</small>
+          <strong>Rosary Memory Bus</strong>
+          <p>Sequential symbolic memory (beads, nodes, beats). Trauma-resilient recall + modular narrative storage.</p>
+        </div>
+        <div class="layer">
+          <small>05</small>
+          <strong>Myth-Tech Interpreter</strong>
+          <p>Archetype → logic pipeline. Symbolic execution, recursive rendering, narrative computation.</p>
+        </div>
+        <div class="layer">
+          <small>06</small>
+          <strong>Semantic Containerizer</strong>
+          <p>Anchor Node Generator. Produces portable identity states and deterministic environment rehydration.</p>
+        </div>
+        <div class="layer">
+          <small>07</small>
+          <strong>Sovereign Protocol Layer</strong>
+          <p>Authorial firewall. Anti-extraction ethics, narrative rights, contextual integrity.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="applications">
+      <p class="section-title">Applications</p>
+      <div class="apps-grid">
+        <span class="pill">MythOS™ development</span>
+        <span class="pill">Decrypt the Girl OS</span>
+        <span class="pill">Portable author-state initialization</span>
+        <span class="pill">Embodied cognition modeling</span>
+        <span class="pill">Narrative computation</span>
+        <span class="pill">Trauma-informed design systems</span>
+      </div>
+    </section>
+
+    <footer>
+      <span class="author">Author: Allison Van Cura (AVC) — Choreographer & Systems Architect</span>
+      <div class="logos">
+        <span class="logo-pill">MythOS™</span>
+        <span class="logo-pill">Decrypt the Girl</span>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
