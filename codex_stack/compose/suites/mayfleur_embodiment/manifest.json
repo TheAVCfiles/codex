@@ -1,0 +1,12 @@
+{
+  "name": "mayfleur_embodiment",
+  "workflows": [
+    "dtg_worker/log",
+    "csv_tools/normalize",
+    "ledger_demo/build"
+  ],
+  "outputs": [
+    "reports/mayfleur.json",
+    "reports/mayfleur.csv"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "narrative",
+  "name": "decrypt_assets",
+  "version": "0.1.0",
+  "docs": ["development_plan.md", "curriculum/README.md"],
+  "links": [
+    { "concept": "Birth Chart Layer", "used_by": ["intuition_autopilot"] }
+  ]
+}
