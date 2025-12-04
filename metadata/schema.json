@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Codex Narrative Node",
+  "description": "Structured metadata for poems, scenes, archetypes, constellations, and other narrative fragments in the DeCrypt the Girl codex.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "type",
+    "mode",
+    "archetype",
+    "constellation",
+    "timecode",
+    "alignment",
+    "emotional_key",
+    "themes",
+    "function",
+    "text",
+    "relations"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for the fragment (e.g., poem code A1 or constellation name)."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable title for the fragment."
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content kind, such as poem, scene, archetype, constellation, or glyph."
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["Surface", "Cipher", "Echo"],
+      "description": "Narrative layer for this fragment: Surface (visible), Cipher (encoded truth), or Echo (resonance)."
+    },
+    "archetype": {
+      "type": "array",
+      "description": "Associated archetypes for this fragment.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "constellation": {
+      "type": "array",
+      "description": "Constellation memberships for this fragment.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "timecode": {
+      "type": "string",
+      "description": "Canonical timeline reference or empty string when not set.",
+      "default": ""
+    },
+    "alignment": {
+      "type": "object",
+      "required": ["zodiac", "tarot", "glyph"],
+      "additionalProperties": false,
+      "properties": {
+        "zodiac": {
+          "type": "string",
+          "description": "Zodiac correspondence for the fragment.",
+          "default": ""
+        },
+        "tarot": {
+          "type": "string",
+          "description": "Tarot correspondence for the fragment.",
+          "default": ""
+        },
+        "glyph": {
+          "type": "string",
+          "description": "Glyph correspondence for the fragment.",
+          "default": ""
+        }
+      }
+    },
+    "emotional_key": {
+      "type": "array",
+      "description": "Emotional tonalities emphasized by this fragment.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "themes": {
+      "type": "array",
+      "description": "Themes present in the fragment.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "function": {
+      "type": "string",
+      "description": "Narrative function or in-world purpose of the fragment.",
+      "default": ""
+    },
+    "text": {
+      "type": "string",
+      "description": "Full text of the fragment (poetry, scene prose, or glyph description).",
+      "default": ""
+    },
+    "relations": {
+      "type": "object",
+      "required": ["mirrors", "unlocks", "glitches"],
+      "additionalProperties": false,
+      "properties": {
+        "mirrors": {
+          "type": "array",
+          "description": "Fragments that mirror this node (reflections, parallels).",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": []
+        },
+        "unlocks": {
+          "type": "array",
+          "description": "Fragments that this node unlocks or reveals.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": []
+        },
+        "glitches": {
+          "type": "array",
+          "description": "Fragments that glitch or destabilize this node.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}
