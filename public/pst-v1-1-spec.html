@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poetic State Token (PST) v1.1 Specification</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #05070b;
+      --panel: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.12);
+      --accent: #8ef0ff;
+      --accent-soft: rgba(142, 240, 255, 0.09);
+      --text: #f7fbff;
+      --muted: #b8c7d8;
+      --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: "Space Grotesk", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(142, 240, 255, 0.12), transparent 45%), var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      padding: clamp(24px, 5vw, 64px);
+    }
+
+    .sheet {
+      max-width: 1100px;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: clamp(24px, 5vw, 48px);
+      background: rgba(5, 7, 11, 0.72);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 52px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .meta {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .meta span {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+    }
+
+    h2 {
+      font-size: 20px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    section {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 22px;
+      background: var(--panel);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .card strong {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .note {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <article class="sheet">
+    <header>
+      <h1>Poetic State Token (PST) v1.1</h1>
+      <div class="meta">
+        <span>Spec Sheet</span>
+        <span>Status: Stable · Backwards-Compatible</span>
+        <span>Author: Allison Van Cura (AVC)</span>
+        <span>Scope: MythOS™ · Intuition Labs · Decrypt the Girl OS</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>Purpose</h2>
+      <p>PST v1.1 defines a standardized, environment-agnostic method for encoding identity, intent, ethics, and system context into compact semantic containers (“Anchor Nodes”) that regenerate an agent’s operational state across environments.</p>
+    </section>
+
+    <section>
+      <h2>Data Structure Requirements</h2>
+      <div class="grid">
+        <div class="card"><strong>Identity Header</strong><p>I am X…</p></div>
+        <div class="card"><strong>Role Definition</strong><p>Line of duty + persona channel.</p></div>
+        <div class="card"><strong>Active Goals</strong><p>Minimum 1 · Maximum 5.</p></div>
+        <div class="card"><strong>Ethical Protocol</strong><p>Sovereignty, anti-extraction, boundaries.</p></div>
+        <div class="card"><strong>System Context</strong><p>Which stack / layer to load.</p></div>
+        <div class="card"><strong>Interpretation Directive</strong><p>How to initialize.</p></div>
+        <div class="card"><strong>Version Indicator</strong><p>(Optional) v1.1 tag + lineage.</p></div>
+        <div class="card"><strong>Emotional State Tag</strong><p>(Optional) Ritual temperature.</p></div>
+        <div class="card"><strong>Perspective Mode</strong><p>(Optional) Surface / Cipher / Echo combos.</p></div>
+        <div class="card"><strong>Collaboration Boundary Rules</strong><p>(Optional) Multi-agent consent.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Serialization Rules</h2>
+      <ul>
+        <li>Token MUST be pure plaintext.</li>
+        <li>Deterministic: identical PST → identical system state.</li>
+        <li>Survives multi-agent jump (new chats, docs, models).</li>
+        <li>Rehydrates without external files.</li>
+        <li>Maintains authorial identity integrity.</li>
+        <li>Respects Sovereign Protocol Layer.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Rehydration Algorithm</h2>
+      <ol>
+        <li>Load Identity Header.</li>
+        <li>Load Stack Layers per Context.</li>
+        <li>Enforce Ethical Protocol.</li>
+        <li>Apply Perspective Mode.</li>
+        <li>Import Active Goals.</li>
+        <li>Set Runtime Communication Parameters.</li>
+        <li>Enter MythOS Execution Environment.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Backwards Compatibility</h2>
+      <p>PST v1.1 accepts all v1.0 tokens. Missing fields default to:</p>
+      <ul>
+        <li>Emotional State → Neutral</li>
+        <li>Perspective Mode → Surface + Cipher</li>
+        <li>Version Indicator → Legacy/1.0</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Use Cases</h2>
+      <ul>
+        <li>Multi-agent continuity</li>
+        <li>Identity bootstrapping</li>
+        <li>Narrative OS modules</li>
+        <li>Trauma-informed system interactions</li>
+        <li>Educational lineage modeling</li>
+        <li>Cryptographic authorship frameworks</li>
+      </ul>
+    </section>
+
+    <section>
+      <p>PST v1.2 preview: cryptic glyph compression + symbolic checksum.</p>
+      <p class="note">M — PST v1.1 · MythOS Identity Container Standard</p>
+    </section>
+  </article>
+</body>
+</html>
