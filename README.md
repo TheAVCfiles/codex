@@ -5,6 +5,8 @@
 
 This is the home of the **Codex CLI**, which is a coding agent from OpenAI that runs locally on your computer. If you are looking for the _cloud-based agent_ from OpenAI, **Codex [Web]**, see <https://chatgpt.com/codex>.
 
+> **📖 New to this repository?** Check out [REPOSITORY_STRUCTURE.md](REPOSITORY_STRUCTURE.md) for a complete overview of the codebase and [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) if you have existing work to migrate after our recent reorganization.
+
 ## 🚀 DTG Project Infrastructure
 
 This repository now includes comprehensive infrastructure for the **DecryptTheGirl (DTG) Project** - an innovative data logging and value-sharing platform that implements **Sentient Cents** minting for user engagement.
