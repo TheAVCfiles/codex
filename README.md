@@ -52,9 +52,29 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
    ```
 
 5. **View Privacy Policy**:
+
    ```bash
    # Review the Zero Loss, Zero Surprise framework
    open public/zero-loss-zero-surprise.html
+   ```
+
+6. **Explore Myth-Tech System Sheets**:
+
+   ```bash
+   # Read the AVC Hybrid Stack overview
+   open public/avc-hybrid-stack.html
+
+   # Review Poetic State Token (PST) v1.1 requirements
+   open public/pst-v1-1-spec.html
+
+   # Reference the MythOS command shell
+   open public/mythos-command-set.html
+
+   # See the Intuition Labs executive overview
+   open public/intuition-labs-overview.html
+
+   # Experience the Ritual Boot Sequence script
+   open public/ritual-boot-sequence.html
    ```
 
 ### Directory Structure
