@@ -1,0 +1,12 @@
+{
+  "type": "edition",
+  "name": "interpreter",
+  "assets": [
+    "assets/glisscode_render_001.mp4",
+    "assets/rouette_001.gliss",
+    "assets/folio_001.pdf",
+    "license/performance.md"
+  ],
+  "license": "codex-performance-v1",
+  "includes": ["archive"]
+}

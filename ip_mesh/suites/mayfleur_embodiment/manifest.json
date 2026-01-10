@@ -1,0 +1,8 @@
+{
+  "type": "suite",
+  "name": "mayfleur_embodiment",
+  "version": "0.1.0",
+  "includes": ["mayfleur_core", "ui_td"],
+  "entrypoints": [{ "cli": "python interfaces/ui_td/receiver_bridge.py" }],
+  "outputs": ["engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox"]
+}

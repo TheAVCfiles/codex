@@ -1,0 +1,10 @@
+{
+  "type": "service",
+  "name": "dtg_worker",
+  "version": "0.1.0",
+  "runtime": "cloudflare-worker",
+  "routes": ["/log", "/mint", "/ledger"],
+  "storage": ["KV:DTG_EVENTS", "D1:DTG_LEDGER"],
+  "depends_on": [],
+  "docs": ["README.md"]
+}
