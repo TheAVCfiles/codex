@@ -1,0 +1,45 @@
+name: AVC Agent — Product Launch
+
+on:
+  workflow_dispatch:
+    inputs:
+      config:
+        description: "Path to config file"
+        default: "ops/avc-agent.yml"
+  release:
+    types: [created]
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run AVC Agent
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: node scripts/avc-agent.js --config ${{ github.event.inputs.config || 'ops/avc-agent.yml' }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: run-agent
+    if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/release/')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vercel — Deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: "--prod"
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
