@@ -1,0 +1,38 @@
+name: Nightly Audit Build
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2AM daily
+  push:
+    paths:
+      - 'inbox/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r engine/requirements.txt
+
+      - name: Validate Intake
+        run: python engine/intake_validate.py
+
+      - name: Run build
+        if: success()
+        run: python engine/build_zip.py
+
+      - name: Commit exports and state
+        run: |
+          git config --global user.name "audit-bot"
+          git config --global user.email "bot@audit.local"
+          git add exports/ state/
+          git commit -m "Nightly audit build [auto]" || echo "No changes to commit"
+          git push
