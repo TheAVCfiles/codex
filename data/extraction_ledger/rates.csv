@@ -1,0 +1,2 @@
+Role,base_rate_low,base_rate_high,base_rate_max,risk_multiplier,valuation_notes
+"Non-Profit Consultant",150,250,300,1.1,"Emergency pivot rate; locked gate"
