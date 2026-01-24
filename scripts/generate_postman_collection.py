@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 DEFAULT_SPEC = Path("smallwallets-openapi.json")
-DEFAULT_OUTPUT = Path("postman.collection.json")
+DEFAULT_OUTPUT = Path("postman/SmallWallets.postman_collection.json")
 DEFAULT_BASE_URL = "https://sandbox.smallwallets.dev/v1"
 
 
@@ -149,13 +149,17 @@ def main() -> int:
     collection = build_collection(spec)
     rendered = json.dumps(collection, indent=2) + "\n"
 
-    if args.check and output_path.exists():
+    if args.check:
+        if not output_path.exists():
+            print("Postman collection is missing. Run without --check to generate it.")
+            return 1
         current = output_path.read_text(encoding="utf-8")
         if current != rendered:
             print("Postman collection is out of date. Run without --check to regenerate.")
             return 1
         return 0
 
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(rendered, encoding="utf-8")
     return 0
 

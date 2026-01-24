@@ -4,14 +4,14 @@ on:
   push:
     paths:
       - "smallwallets-openapi.json"
-      - "postman.collection.json"
+      - "postman/SmallWallets.postman_collection.json"
       - "scripts/generate_postman_collection.py"
       - ".github/workflows/smallwallets-toolbox.yml"
       - "README.md"
   pull_request:
     paths:
       - "smallwallets-openapi.json"
-      - "postman.collection.json"
+      - "postman/SmallWallets.postman_collection.json"
       - "scripts/generate_postman_collection.py"
       - ".github/workflows/smallwallets-toolbox.yml"
       - "README.md"
