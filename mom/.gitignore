@@ -1,0 +1,41 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Node / JS
+node_modules/
+dist/
+build/
+.npmrc
+.pnpm-store/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+pip-wheel-metadata/
+
+# Editors
+.vscode/
+.idea/
+
+# Secrets / keys
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local artifacts
+*.zip
+*.tar.gz
+/out/
+/tmp/
