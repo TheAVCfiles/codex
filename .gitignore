@@ -98,3 +98,5 @@ ENV/
 .pytest_cache/
 .coverage
 htmlcov/
+*.csv
+summary.txt
