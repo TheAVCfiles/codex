@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Pattern Scanner - Upload & Analyze</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .upload-section {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+        
+        .upload-section:hover {
+            border-color: #764ba2;
+            background: #f8f9ff;
+        }
+        
+        .upload-section.dragover {
+            border-color: #764ba2;
+            background: #f0f3ff;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .analyze-btn {
+            background: #28a745;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .analyze-btn:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .analyze-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .results.show {
+            display: block;
+        }
+        
+        .result-section {
+            margin-bottom: 20px;
+        }
+        
+        .result-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .pattern-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .pattern-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .pattern-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9em;
+        }
+        
+        .pattern-count {
+            color: #667eea;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .download-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            display: none;
+            padding: 15px;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            color: #721c24;
+            margin-top: 20px;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .pricing {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Chat Pattern Scanner</h1>
+            <p>Analyze chat logs for patterns and sequences</p>
+        </div>
+        
+        <div class="content">
+            <div class="pricing">
+                <strong>💰 Pricing:</strong> $5.00 per analysis
+                <br>
+                <small>(Development mode: FREE)</small>
+            </div>
+            
+            <div class="upload-section" id="uploadSection">
+                <p style="margin-bottom: 20px; color: #666;">
+                    Drop your chat log file here or click to browse
+                </p>
+                <label for="fileInput" class="upload-btn">Choose File</label>
+                <input type="file" id="fileInput" accept=".txt,.log,.csv">
+                <div class="file-info" id="fileInfo"></div>
+            </div>
+            
+            <button class="analyze-btn" id="analyzeBtn" disabled>
+                Analyze Chat Log
+            </button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your chat log...</p>
+            </div>
+            
+            <div class="error" id="error"></div>
+            
+            <div class="results" id="results">
+                <div class="result-section">
+                    <h3>📊 Summary</h3>
+                    <p>Total events detected: <strong id="totalEvents">0</strong></p>
+                </div>
+                
+                <div class="result-section">
+                    <h3>🎯 Pattern Detections</h3>
+                    <div class="pattern-list" id="patternList"></div>
+                </div>
+                
+                <div class="result-section">
+                    <h3>🔗 Sequences Found</h3>
+                    <div id="sequenceList"></div>
+                </div>
+                
+                <div class="result-section">
+                    <h3>📥 Download Results</h3>
+                    <div class="download-section">
+                        <button class="download-btn" onclick="downloadFile('events_csv', 'events.csv')">
+                            Events CSV
+                        </button>
+                        <button class="download-btn" onclick="downloadFile('sequences_csv', 'sequences.csv')">
+                            Sequences CSV
+                        </button>
+                        <button class="download-btn" onclick="downloadFile('summary_text', 'summary.txt')">
+                            Summary
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let currentResults = null;
+        let selectedFile = null;
+        
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInfo = document.getElementById('fileInfo');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const results = document.getElementById('results');
+        
+        // File input handling
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+        
+        // Drag and drop
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+        
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+        
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+        
+        function handleFile(file) {
+            if (!file) return;
+            
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!['txt', 'log', 'csv'].includes(ext)) {
+                showError('Invalid file type. Please upload .txt, .log, or .csv files.');
+                return;
+            }
+            
+            selectedFile = file;
+            fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            analyzeBtn.disabled = false;
+        }
+        
+        // Analyze button
+        analyzeBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+            
+            hideError();
+            results.classList.remove('show');
+            loading.classList.add('show');
+            analyzeBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                
+                const response = await fetch(`${API_URL}/analyze`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Analysis failed');
+                }
+                
+                currentResults = await response.json();
+                displayResults(currentResults);
+                
+            } catch (err) {
+                showError(err.message);
+            } finally {
+                loading.classList.remove('show');
+                analyzeBtn.disabled = false;
+            }
+        });
+        
+        function displayResults(data) {
+            document.getElementById('totalEvents').textContent = data.total_events;
+            
+            // Display patterns
+            const patternList = document.getElementById('patternList');
+            patternList.innerHTML = '';
+            
+            for (const [pattern, count] of Object.entries(data.unique_patterns)) {
+                const item = document.createElement('div');
+                item.className = 'pattern-item';
+                item.innerHTML = `
+                    <div class="pattern-name">${pattern.replace(/_/g, ' ')}</div>
+                    <div class="pattern-count">${count}</div>
+                `;
+                patternList.appendChild(item);
+            }
+            
+            // Display sequences
+            const sequenceList = document.getElementById('sequenceList');
+            sequenceList.innerHTML = '';
+            
+            if (Object.keys(data.sequence_counts).length > 0) {
+                for (const [sequence, count] of Object.entries(data.sequence_counts)) {
+                    const item = document.createElement('div');
+                    item.className = 'pattern-item';
+                    item.style.borderLeftColor = '#dc3545';
+                    item.innerHTML = `
+                        <div class="pattern-name">${sequence}</div>
+                        <div class="pattern-count">${count}</div>
+                    `;
+                    sequenceList.appendChild(item);
+                }
+            } else {
+                sequenceList.innerHTML = '<p style="color: #666;">No sequences detected</p>';
+            }
+            
+            results.classList.add('show');
+        }
+        
+        function downloadFile(key, filename) {
+            if (!currentResults) return;
+            
+            const content = currentResults[key];
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function showError(message) {
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        function hideError() {
+            error.classList.remove('show');
+        }
+    </script>
+</body>
+</html>
