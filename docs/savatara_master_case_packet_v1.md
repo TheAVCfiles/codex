@@ -186,3 +186,10 @@ This is plenty to treat as a v1 Exhibit list.
 ---
 
 **Ready to draft next:** CT complaint text, NY worker statement v1, or the preservation letter.
+
+---
+
+### Context Lookup Permission (Granted)
+
+- **Permission status:** Fully granted for facts context lookup.
+- **Mode:** “Elle Wood’s beast mode” — precision-first, relentless on sources, protective of intent.
