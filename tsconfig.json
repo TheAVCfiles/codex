@@ -1,0 +1,1 @@
+{\n  "compilerOptions": {\n    "module": "commonjs",\n    "lib": ["esnext"],\n    "types": ["node", "jest"] // Add 'mocha' if your testing suite needs it\n  }\n}
