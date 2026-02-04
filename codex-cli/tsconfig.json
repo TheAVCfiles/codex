@@ -9,7 +9,7 @@
       "DOM.Iterable",
       "ES2022" // Node.js 18
     ],
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "baseUrl": "./",
     "resolveJsonModule": true, // ESM doesn't yet support JSON modules.
     "jsx": "react",
