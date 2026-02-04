@@ -11,7 +11,7 @@ This index is an evidence-first ledger of **proven** dates, times, work, and art
 
 ## Proven (C1/C2)
 
-> _No proven entries yet. Add rows only when artifacts are attached._
+> _No proven entries yet. Add rows only when artifacts are attached and verified._
 
 | Row ID | Date (ISO) | Time (local) | Location (NY/CT) | Work / Arts Output | Artifact / Evidence Location | Proof ID | Verification Status | Notes |
 | ------ | ---------- | ------------ | ---------------- | ------------------ | ---------------------------- | -------- | ------------------- | ----- |
@@ -25,6 +25,15 @@ This index is an evidence-first ledger of **proven** dates, times, work, and art
 | R-0001 | 2021-10-31 → 2022-01 (COVID era) | Poughkeepsie/Poughquag, NY + Wilton, CT | Property updates, digital arts, show/tech updates, curriculum work                           | Emails about storage unit in Poughkeepsie; work requests; production files; schedules; receipts; location logs | C0     | Reported cross-state work window; requires primary artifacts to verify. |
 | R-0002 | 2022-05                          | (DV shelter, NY/CT)                     | Loss of personal phone/property; inability to access contacts                                | Shelter communications; police reports; property recovery records                                              | C0     | Reported device/property loss; requires primary artifacts.              |
 | R-0003 | 2021-12 (holiday period)         | NY/CT                                   | Production support and holiday-related work (messages referencing Dennis / Santa / wrapping) | iMessage exports or email threads with dates visible                                                           | C0     | Reported via screenshots; needs originals with timestamps.              |
+
+## Evidence source pointers (populate before moving items to Proven)
+
+Use these sources to promote items from **Reported (C0)** into **Proven (C1/C2)** once artifacts are attached.
+
+- `data/forensic_evidence_summary.csv` — authoritative evidence log (one row per artifact).
+- `data/forensics/` — repository of evidence artifacts (statements, receipts, invoices, tax, messages).
+
+When an artifact is attached, add its path or proof ID to the **Artifact / Evidence Location** column and update **Verification Status** to C1 or C2.
 
 ## Correlation targets (2026 DFR public use)
 
