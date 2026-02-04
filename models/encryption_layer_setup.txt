@@ -1,0 +1,31 @@
+## Encryption Layer Setup
+
+This document outlines the setup for an encryption layer for secure data handling.
+
+### Requirements:
+- Library: AES (Advanced Encryption Standard)
+- Language: Python
+
+### Installation:
+```bash
+pip install pycryptodome
+```
+
+### Implementation:
+```python
+from Crypto.Cipher import AES
+import os
+
+# Generate a random 16-byte key
+key = os.urandom(16)
+
+# Create a cipher object using the key
+cipher = AES.new(key, AES.MODE_EAX)
+
+# Encrypting data
+plaintext = b'Secured data'
+nonce = cipher.nonce
+ciphertext, tag = cipher.encrypt_and_digest(plaintext)
+
+# Store or transmit the `ciphertext` and `nonce` securely
+```
