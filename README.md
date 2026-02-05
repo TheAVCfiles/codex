@@ -17,6 +17,7 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 - **🔒 Privacy-First Design**: Zero Loss, Zero Surprise principles with full transparency
 - **📈 Analytics Dashboard**: Real-time monitoring and proof ledger integrity
 - **📖 Narrative Atlas**: Structured glitch scenes, archetypes, and constellations stored in `data/dtg/narrative_nodes.json`
+- **🧾 Forensic Alignment Toolkit**: Evidence-first intake, single-case spine, and rapid relief handoff docs in `docs/`
 
 ### Quick Start - DTG System
 
@@ -69,6 +70,12 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 ```
 
 For detailed DTG project documentation, see the [project wiki](../../wiki) or explore the `public/` directory for interactive demos.
+
+### Evidence-First Case Docs (DTG)
+
+- `docs/forensic-alignment-fast-dossier.md` — full evidence-first workflow and guardrails.
+- `docs/forensic-alignment-onepage.md` — one-page relief intake (print/PDF ready).
+- `docs/single-case-spine.md` — single case backbone to anchor artifacts and timelines.
 
 <!-- ![Codex demo GIF using: codex "explain this codebase to me"](./.github/demo.gif) -->
 
