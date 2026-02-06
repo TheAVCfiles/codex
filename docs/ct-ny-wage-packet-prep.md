@@ -144,3 +144,69 @@ For each line item, include:
 2. File NY packet when NY nexus evidence is sufficient and document-backed.
 3. Reuse shared evidence exhibits but keep each packet tailored to venue standards.
 4. Keep language factual and restrained to preserve credibility with agency intake staff.
+
+---
+
+## Add-on Module: DOL + COVID-period wage theft support
+
+Use this module if the unpaid labor period overlapped with 2020–2022 operations or any period affected by pandemic scheduling disruptions.
+
+### Add these exhibits to both CT and NY packets (when available)
+
+- `11_COVID_SCHEDULING_AND_CONTROL_LOG.pdf`
+- `12_PUBLIC_HEALTH_ERA_WORK_CONDITIONS_DECLARATION.pdf`
+- `13_REVENUE_CONTINUITY_VS_PAY_GAP_SUMMARY.pdf`
+
+### What to document in the COVID scheduling log
+
+For each event, capture:
+
+- Date and time
+- Work request channel (text/email/call)
+- Task type (teaching, production, transport, child-facing supervision, digital production)
+- Whether task was same-day or emergency
+- Whether compensation was offered/paid
+- Evidence filename
+
+### Revenue continuity vs pay gap summary
+
+Build a one-page chart that compares:
+
+1. Ongoing operations (classes, showcases, camps, performances, digital products).
+2. Worker labor demand (hours, duties, role expansion).
+3. Actual wages paid (or lack of pay).
+
+This is useful for agency reviewers because it ties work performed to commercial continuity while showing wage non-payment.
+
+---
+
+## Add-on Module: DV/coercive-control context for wage enforcement
+
+When coercion or safety threats affected ability to refuse labor, include a **fact-only context addendum** without changing the wage-first focus.
+
+### Optional attachment
+
+- `14_DV_COERCIVE_CONTROL_CONTEXT_ADDENDUM.pdf`
+
+### Include only objective facts
+
+- Dates of threatening or controlling communications.
+- How those communications affected work compliance (e.g., inability to refuse shifts/tasks).
+- Any documented restrictions on movement, housing, transportation, or communications.
+- Link each statement to a message ID, screenshot filename, or third-party record.
+
+### Keep venue-safe framing
+
+- Avoid diagnosis language.
+- Avoid speculative motive statements.
+- Use: "This context is provided to explain why labor was performed under pressure and without normal negotiation power."
+
+---
+
+## Rapid assembly checklist (DOL/COVID + DV wage theft)
+
+- [ ] Update `04_HOURS_AND_DUTIES_LEDGER.xlsx` with COVID-era date filters.
+- [ ] Add at least 10 timestamped communication exhibits showing task direction/control.
+- [ ] Add one summary table linking each duty cluster to uncompensated hours.
+- [ ] Add DV/coercive-control context addendum only if documentary support exists.
+- [ ] Recalculate conservative damages before filing.
