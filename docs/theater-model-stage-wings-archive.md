@@ -165,7 +165,7 @@
 
 - **Labor lane:** hours, schedules, duties, outputs.
 - **Compensation lane:** payments, 1099s, Zelle failures, payroll gaps.
-- **Safety lane:** shelter dates, safety planning, address confidentiality events.
+- **Safety lane:** shelter dates, safety planning, address confidentiality events, and documented physical strain/health impact messages tied to work conditions.
 - **Governance lane:** role changes, board actions, removal notices.
 
 **Do not merge lanes** in a single statement. Use cross‑references: “See EV‑\_\_\_\_.”
@@ -190,7 +190,7 @@ Submit only **10–12 exhibits** in the first pass:
 6. Shelter date range proof (redacted).
 7. Address confidentiality or safety‑planning proof (redacted).
 8. Role removal notice (if applicable).
-9. One bank/broker snapshot showing financial disruption.
+9. One bank/broker snapshot showing financial disruption (e.g., Robinhood 2021‑04‑16 balance + weekly gain + buying power screenshot).
 10. A clean timeline excerpt (chronology.csv row list).
 
 **Goal:** get relief started; avoid burying the reviewer.
