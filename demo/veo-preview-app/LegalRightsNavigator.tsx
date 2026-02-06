@@ -204,7 +204,7 @@ const statsDatabase: Record<string, JurisdictionStats> = {
 
 const getJurisdictionLeverage = (
   stats: JurisdictionStats,
-  jurisdiction: string
+  jurisdiction: string,
 ) => {
   const strength = stats.jurisdictionStrength[jurisdiction] ?? 7.0;
   const successRate =
@@ -220,7 +220,13 @@ const getJurisdictionLeverage = (
     strength,
     successRate,
     recommendation:
-      strength >= 9 ? "Strong" : strength >= 7.5 ? "Good" : strength >= 6 ? "Moderate" : "Consider Alternative",
+      strength >= 9
+        ? "Strong"
+        : strength >= 7.5
+          ? "Good"
+          : strength >= 6
+            ? "Moderate"
+            : "Consider Alternative",
     color:
       strength >= 9
         ? "#22c55e"
@@ -241,9 +247,7 @@ type DropdownProps = {
 
 const CustomDropdown = ({ value, options, onChange, label }: DropdownProps) => (
   <label className="relative block">
-    {label ? (
-      <span className="sr-only">{label}</span>
-    ) : null}
+    {label ? <span className="sr-only">{label}</span> : null}
     <select
       value={value}
       onChange={(event) => onChange(event.target.value)}
@@ -274,22 +278,23 @@ const LegalRightsNavigator = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState("");
   const [showStats, setShowStats] = useState(false);
-  const [jurisdictionAnalysis, setJurisdictionAnalysis] =
-    useState<ReturnType<typeof getJurisdictionLeverage> | null>(null);
+  const [jurisdictionAnalysis, setJurisdictionAnalysis] = useState<ReturnType<
+    typeof getJurisdictionLeverage
+  > | null>(null);
 
   const currentStats = useMemo(
     () => statsDatabase[legalArea] || statsDatabase["Domestic Violence (DV)"],
-    [legalArea]
+    [legalArea],
   );
 
   const jurisdictionLeverage = useMemo(
     () => getJurisdictionLeverage(currentStats, jurisdiction),
-    [currentStats, jurisdiction]
+    [currentStats, jurisdiction],
   );
 
   const storyJurisdictionLeverage = useMemo(
     () => getJurisdictionLeverage(currentStats, storyJurisdiction),
-    [currentStats, storyJurisdiction]
+    [currentStats, storyJurisdiction],
   );
 
   const radarData = useMemo(
@@ -299,7 +304,7 @@ const LegalRightsNavigator = () => {
         strength: value,
         fullMark: 10,
       })),
-    [currentStats]
+    [currentStats],
   );
 
   const outcomeData = useMemo(
@@ -323,12 +328,23 @@ const LegalRightsNavigator = () => {
         color: "#ef4444",
       },
     ],
-    [currentStats]
+    [currentStats],
   );
+
+  const buildContextLookupNotice = (jur: string, area: string) =>
+    [
+      "Context lookup required before statute-level claims.",
+      `- Requested jurisdiction: ${jur}`,
+      `- Requested legal area: ${area}`,
+      "- Action: Ask user permission to run a context lookup against trusted corpus files.",
+      "- Until lookup is approved, this output is a structural draft, not legal advice.",
+    ].join("\n");
 
   const processYourStory = async () => {
     if (!yourStory.trim()) {
-      setError("Please share your story so we can help identify your legal rights.");
+      setError(
+        "Please share your story so we can help identify your legal rights.",
+      );
       return;
     }
 
@@ -342,65 +358,41 @@ const LegalRightsNavigator = () => {
       const leverageInfo = storyJurisdictionLeverage;
       const stats = currentStats;
 
-      const prompt = `You are a trauma-informed legal advocate with access to comprehensive case statistics and jurisdictional analysis.
+      const summary = [
+        "SECTION 1 — STRUCTURED RIGHTS DRAFT",
+        `Jurisdiction: ${storyJurisdiction}`,
+        `Legal area: ${legalArea}`,
+        `Jurisdiction strength: ${leverageInfo.strength}/10 (${leverageInfo.recommendation})`,
+        `Historical success signal: ${leverageInfo.successRate}%`,
+        `Recent case count: ${stats.recentCases.toLocaleString()}`,
+        `Expected duration range: ${stats.avgCaseDuration}`,
+        "",
+        "Narrative extraction (draft):",
+        yourStory,
+        "",
+        "Next structured outputs:",
+        "1. Facts timeline (who, what, when, where)",
+        "2. Harm matrix (economic, safety, housing, reputation)",
+        "3. Evidence checklist (documents, communications, payment proof)",
+        "4. Filing lane recommendation (NY, CT, federal, multi-jurisdiction)",
+        "",
+        buildContextLookupNotice(storyJurisdiction, legalArea),
+      ].join("\n");
 
-JURISDICTION ANALYSIS:
-- Jurisdiction: ${storyJurisdiction}
-- Legal Area: ${legalArea}
-- Jurisdiction Strength: ${leverageInfo.strength}/10 (${leverageInfo.recommendation})
-- Success Rate: ${leverageInfo.successRate}%
-- Recent Cases: ${stats.recentCases.toLocaleString()}
-- Average Duration: ${stats.avgCaseDuration}
+      const plain = [
+        `SECTION 2 — PLAIN EXPLANATION (${selectedLanguage})`,
+        "You entered a strong first-pass record.",
+        "This tool can organize your facts and evidence, but it cannot assert statute-level conclusions until you approve a context lookup.",
+        "",
+        "Immediate next steps:",
+        "- Keep dates and events in chronological order.",
+        "- Separate facts from conclusions.",
+        "- Attach one proof item per claim.",
+        "- Request context lookup permission when you want statute citations.",
+      ].join("\n");
 
-Person’s Story:
-"${yourStory}"
-
-Provide TWO sections:
-
-SECTION 1 - LEGAL TRANSLATION & STATISTICAL ANALYSIS:
-- Identify specific laws violated with statute citations
-- Note applicable COVID-era protections (2019-2026)
-- Analyze jurisdictional strength based on the ${leverageInfo.strength}/10 rating
-- Reference success rate trends (${leverageInfo.successRate}% in this jurisdiction)
-- Identify strategic advantages of this jurisdiction
-- Note any multi-jurisdiction opportunities
-
-SECTION 2 - PLAIN EXPLANATION (in ${selectedLanguage}):
-- What laws protect them in clear language
-- Specific actionable steps with timelines
-- Expected outcomes based on ${leverageInfo.successRate}% success rate
-- Strategic recommendations for this jurisdiction
-- Resources and next steps
-- Timeline expectations (avg: ${stats.avgCaseDuration})
-
-Use empowering, trauma-informed language. Reference statistics to provide realistic hope.`;
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 8000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      const data = await response.json();
-      const fullResponse =
-        data.content?.find((block: { type: string }) => block.type === "text")
-          ?.text || "Processing failed";
-
-      const sections = fullResponse.split(/SECTION 2|Plain Explanation/i);
-
-      if (sections.length >= 2) {
-        setLegalTranslation(
-          sections[0].replace(/SECTION 1|Legal Translation/gi, "").trim()
-        );
-        setPlainExplanation(sections[1].trim());
-      } else {
-        setLegalTranslation(fullResponse);
-        setPlainExplanation("See legal translation above for full analysis.");
-      }
+      setLegalTranslation(summary);
+      setPlainExplanation(plain);
 
       setJurisdictionAnalysis(leverageInfo);
       setShowStats(true);
@@ -426,40 +418,25 @@ Use empowering, trauma-informed language. Reference statistics to provide realis
       const leverageInfo = jurisdictionLeverage;
       const stats = currentStats;
 
-      const prompt = `Translate legal code to plain language with statistical context.
+      const translated = [
+        `Plain-language conversion (${translationLanguage}) — draft`,
+        `Jurisdiction: ${jurisdiction}`,
+        `Legal area: ${legalArea}`,
+        `Strength signal: ${leverageInfo.strength}/10 | Success signal: ${leverageInfo.successRate}%`,
+        `Average duration: ${stats.avgCaseDuration}`,
+        "",
+        "Input text:",
+        legalText,
+        "",
+        "Structured interpretation:",
+        "1. This text appears to describe rights, obligations, or procedures.",
+        "2. Confirm venue and date range before filing.",
+        "3. Pull documentary proof for each assertion.",
+        "4. Escalate to jurisdiction-specific lookup for exact statute references.",
+        "",
+        buildContextLookupNotice(jurisdiction, legalArea),
+      ].join("\n");
 
-Jurisdiction: ${jurisdiction} (Strength: ${leverageInfo.strength}/10, Success: ${leverageInfo.successRate}%)
-Legal Area: ${legalArea}
-Recent Cases: ${stats.recentCases.toLocaleString()}
-Average Duration: ${stats.avgCaseDuration}
-
-Legal Text:
-${legalText}
-
-Provide in ${translationLanguage}:
-1. What This Means (plain language)
-1. Your Rights (specific to this jurisdiction)
-1. Statistical Context (success rates, typical outcomes)
-1. What You Can Do (actionable steps)
-1. Expected Timeline (based on ${stats.avgCaseDuration})
-1. Resources & Next Steps
-
-Include pandemic-era changes where applicable (2019-2026).`;
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 6000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      const data = await response.json();
-      const translated =
-        data.content?.find((block: { type: string }) => block.type === "text")
-          ?.text || "Translation unavailable";
       setTranslatedText(translated);
       setShowStats(true);
     } catch (err) {
@@ -482,7 +459,7 @@ Include pandemic-era changes where applicable (2019-2026).`;
                   Legal Rights Navigator
                 </h1>
                 <p className="text-slate-300 text-sm">
-                  AI-Powered Rights Analysis + Real-Time Case Statistics
+                  Rights Drafting Workspace + Case Statistics
                 </p>
               </div>
             </div>
@@ -502,8 +479,8 @@ Include pandemic-era changes where applicable (2019-2026).`;
         <div className="max-w-7xl mx-auto flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-rose-300 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-rose-100">
-            <strong>24/7 Crisis Support:</strong> National DV Hotline 1-800-799-7233
-            | Crisis Text: START to 88788 | RAINN 1-800-656-4673
+            <strong>24/7 Crisis Support:</strong> National DV Hotline
+            1-800-799-7233 | Crisis Text: START to 88788 | RAINN 1-800-656-4673
           </div>
         </div>
       </div>
@@ -525,7 +502,9 @@ Include pandemic-era changes where applicable (2019-2026).`;
                 <div className="text-3xl font-bold text-white">
                   {jurisdictionLeverage.successRate}%
                 </div>
-                <div className="text-xs text-slate-400 mt-1">{jurisdiction}</div>
+                <div className="text-xs text-slate-400 mt-1">
+                  {jurisdiction}
+                </div>
               </div>
 
               <div className="bg-slate-900/70 rounded-lg p-4 border border-slate-700">
@@ -590,7 +569,12 @@ Include pandemic-era changes where applicable (2019-2026).`;
                         border: "1px solid #475569",
                       }}
                     />
-                    <Line type="monotone" dataKey="cases" stroke="#3b82f6" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="cases"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                    />
                     <Line
                       type="monotone"
                       dataKey="successful"
@@ -613,7 +597,11 @@ Include pandemic-era changes where applicable (2019-2026).`;
                       stroke="#94a3b8"
                       tick={{ fontSize: 10 }}
                     />
-                    <PolarRadiusAxis angle={90} domain={[0, 10]} stroke="#94a3b8" />
+                    <PolarRadiusAxis
+                      angle={90}
+                      domain={[0, 10]}
+                      stroke="#94a3b8"
+                    />
                     <Radar
                       name="Strength"
                       dataKey="strength"
@@ -640,7 +628,10 @@ Include pandemic-era changes where applicable (2019-2026).`;
                       label
                     >
                       {outcomeData.map((entry, index) => (
-                        <Cell key={`${entry.name}-${index}`} fill={entry.color} />
+                        <Cell
+                          key={`${entry.name}-${index}`}
+                          fill={entry.color}
+                        />
                       ))}
                     </Pie>
                     <Tooltip
@@ -698,8 +689,9 @@ Include pandemic-era changes where applicable (2019-2026).`;
                     Safe Space to Share Your Story
                   </h3>
                   <p className="text-slate-300 text-sm">
-                    Share what happened in your own words—we&apos;ll analyze your rights
-                    and show you real statistics for cases like yours.
+                    Share what happened in your own words—we&apos;ll analyze
+                    your rights and show you real statistics for cases like
+                    yours.
                   </p>
                 </div>
               </div>
@@ -789,7 +781,9 @@ Include pandemic-era changes where applicable (2019-2026).`;
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
                   <div>
-                    <div className="text-xs text-slate-400">Strength Rating</div>
+                    <div className="text-xs text-slate-400">
+                      Strength Rating
+                    </div>
                     <div
                       className="text-2xl font-bold"
                       style={{ color: jurisdictionAnalysis.color }}

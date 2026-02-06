@@ -1,0 +1,60 @@
+meta:
+  tags:
+    - ZONE_A_HOME_IMPROVEMENTS
+    - ZONE_B_STADIUM_EVENT
+    - ZONE_C_1099_DISCREPANCY
+    - ZONE_D_TEXT_PRESSURE_OR_COERCION
+    - ZONE_E_STOCK_LIQUIDATION_CHAIN
+
+EVIDENCE_LEDGER:
+  entries:
+    - evidence_id: "EVT-UNKNOWN-001"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "B78F27FE-8C74-4754-88BD-7C0BDFB3223D.jpeg"
+      description_neutral: "Screenshot showing prior assistant generating an offline MVP rehydration script concept."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-002"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT / Editor View"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "4D0228A9-DB68-4422-B3E4-4F956DF2CFD2.jpeg"
+      description_neutral: "Screenshot of bash script snippet referencing mythos-cathedral-v3 and forensic dossier scaffolding."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-003"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "381ACAB5-ECED-42F4-B3D0-227FFB31C289.jpeg"
+      description_neutral: "Screenshot showing OCR/multi-image processing attempt and tool steps (stopped reasoning)."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-004"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT / Document View"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "9A408558-CDC7-4384-97D0-715B000891D2.jpeg"
+      description_neutral: "Screenshot referencing forensic investigation flow-of-funds language and evidence summary table concept."
+      confidence_level: "medium"
+      notes: "Captures a draft framework; not primary evidence."
+
+    - evidence_id: "EVT-UNKNOWN-005"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "00A288A0-A549-4B57-8F94-A6802D97BF18.jpeg"
+      description_neutral: "Screenshot of step list creating a case pack ZIP with evidence and documentation."
+      confidence_level: "medium"
