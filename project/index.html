@@ -243,7 +243,7 @@
           <label class="flex flex-col text-sm text-stone-200">Notes / focus area<textarea name="notes" class="field mt-1 rounded-lg px-3 py-3 h-24 resize-none" aria-label="Notes"></textarea></label>
           <button type="submit" class="glow-button-secondary text-white font-semibold rounded-xl py-3 px-4 w-full">Share birth data</button>
         </form>
-        <p id="intakeMessage" class="text-emerald-300 text-sm mt-2 hidden">Form validated. We will route you to the correct ritual after submission.</p>
+        <p id="intakeMessage" class="text-emerald-300 text-sm mt-2 hidden" aria-live="polite"></p>
       </div>
     </section>
 
@@ -273,6 +273,7 @@
       <h3 class="font-[\"Playfair Display\",serif] text-3xl">Transit Report • $77</h3>
       <p class="text-stone-300">We weave your submitted birth data into a 12-house transit scan and deliver a PDF to your email.</p>
       <button id="transitSubmit" class="glow-button-secondary inline-flex justify-center w-full rounded-xl py-3 font-semibold text-white">Submit & Pay</button>
+      <p id="transitStatus" class="text-sm text-amber-200 hidden" aria-live="polite">Submit your birth data below to unlock the payment link.</p>
       <p class="text-xs text-stone-400">Completing this sends your stored intake data; you will be redirected to payment.</p>
     </div>
   </template>
@@ -367,6 +368,8 @@
     const modalContainer = document.getElementById('modalContainer');
     const modalContent = document.getElementById('modalContent');
     const closeModalButton = document.getElementById('closeModal');
+    const intakeMessage = document.getElementById('intakeMessage');
+    let latestIntakeData = null;
 
     const openModal = (id) => {
       const template = document.getElementById(id);
@@ -400,16 +403,42 @@
       if (event.target.id === 'intakeForm') {
         event.preventDefault();
         const form = event.target;
-        if (form.checkValidity()) {
-          document.getElementById('intakeMessage').classList.remove('hidden');
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
         }
+
+        const formData = new FormData(form);
+        latestIntakeData = Object.fromEntries(formData.entries());
+        intakeMessage.textContent = `${latestIntakeData.fullName || 'Your dossier'} is locked. We will route your intake to the correct ritual when you proceed to payment.`;
+        intakeMessage.classList.remove('hidden');
       }
     });
 
     document.addEventListener('click', (event) => {
       if (event.target.id === 'transitSubmit') {
         event.preventDefault();
-        alert('Transit report checkout placeholder. Replace with payment redirect.');
+        const transitStatus = document.getElementById('transitStatus');
+        if (!latestIntakeData) {
+          if (transitStatus) {
+            transitStatus.textContent = 'Share your birth data first so we can calculate your transits accurately.';
+            transitStatus.classList.remove('hidden');
+          }
+          document.getElementById('intakeForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+
+        if (transitStatus) {
+          transitStatus.textContent = 'Routing your encrypted intake to checkout...';
+          transitStatus.classList.remove('hidden');
+        }
+
+        const params = new URLSearchParams({
+          product: 'transit-report',
+          ...latestIntakeData
+        });
+        const checkoutUrl = 'https://example.com/checkout/transit-report';
+        window.location.href = `${checkoutUrl}?${params.toString()}`;
       }
     });
   </script>
