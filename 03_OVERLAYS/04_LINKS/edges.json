@@ -1,0 +1,47 @@
+[
+  {
+    "from_exhibit": "E0001",
+    "to_exhibit": "E0010",
+    "relation": "TEMPORAL_PROXIMITY_SUPPORTS",
+    "note": "Video mentions Nutcracker; chat discusses IP theft including Nutcracker concepts",
+    "confidence": 60,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "2026-03-10T00:00:00Z"
+  },
+  {
+    "from_exhibit": "E0001",
+    "to_exhibit": "E0002",
+    "relation": "CONTENT_OVERLAP_SUPPORTS",
+    "note": "Event listing mirrors Nutcracker highlight referenced in the overview video",
+    "confidence": 55,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "2026-03-10T00:00:00Z"
+  },
+  {
+    "from_exhibit": "E0003",
+    "to_exhibit": "E0004",
+    "relation": "SOURCE_ATTRIBUTION_SUPPORTS",
+    "note": "Mission/credits page aligns with public claims of authorship discussed in chat summary",
+    "confidence": 52,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "2026-03-10T00:00:00Z"
+  },
+  {
+    "from_exhibit": "E0005",
+    "to_exhibit": "E0006",
+    "relation": "SEQUENCE_SUPPORTS",
+    "note": "Timeline of social posts supports continuity of use across seasons",
+    "confidence": 50,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "2026-03-10T00:00:00Z"
+  },
+  {
+    "from_exhibit": "E0007",
+    "to_exhibit": "E0008",
+    "relation": "CORROBORATION_SUPPORTS",
+    "note": "Chat summary references the same themes and entities captured in the exhibit metadata",
+    "confidence": 48,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "2026-03-10T00:00:00Z"
+  }
+]
