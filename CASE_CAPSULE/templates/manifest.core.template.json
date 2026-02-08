@@ -1,0 +1,14 @@
+{
+  "pack_type": "CORE",
+  "pack_id": "AVC_CASEPACK_CORE_YYYY-MM-DD",
+  "created_at": "YYYY-MM-DDThh:mm:ssZ",
+  "canonical_index": "01_CORE/02_INDEX/exhibits.csv",
+  "hash_list": "01_CORE/02_INDEX/hashes.sha256",
+  "immutability_rule": "01_CORE is append-only; no file replacement allowed",
+  "source_devices": [
+    {
+      "device": "DeviceName",
+      "owner": "OwnerName"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+evidence_id,exhibit_id,date_captured_utc,source_device,source_app,type,description_neutral,file_name,file_path,hash_sha256,confidence_level,notes
+E0001,EX-PLACEHOLDER-001,YYYY-MM-DDThh:mm:ssZ,DeviceName,AppName,screenshot,"Neutral description of what the artifact shows",filename.ext,01_CORE/01_EXHIBITS_RAW/filename.ext,sha256:...,high,"[[GREEN]]Add missing context or source exports here.[[/GREEN]]"
