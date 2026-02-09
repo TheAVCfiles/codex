@@ -1,0 +1,155 @@
+meta:
+  capsule_name: "CASE_CAPSULE"
+  version: "v1"
+  append_only: true
+  created_utc: "2026-02-03T00:00:00Z"
+  tags:
+    - ZONE_A_HOME_IMPROVEMENTS
+    - ZONE_B_STADIUM_EVENT
+    - ZONE_C_1099_DISCREPANCY
+    - ZONE_D_TEXT_PRESSURE_OR_COERCION
+    - ZONE_E_STOCK_LIQUIDATION_CHAIN
+
+EVIDENCE_LEDGER:
+  id_rule: "EVT-YYYYMMDD-### (or EVT-UNKNOWN-### when date is unknown)"
+  entries:
+    - evidence_id: "EVT-UNKNOWN-001"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "B78F27FE-8C74-4754-88BD-7C0BDFB3223D.jpeg"
+      description_neutral: "Screenshot showing prior assistant generating an offline MVP rehydration script concept."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-002"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT / Editor View"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "4D0228A9-DB68-4422-B3E4-4F956DF2CFD2.jpeg"
+      description_neutral: "Screenshot of bash script snippet referencing mythos-cathedral-v3 and forensic dossier scaffolding."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-003"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "381ACAB5-ECED-42F4-B3D0-227FFB31C289.jpeg"
+      description_neutral: "Screenshot showing OCR/multi-image processing attempt and tool steps (stopped reasoning)."
+      confidence_level: "high"
+
+    - evidence_id: "EVT-UNKNOWN-004"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT / Document View"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "9A408558-CDC7-4384-97D0-715B000891D2.jpeg"
+      description_neutral: "Screenshot referencing forensic investigation flow-of-funds language and evidence summary table concept."
+      confidence_level: "medium"
+      notes: "Captures a draft framework; not primary evidence."
+
+    - evidence_id: "EVT-UNKNOWN-005"
+      type: "screenshot"
+      source_device: "iPhone"
+      source_app: "ChatGPT"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-03T00:00:00Z"
+      file_reference: "00A288A0-A549-4B57-8F94-A6802D97BF18.jpeg"
+      description_neutral: "Screenshot of step list creating a case pack ZIP with evidence and documentation."
+      confidence_level: "medium"
+
+    - evidence_id: "EVT-20210503-006"
+      type: "text_message_capture"
+      source_device: "iPhone"
+      source_app: "iMessage"
+      captured_utc: "2022-05-03T17:25:00-04:00"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "IMG_38323B7A-9515-41DE-809F-7617D1CC3D09.jpeg; IMG_CA1EDB98-3D58-4FAB-B0F1-29D6CDA9C846.jpeg"
+      description_neutral: "Thread includes statements describing sustained workload and recurring extra rehearsals."
+      confidence_level: "high"
+      tags:
+        - ZONE_D_TEXT_PRESSURE_OR_COERCION
+
+    - evidence_id: "EVT-20210308-007"
+      type: "payment_confirmation"
+      source_device: "iPhone"
+      source_app: "Outlook / Venmo notification"
+      captured_utc: "2021-03-08T00:00:00-05:00"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "IMG_728429A1-438F-4AED-9081-8FEC81276781.jpeg"
+      description_neutral: "Inbox capture displays Venmo payment confirmation to Kristin Leggio for $333.00."
+      confidence_level: "high"
+      tags:
+        - ZONE_C_1099_DISCREPANCY
+
+    - evidence_id: "EVT-20210317-008"
+      type: "payment_confirmation"
+      source_device: "iPhone"
+      source_app: "Outlook / Venmo notification"
+      captured_utc: "2021-03-17T00:00:00-05:00"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "IMG_EC60FE58-B0BD-4771-94BA-A60EC6CB4864.jpeg"
+      description_neutral: "Inbox capture displays Venmo payment confirmation to Kristin Leggio for $555.00."
+      confidence_level: "high"
+      tags:
+        - ZONE_C_1099_DISCREPANCY
+
+    - evidence_id: "EVT-UNKNOWN-009"
+      type: "text_message_capture"
+      source_device: "iPhone"
+      source_app: "iMessage"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "IMG_AF3533FA-8EB4-4CCD-B685-69C35D803595.jpeg"
+      description_neutral: "Thread includes discussion of still-image editing and backdrop asset adjustments."
+      confidence_level: "high"
+      tags:
+        - ZONE_E_STOCK_LIQUIDATION_CHAIN
+
+    - evidence_id: "EVT-UNKNOWN-010"
+      type: "program_credit_capture"
+      source_device: "iPhone"
+      source_app: "Program screenshot"
+      captured_utc: "2021-12-12T18:30:00-05:00"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "nutcracker_2021_program_screenshot.jpg"
+      description_neutral: "Program credits include choreography/coaching and digital backdrop attribution including Allison Van Cura."
+      confidence_level: "medium"
+      tags:
+        - ZONE_D_TEXT_PRESSURE_OR_COERCION
+
+    - evidence_id: "EVT-20220123-011"
+      type: "email_capture"
+      source_device: "iPhone"
+      source_app: "Email"
+      captured_utc: "2022-01-23T19:55:00-05:00"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "dfr_family_reliability_notice.jpg"
+      description_neutral: "Email to DFR families states Allison will no longer work at DFR and references reliability issues."
+      confidence_level: "high"
+      tags:
+        - ZONE_D_TEXT_PRESSURE_OR_COERCION
+
+    - evidence_id: "EVT-UNKNOWN-012"
+      type: "public_record_capture"
+      source_device: "iPhone"
+      source_app: "OpenCorporates / property record screenshot"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "savatara_officers_and_21_irmgard_records.jpg"
+      description_neutral: "Screenshots summarize Savatara officer data and 21 Irmgard public property record fields."
+      confidence_level: "medium"
+      tags:
+        - ZONE_A_HOME_IMPROVEMENTS
+        - ZONE_C_1099_DISCREPANCY
+
+NOTES:
+  - "Append-only rule: never overwrite existing entries; only add new rows/items with new evidence IDs."
+  - "Neutral language rule: facts first, conclusions deferred."
+  - "Secondary-capture note: where primary device originals are unavailable, preserve photographed-screen captures and record provenance as device-loss constrained."
