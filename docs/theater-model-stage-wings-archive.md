@@ -138,6 +138,90 @@
 
 ---
 
+## 2026 DV/VAWA‑informed investigative process (NY/CT) — relief‑first, evidence‑first
+
+**Purpose:** deepen the investigative process while preserving safety, credibility, and immediate relief pathways. This is **not legal advice**; it is a stabilization protocol aligned with survivor‑informed practice and agency norms.
+
+### A. Relief‑first triage (short list, fastest money first)
+
+1. **NY OVS (economic loss + emergency claim)**
+   - Track: lost earnings, relocation/safety costs, essential expenses.
+   - Evidence priority: proof of work performed, interruption, and DV shelter timeline.
+2. **NY DOL wage claim**
+   - Track: unpaid wages, misclassification indicators, schedule/control evidence.
+   - Evidence priority: schedules, communications, payment instruments (Zelle/1099).
+3. **CT Victim Compensation**
+   - Track: safety‑related economic loss tied to CT incidents.
+   - Evidence priority: incident‑location proof + costs.
+4. **CT DOL wage claim**
+   - Track: unpaid wages/contractor misclassification tied to CT work.
+   - Evidence priority: CT worksite dates, control indicators, payment gaps.
+
+**Relief rule:** no moral framing. Submit **facts + costs + evidence IDs** only.
+
+### B. VAWA‑informed evidence posture (survivor‑safe + regulator‑safe)
+
+**Evidence lanes (keep separate):**
+
+- **Labor lane:** hours, schedules, duties, outputs.
+- **Compensation lane:** payments, 1099s, Zelle failures, payroll gaps.
+- **Safety lane:** shelter dates, safety planning, address confidentiality events.
+- **Governance lane:** role changes, board actions, removal notices.
+
+**Do not merge lanes** in a single statement. Use cross‑references: “See EV‑\_\_\_\_.”
+
+### C. COVID‑era continuity logic (for 2020–2021)
+
+Use this standard phrasing when asked about gaps:
+
+> “Work continued remotely during COVID with documented schedules, deliverables, and communications; payment instruments were inconsistent, and some work was uncompensated.”
+
+This avoids speculation while clarifying the causal timing regulators expect.
+
+### D. Immediate evidence packet (minimum viable submission)
+
+Submit only **10–12 exhibits** in the first pass:
+
+1. Work schedule or class roster excerpt.
+2. A client/parent email showing class delivery.
+3. 1099‑NEC or Zelle payment screenshot.
+4. Example of control (time set, content directives).
+5. Example of unpaid work (missed payment or “failed Zelle”).
+6. Shelter date range proof (redacted).
+7. Address confidentiality or safety‑planning proof (redacted).
+8. Role removal notice (if applicable).
+9. One bank/broker snapshot showing financial disruption.
+10. A clean timeline excerpt (chronology.csv row list).
+
+**Goal:** get relief started; avoid burying the reviewer.
+
+### E. DV/trafficking‑informed language (neutral, non‑accusatory)
+
+Use **pattern‑of‑control** language without asserting criminal intent:
+
+- “Operational dependence + schedule control.”
+- “Economic reliance + unpaid work.”
+- “Safety disruption + income interruption.”
+- “Documented threats or coercive conditions (if evidenced).”
+
+Avoid labels like “trafficking” unless counsel instructs.
+
+### F. 6‑week stabilization loop (repeat until relief decision)
+
+**Week 1–2:** submit minimum viable packet; request status timeline.  
+**Week 3–4:** respond to agency questions; add 3–5 more exhibits.  
+**Week 5–6:** reconcile numbers; request provisional relief if eligible.
+
+**Rule:** no new narrative until the agency asks. Keep to evidence ID numbers.
+
+### G. Privacy and retaliation protection
+
+- Use **P.O. Box or advocate address** on all filings.
+- Ask for confidential address handling where allowed.
+- Keep a separate “contact log” for agency communications (date, person, action).
+
+---
+
 ## Reconstruction of the 1988 Miss Dutchess County preliminaries and Alicia McLoughlin’s role
 
 **Key findings on Alicia McLoughlin’s 1988 participation**
