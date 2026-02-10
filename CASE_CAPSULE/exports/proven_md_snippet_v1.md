@@ -24,6 +24,7 @@
 - **P22/P23** — Venmo confirmations: $333 and $555 payments to Kristin.
 - **P24** — Dennison thread acknowledging “nonstop” work and extra rehearsals.
 - **P25** — Kristin thread requesting image/backdrop adjustments.
+- **P26** — Attribution note: Valerie cited Allison as contributor/author in early Bardavon works following “Altered Allegro.” (user statement)
 
 ## Handling note
 - Where primary device originals are unavailable, captures are tagged as **secondary capture due to device loss** and retained in append-only chain.

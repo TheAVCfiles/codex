@@ -149,6 +149,18 @@ EVIDENCE_LEDGER:
         - ZONE_A_HOME_IMPROVEMENTS
         - ZONE_C_1099_DISCREPANCY
 
+    - evidence_id: "EVT-UNKNOWN-013"
+      type: "credit_attribution_note"
+      source_device: "user_statement"
+      source_app: "intake"
+      captured_utc: "UNKNOWN"
+      ingested_utc: "2026-02-06T00:00:00Z"
+      file_reference: "user_statement_valerie_bardavon_attribution.txt"
+      description_neutral: "User states Valerie cited Allison as contributor/author in early Bardavon works following “Altered Allegro.”"
+      confidence_level: "low"
+      tags:
+        - ZONE_D_TEXT_PRESSURE_OR_COERCION
+
 NOTES:
   - "Append-only rule: never overwrite existing entries; only add new rows/items with new evidence IDs."
   - "Neutral language rule: facts first, conclusions deferred."

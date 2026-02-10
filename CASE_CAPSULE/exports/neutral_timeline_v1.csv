@@ -11,6 +11,7 @@ UNKNOWN,EVT-UNKNOWN-005,"Step list references generating case-pack ZIP with evid
 2022-05-03,EVT-20210503-006,"Thread describes nonstop work and ongoing extra rehearsals",text_message,,high,"ZONE_D_TEXT_PRESSURE_OR_COERCION"
 UNKNOWN,EVT-UNKNOWN-009,"Thread discusses still-image and backdrop asset adjustments",text_message,,high,"ZONE_E_STOCK_LIQUIDATION_CHAIN"
 UNKNOWN,EVT-UNKNOWN-012,"Public-record screenshot summarizes Savatara officer and property record fields",public_record,,medium,"ZONE_A_HOME_IMPROVEMENTS;ZONE_C_1099_DISCREPANCY"
+UNKNOWN,EVT-UNKNOWN-013,"User statement reports Valerie cited Allison as contributor/author in early Bardavon works following “Altered Allegro”",user_statement,,low,"ZONE_D_TEXT_PRESSURE_OR_COERCION"
 UNKNOWN,PENDING-REF-001,"Reference to a '$7k extraction' event mentioned in planning narrative",to_be_exported,,low,"ZONE_D_TEXT_PRESSURE_OR_COERCION"
 UNKNOWN,PENDING-REF-002,"Reference to 1099/circular transaction hypothesis mentioned in planning narrative",to_be_exported,,low,"ZONE_C_1099_DISCREPANCY"
 UNKNOWN,PENDING-REF-003,"Reference to stock liquidation chain mentioned in planning narrative",to_be_exported,,low,"ZONE_E_STOCK_LIQUIDATION_CHAIN"
