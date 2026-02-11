@@ -13,6 +13,7 @@
       --bg-primary: #1a1614;
       --bg-secondary: #0f0d0c;
       --text-bright: #fafaf9;
+      --text-medium: #e7e5e4;
       --text-soft: #d6d3d1;
       --accent-emerald: #10b981;
       --accent-purple: #7c3aed;
@@ -31,7 +32,7 @@
     }
 
     .glass {
-      background: rgba(24, 20, 18, 0.75);
+      background: rgba(24, 20, 18, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(20px);
@@ -45,6 +46,7 @@
       opacity: 0.6;
       animation: float 8s ease-in-out infinite;
       border-radius: 999px;
+      pointer-events: none;
     }
 
     .orb-emerald { background: rgba(16, 185, 129, 0.24); left: 5%; top: 12%; }
@@ -67,6 +69,7 @@
       background-size: 22px 22px;
       border-radius: 999px;
       animation: spin 60s linear infinite;
+      pointer-events: none;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -74,16 +77,12 @@
     .glow-button {
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
       box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .glow-button-secondary {
-      background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
-      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25);
-    }
-
-    .glow-button-gold {
-      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-      box-shadow: 0 10px 30px rgba(251, 191, 36, 0.25);
+    .glow-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
     }
 
     .modal-backdrop {
@@ -104,184 +103,108 @@
   <div class="orb orb-gold"></div>
   <div class="zodiac-wheel"></div>
 
-  <header class="max-w-6xl mx-auto px-6 pt-12 pb-8 relative z-10">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-      <div>
-        <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
-        <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl lg:text-6xl leading-tight text-white">
-          The Sovereign Beta Portal
-        </h1>
-        <p class="mt-4 text-lg text-stone-200 max-w-2xl">
-          Decode your karmic code through precise transit intelligence, bespoke strategy calls, and a living grimoire of your natal promise. Every reading honors your sovereignty and delivers a clear path to activate your next house.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
-          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Solar calibration</span>
-          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Pluto transmutation</span>
-          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">Zodiacal sovereignty</span>
-        </div>
+  <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
+    <section class="glass rounded-2xl p-7 md:p-10">
+      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
+      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl leading-tight text-white mt-3">
+        Decode your karmic code — and move with precision this season.
+      </h1>
+      <p class="mt-4 text-lg text-stone-200 max-w-3xl">
+        A paid download for founders and creators who want one sharp cosmic operating system: what to pursue,
+        what to pause, and what to protect over the next 30 days.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Transit timing</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♄ Boundary strategy</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Sovereign execution</span>
       </div>
-      <div class="glass rounded-2xl p-6 w-full lg:w-96">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-stone-300 text-sm">Portal closes in</p>
-            <div id="countdown" class="text-3xl font-semibold text-white mt-1">--d --h --m --s</div>
-          </div>
-          <div class="text-right">
-            <p class="text-stone-300 text-sm">Timezone</p>
-            <select id="timezone" class="field rounded-lg px-3 py-2 mt-1 text-sm">
-              <option value="America/New_York">Eastern (EST/EDT)</option>
-              <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
-              <option value="Europe/London">London (GMT/BST)</option>
-              <option value="UTC">UTC</option>
-            </select>
-          </div>
-        </div>
-        <p class="mt-4 text-stone-300 text-sm leading-relaxed">
-          A living countdown to Samhain: midnight on October 31, 2025 in your chosen timezone. The portal remains awake even while modals are open.
-        </p>
-        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-4">Unlock the Guide</button>
-          <button data-modal="transitModal" class="glow-button-secondary text-white font-semibold rounded-xl py-3 px-4">Request Transit Report</button>
-          <button data-modal="strategyModal" class="glow-button-gold text-black font-semibold rounded-xl py-3 px-4 sm:col-span-2">Book Strategy Call</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-6xl mx-auto px-6 pb-16 relative z-10">
-    <section class="grid gap-6 lg:grid-cols-3">
-      <article class="glass rounded-2xl p-6">
-        <p class="text-emerald-300 text-sm uppercase tracking-[0.25em]">Guide • $22</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-2">Sovereign Grimoire</h2>
-        <p class="text-stone-300 mt-3">Download the encrypted field notes to anchor your natal houses, daily rituals, and lunar activations.</p>
-        <button data-modal="guideModal" class="mt-4 glow-button w-full text-black font-semibold rounded-xl py-3">Buy the Guide</button>
-      </article>
-      <article class="glass rounded-2xl p-6">
-        <p class="text-purple-200 text-sm uppercase tracking-[0.25em]">Transit Report • $77</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-2">Precision Transits</h2>
-        <p class="text-stone-300 mt-3">Receive a bespoke PDF with solar arcs, progressed Moon windows, and the exact aspects shaping your storyline.</p>
-        <button data-modal="transitModal" class="mt-4 glow-button-secondary w-full text-white font-semibold rounded-xl py-3">Request Report</button>
-      </article>
-      <article class="glass rounded-2xl p-6">
-        <p class="text-amber-200 text-sm uppercase tracking-[0.25em]">Strategy Call • $222</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-2">Sovereign Navigation</h2>
-        <p class="text-stone-300 mt-3">A 1:1 council to align your houses, roles, and future moves with the sovereign currents of your chart.</p>
-        <button data-modal="strategyModal" class="mt-4 glow-button-gold w-full text-black font-semibold rounded-xl py-3">Book Your Call</button>
-      </article>
-    </section>
-
-    <section class="glass rounded-2xl p-6 mt-8">
-      <div class="flex flex-col gap-3">
-        <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Sovereign Index</p>
-        <h3 class="font-[\"Playfair Display\",serif] text-3xl">Ritual & intelligence archives</h3>
-        <p class="text-stone-300 max-w-3xl">A living catalog of the portals, audits, and mythic dossiers stewarded inside the Sovereign Beta. Each pillar remains curated and protected while we sequence your next activation.</p>
-      </div>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <article class="bg-white/5 border border-white/10 rounded-2xl p-4">
-          <h4 class="text-emerald-200 text-lg font-semibold">Ritual Systems</h4>
-          <ul class="mt-3 space-y-2 text-sm text-stone-200">
-            <li>Ava A/B Testing Insights</li>
-            <li>Aurora Timestamp Request</li>
-            <li>Glitch Vulnerability (TSA decode)</li>
-          </ul>
-        </article>
-        <article class="bg-white/5 border border-white/10 rounded-2xl p-4">
-          <h4 class="text-purple-200 text-lg font-semibold">AI / Data Security</h4>
-          <ul class="mt-3 space-y-2 text-sm text-stone-200">
-            <li>Security Analysis Pipeline</li>
-            <li>Have I Been Pwned</li>
-            <li>MicroSD Card Overview</li>
-          </ul>
-        </article>
-        <article class="bg-white/5 border border-white/10 rounded-2xl p-4">
-          <h4 class="text-amber-200 text-lg font-semibold">Brand Identity &amp; Story</h4>
-          <ul class="mt-3 space-y-2 text-sm text-stone-200">
-            <li>Allison Van Cura Index</li>
-            <li>Fruition KDP</li>
-            <li>Nikki Bella Overview</li>
-            <li>CNN Ledger</li>
-          </ul>
-        </article>
-        <article class="bg-white/5 border border-white/10 rounded-2xl p-4">
-          <h4 class="text-emerald-100 text-lg font-semibold">Income &amp; IP</h4>
-          <ul class="mt-3 space-y-2 text-sm text-stone-200">
-            <li>Maximize AI Income</li>
-            <li>Licensing Overview</li>
-            <li>Fiverr Blueprint</li>
-          </ul>
-        </article>
+      <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
+        <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
+          Buy the Primer → Instant Download
+        </button>
+        <p class="text-sm text-stone-300">$49 · Private PDF · No account required</p>
       </div>
     </section>
 
-    <section class="glass rounded-2xl p-6 mt-8 grid gap-6 lg:grid-cols-2">
+    <section class="glass rounded-2xl p-7 md:p-8">
+      <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Proof</p>
+      <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
+        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Built for women navigating asymmetric risk, hidden labor extraction, and high-responsibility decisions.</li>
+        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Readers leave with a clear 30/60/90 rhythm to prioritize focus, money moves, and relational boundaries.</li>
+        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Grounded in real operator architecture: receipts, governed choices, and evidence over hype.</li>
+      </ul>
+    </section>
+
+    <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
       <div>
-        <p class="text-stone-300 text-sm">Birth data intake</p>
-        <h3 class="font-[\"Playfair Display\",serif] text-3xl">Your celestial dossier</h3>
-        <p class="text-stone-300 mt-3">All offerings require accurate birth data to calculate transits, synastry, and timing windows. Your information is encrypted in transit and never stored client-side.</p>
-        <ul class="mt-4 space-y-2 text-stone-200">
-          <li>☿ Precise Mercury-grade timestamps</li>
-          <li>☽ Lunar gates and house rulers</li>
-          <li>♄ Saturnian guardrails for timing activations</li>
-        </ul>
+        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Offer</p>
+        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Founder-Safe Systems Primer</h2>
+        <p class="mt-3 text-stone-200">A 28–32 page PDF that maps extraction patterns, introduces the consideration framework, and helps you move from chaos to optionality without leaking power.</p>
+        <p class="mt-4 text-stone-300">Includes: core framework, plain-English licensing orientation, and a calm implementation arc for the next 90 days.</p>
       </div>
-      <div>
-        <form id="intakeForm" class="space-y-3" aria-label="Birth data form">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label class="flex flex-col text-sm text-stone-200">Full name<input required name="fullName" class="field mt-1 rounded-lg px-3 py-2" type="text" aria-label="Full name"></label>
-            <label class="flex flex-col text-sm text-stone-200">Email<input required name="email" class="field mt-1 rounded-lg px-3 py-2" type="email" aria-label="Email"></label>
-            <label class="flex flex-col text-sm text-stone-200">Birth date<input required name="birthDate" class="field mt-1 rounded-lg px-3 py-2" type="date" aria-label="Birth date"></label>
-            <label class="flex flex-col text-sm text-stone-200">Birth time<input required name="birthTime" class="field mt-1 rounded-lg px-3 py-2" type="time" aria-label="Birth time"></label>
-            <label class="flex flex-col text-sm text-stone-200">Timezone<select required name="tz" class="field mt-1 rounded-lg px-3 py-2" aria-label="Timezone">
-              <option value="">Select timezone</option>
-              <option value="America/New_York">Eastern (EST/EDT)</option>
-              <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
-              <option value="Europe/London">London (GMT/BST)</option>
-              <option value="UTC">UTC</option>
-            </select></label>
-            <label class="flex flex-col text-sm text-stone-200 sm:col-span-2">Birth location<input required name="birthLocation" class="field mt-1 rounded-lg px-3 py-2" type="text" aria-label="Birth location"></label>
-          </div>
-          <label class="flex flex-col text-sm text-stone-200">Notes / focus area<textarea name="notes" class="field mt-1 rounded-lg px-3 py-3 h-24 resize-none" aria-label="Notes"></textarea></label>
-          <button type="submit" class="glow-button-secondary text-white font-semibold rounded-xl py-3 px-4 w-full">Share birth data</button>
-        </form>
-        <p id="intakeMessage" class="text-emerald-300 text-sm mt-2 hidden">Form validated. We will route you to the correct ritual after submission.</p>
+      <div class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6">
+        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Price anchor</p>
+        <p class="mt-2 font-[\"Playfair Display\",serif] text-5xl text-white">$49</p>
+        <p class="mt-3 text-stone-200">Lower than a strategy session. Higher leverage than random content consumption.</p>
+        <button data-modal="guideModal" class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]">Buy the Primer → Instant Download</button>
       </div>
     </section>
 
-    <section class="mt-10 text-center text-stone-300">
-      <p id="footerNote" class="text-sm">Portal set to close at midnight on October 31, 2025 (Eastern).</p>
-      <p class="text-xs text-stone-400 mt-1">Stay sovereign. The countdown honors your chosen timezone and continues while you explore the offerings.</p>
+    <section class="glass rounded-2xl p-7 md:p-8">
+      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Trust + boundaries</p>
+      <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">What this is — and what it is not</h2>
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
+          <h3 class="text-lg font-semibold text-emerald-100">This is for</h3>
+          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
+            <li>• Founders carrying real responsibility</li>
+            <li>• Builders who need structural clarity, not motivation</li>
+            <li>• Operators who value evidence and constraints</li>
+          </ul>
+        </div>
+        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
+          <h3 class="text-lg font-semibold text-rose-100">This is not</h3>
+          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
+            <li>• Not legal, financial, or therapeutic advice</li>
+            <li>• Not a coaching subscription</li>
+            <li>• Not access to sealed operator methods</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-7 md:p-9 text-center">
+      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
+      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
+      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
+      <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
+        <span id="countdown">--d --h --m --s</span>
+        <label for="timezone" class="inline-flex items-center gap-2">
+          <span>Timezone</span>
+          <select id="timezone" class="field rounded-lg px-3 py-2 text-sm min-h-[44px]">
+            <option value="America/New_York">Eastern (EST/EDT)</option>
+            <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
+            <option value="Europe/London">London (GMT/BST)</option>
+            <option value="UTC">UTC</option>
+          </select>
+        </label>
+      </div>
+      <p id="footerNote" class="text-xs text-stone-400 mt-3">Portal closes at midnight on October 31, 2025 (Eastern).</p>
     </section>
   </main>
 
   <div id="modalContainer" class="hidden fixed inset-0 z-30 flex items-center justify-center modal-backdrop">
     <div class="bg-[rgba(24,20,18,0.95)] border border-white/10 rounded-2xl shadow-2xl max-w-lg w-[92%] md:w-[560px] p-6 relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-stone-300 hover:text-white" aria-label="Close modal">✕</button>
+      <button id="closeModal" class="absolute top-4 right-4 text-stone-300 hover:text-white min-h-[44px] min-w-[44px]" aria-label="Close modal">✕</button>
       <div id="modalContent"></div>
     </div>
   </div>
 
   <template id="guideModal">
     <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Guide • $22</h3>
-      <p class="text-stone-300">Unlock the digital grimoire of rites, prompts, and planetary decodes. Instant download after payment.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Guide">Pay & Download</a>
-    </div>
-  </template>
-
-  <template id="transitModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Transit Report • $77</h3>
-      <p class="text-stone-300">We weave your submitted birth data into a 12-house transit scan and deliver a PDF to your email.</p>
-      <button id="transitSubmit" class="glow-button-secondary inline-flex justify-center w-full rounded-xl py-3 font-semibold text-white">Submit & Pay</button>
-      <p class="text-xs text-stone-400">Completing this sends your stored intake data; you will be redirected to payment.</p>
-    </div>
-  </template>
-
-  <template id="strategyModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Strategy Call • $222</h3>
-      <p class="text-stone-300">Book a 60-minute sovereign council. We will confirm your time and send a Calendly link aligned to your timezone.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button-gold inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Strategy Call">Reserve Your Seat</a>
+      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Founder-Safe Systems Primer • $49</h3>
+      <p class="text-stone-300">Instant PDF download. Orientation only — not legal, financial, or therapeutic advice.</p>
+      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Primer">Buy the Primer → Instant Download</a>
     </div>
   </template>
 
@@ -293,9 +216,6 @@
     let countdownTimer = null;
     let countdownTarget = null;
 
-    // Derive the timezone offset (in minutes) for a specific instant by
-    // formatting the same UTC timestamp in the requested zone. This keeps
-    // daylight saving adjustments accurate for the 2025-10-31 target.
     const getTimeZoneOffsetMinutes = (date, timeZone) => {
       const parts = new Intl.DateTimeFormat('en-US', {
         timeZone,
@@ -312,9 +232,6 @@
       return (asUTC - date.getTime()) / 60000;
     };
 
-    // Rebuild the countdown target for the currently selected timezone so
-    // the timer can reset to the correct wall-clock midnight when the user
-    // switches zones from the header selector.
     const buildZonedTargetDate = (timeZone) => {
       const utcDate = Date.UTC(baseDate.year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
       const reference = new Date(utcDate);
@@ -342,11 +259,9 @@
         minute: '2-digit',
         timeZoneName: 'short'
       });
-      footerNote.textContent = `Portal set to close at ${formatter.format(countdownTarget)} in your selected timezone.`;
+      footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
     };
 
-    // Keep the countdown updating even when overlays are open so the portal
-    // always reflects the true time remaining.
     const tick = () => {
       const now = new Date();
       const diff = countdownTarget - now;
@@ -395,23 +310,6 @@
     });
 
     closeModalButton.addEventListener('click', closeModal);
-
-    document.addEventListener('submit', (event) => {
-      if (event.target.id === 'intakeForm') {
-        event.preventDefault();
-        const form = event.target;
-        if (form.checkValidity()) {
-          document.getElementById('intakeMessage').classList.remove('hidden');
-        }
-      }
-    });
-
-    document.addEventListener('click', (event) => {
-      if (event.target.id === 'transitSubmit') {
-        event.preventDefault();
-        alert('Transit report checkout placeholder. Replace with payment redirect.');
-      }
-    });
   </script>
 </body>
 </html>
