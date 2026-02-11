@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 import os
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import List, Literal, Optional
 
 from fastapi import FastAPI, HTTPException
@@ -62,6 +66,56 @@ class ErrorPayload(BaseModel):
         if callable(model_dump):
             return model_dump()
         return self.dict()
+
+
+class MintReq(BaseModel):
+    kind: str
+    payload: dict
+
+
+class InitializeStudio(BaseModel):
+    studioName: str
+    ownerEmail: str
+    initialSweepRate: int = 5
+    lockTerm: int = 5
+
+
+ARTIFACTS: list[dict] = []
+
+
+def canonical_hash(data: dict) -> str:
+    canonical = json.dumps(data, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def _load_balletbank_config() -> dict:
+    config_path = Path(__file__).resolve().parents[1] / "docs" / "config" / "balletbank.config.json"
+    if not config_path.exists():
+        logger.warning("BalletBank config not found: %s", config_path)
+        return {}
+    with config_path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+BALLETBANK_CONFIG = _load_balletbank_config()
+
+
+def _validate_balletbank_payload(kind: str, payload: dict) -> None:
+    if payload.get("module") != "BalletBank":
+        return
+    if not BALLETBANK_CONFIG:
+        raise HTTPException(status_code=503, detail="BalletBank config unavailable.")
+
+    currencies = BALLETBANK_CONFIG.get("currencies", {})
+    currency = payload.get("currency")
+    if currency and currency not in currencies:
+        raise HTTPException(status_code=400, detail=f"Unsupported BalletBank currency: {currency}")
+
+    if kind == "bbank_accrual":
+        required = ["amount", "note"]
+        missing = [field for field in required if field not in payload]
+        if missing:
+            raise HTTPException(status_code=400, detail=f"Missing fields for BalletBank accrual: {', '.join(missing)}")
 
 
 LLM_API_KEY = os.environ.get("LLM_API_KEY")
@@ -136,6 +190,73 @@ def generate_embodied_learning_curriculum(request: CurriculumRequest):
     except Exception:
         logger.exception("Generation failed.")
         raise HTTPException(status_code=500, detail="Failed to generate curriculum.")
+
+
+@app.post("/mint")
+def mint(req: MintReq):
+    _validate_balletbank_payload(req.kind, req.payload)
+
+    payload_for_hash = {
+        "kind": req.kind,
+        "payload": req.payload,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "module": req.payload.get("module"),
+    }
+    receipt_hash = canonical_hash(payload_for_hash)
+
+    artifact = {
+        "id": len(ARTIFACTS) + 1,
+        "kind": req.kind,
+        "payload": req.payload,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "receipt_hash": receipt_hash,
+    }
+    ARTIFACTS.append(artifact)
+
+    return {
+        "id": artifact["id"],
+        "created_at": artifact["created_at"],
+        "receipt_hash": receipt_hash,
+        "qr_url": f"https://stageport.app/receipt/{receipt_hash}?v=bbank",
+    }
+
+
+@app.get("/receipt/{receipt_hash}")
+def get_receipt(receipt_hash: str):
+    match = next((artifact for artifact in ARTIFACTS if artifact["receipt_hash"] == receipt_hash), None)
+    if not match:
+        raise HTTPException(status_code=404, detail="Receipt not found.")
+    return match
+
+
+@app.post("/initialize-studio")
+def initialize_studio(req: InitializeStudio):
+    trust_wallet = f"trust_{req.studioName.lower().replace(' ', '_')}"
+    trust_payload = {
+        "module": "BalletBank",
+        "studio": req.studioName,
+        "ownerEmail": req.ownerEmail,
+        "trust_wallet": trust_wallet,
+        "initial_balance": 0,
+        "sweep_rate": req.initialSweepRate,
+        "lock_term_years": req.lockTerm,
+    }
+    receipt_hash = canonical_hash(trust_payload)
+
+    artifact = {
+        "id": len(ARTIFACTS) + 1,
+        "kind": "studio_initialized",
+        "payload": trust_payload,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "receipt_hash": receipt_hash,
+    }
+    ARTIFACTS.append(artifact)
+
+    return {
+        "status": "studio_initialized",
+        "trust_wallet_id": trust_wallet,
+        "receipt_hash": receipt_hash,
+    }
 
 
 # Optional: run with `uvicorn api:app --reload`
