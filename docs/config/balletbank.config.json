@@ -1,0 +1,62 @@
+{
+  "module": "BalletBank",
+  "version": "0.1-mvp",
+  "currencies": {
+    "BBT": {
+      "name": "Ballet Bank Trust Units",
+      "type": "locked_trust",
+      "decimals": 0,
+      "symbol": "BBT",
+      "metadata": {
+        "lockTermYears": 5,
+        "unlockCondition": "unlockAt <= now AND policyApproved"
+      }
+    },
+    "BCC": {
+      "name": "Ballet Class Credits",
+      "type": "spendable",
+      "decimals": 0,
+      "symbol": "BCC",
+      "metadata": {
+        "redemptionOptions": [
+          "merch",
+          "workshop",
+          "recital_fees",
+          "private_lesson"
+        ]
+      }
+    }
+  },
+  "requiredWallets": {
+    "student": "Student",
+    "payer": "Payer/Guardian",
+    "studioTrust": "Ballet Bank Trust (system)"
+  },
+  "accrualRule": {
+    "cadence": "weekly_or_per_payment_webhook",
+    "calculation": "attendance_based OR tuition_sweep_percent",
+    "defaultSweepRate": 0.05,
+    "noteTemplate": "Tuition sweep {{rate}}% - {{month}} {{year}}"
+  },
+  "lockRule": {
+    "defaultUnlockYears": 5,
+    "metaKey": "lock",
+    "schema": {
+      "unlockAt": "ISO datetime",
+      "lockReason": "string",
+      "policyId": "string"
+    }
+  },
+  "receiptPayload": {
+    "requiredFields": [
+      "docId",
+      "txId",
+      "studioId",
+      "hash",
+      "accruedBBT",
+      "lockedUntil"
+    ],
+    "qrTemplate": "https://stageport.app/receipt/{{txId}}?v=bbank"
+  },
+  "phase2Hooks": ["meritSeals", "governanceVotes", "insuranceClaim"]
+}
