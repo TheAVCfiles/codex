@@ -1,0 +1,2 @@
+evidence_id,verification_status,date,time_local,platform,thread_or_group,participants_visible,on_screen_text,attachments_visible,artifact_type,artifact_evidence_location_suggested,local_file_path,notes
+P21,Captured,2011-08-22,15:10:34-0700,Email,PayPal Transaction,Anu Jain → Allison Van Cura,"Anu Jain sent you $300.00 USD",No,Email (headers + body),User-provided raw email,data/forensics/emails/paypal_2011-08-22_anujain_300usd.eml,PayPal payment confirmation; Transaction ID 99C8553194239201V; Recipient alias1133@hotmail.com

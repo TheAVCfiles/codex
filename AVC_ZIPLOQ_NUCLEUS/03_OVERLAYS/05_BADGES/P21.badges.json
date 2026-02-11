@@ -1,0 +1,17 @@
+{
+  "exhibit_id": "P21",
+  "badges": [
+    {
+      "type": "PROVENANCE",
+      "value": "PRIMARY_EMAIL",
+      "confidence": 95,
+      "reason": "Full headers + body provided; DKIM neutral, sender-id pass"
+    },
+    {
+      "type": "SENSITIVITY",
+      "value": "FINANCIAL_TRANSACTION",
+      "confidence": 90,
+      "action": "REDACT_IF_PUBLIC"
+    }
+  ]
+}

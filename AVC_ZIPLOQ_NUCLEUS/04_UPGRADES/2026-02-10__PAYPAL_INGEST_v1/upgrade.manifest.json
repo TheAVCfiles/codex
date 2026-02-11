@@ -1,0 +1,14 @@
+{
+  "upgrade_id": "2026-02-10__PAYPAL_INGEST_v1",
+  "date": "2026-02-10",
+  "evidence_ids": ["P21"],
+  "artifacts": [
+    "AVC_ZIPLOQ_NUCLEUS/01_CORE/01_EXHIBITS_RAW/paypal_2011-08-22_anujain_300usd.eml",
+    "AVC_ZIPLOQ_NUCLEUS/01_CORE/02_INDEX/exhibits.csv",
+    "AVC_ZIPLOQ_NUCLEUS/01_CORE/02_INDEX/proven_md_snippet.md",
+    "AVC_ZIPLOQ_NUCLEUS/01_CORE/02_INDEX/hashes.sha256",
+    "AVC_ZIPLOQ_NUCLEUS/01_CORE/03_CUSTODY/chain_of_custody.md",
+    "AVC_ZIPLOQ_NUCLEUS/03_OVERLAYS/05_BADGES/P21.badges.json"
+  ],
+  "notes": "P21 ingest of PayPal transaction evidence (Aug 22, 2011) with preserved raw headers and body."
+}

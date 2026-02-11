@@ -1,0 +1,27 @@
+Authentication-Results: hotmail.com; sender-id=pass (sender IP is 66.211.168.230) header.sender=sendmail@paypal.com; dkim=neutral header.d=yahoo.com; x-hmca=pass
+X-Message-Status: p:1:n
+X-SID-PRA: sendmail@paypal.com
+X-SID-Result: Pass
+X-AUTH-Result: PASS
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTE7YT0xO0Q9MTtTQ0w9MA==
+X-Message-Info: JGTYoYF78jH6W9ZUCLNM1MdQoHO9S90bd9Udrcn1fbNYMoU9XR/uvrkvLxUyffnSWhgshUP5a+4jmEW3slcjwrBYfjVuv8VgQMOG656Y5iUIedypuF5/jyD0LCgjFEmomWz/OH2ZvVw=
+Received: from mx0.phx.paypal.com ([66.211.168.230]) by SNT0-MC3-F20.Snt0.hotmail.com with Microsoft SMTPSVC(6.0.3790.4675); Mon, 22 Aug 2011 15:10:35 -0700
+DomainKey-Signature: q=dns; a=rsa-sha1; c=nofws; s=dkim; d=paypal.com; ...
+DKIM-Signature: v=1; a=rsa-sha1; d=paypal.com; s=dkim; ...
+Received: (qmail 24043 invoked by uid 993); 22 Aug 2011 22:10:34 -0000
+Date: Mon, 22 Aug 2011 15:10:34 -0700
+Message-ID: <1314051034.24043@paypal.com>
+Subject: Anu Jain sent you $300.00 USD
+X-MaxCode-Template: email-standard-transaction-counterparty
+To: Allison Van Cura
+From: "anujain@yahoo.com"
+Sender:
+X-Email-Type-Id: PP1546
+Return-Path: payment@paypal.com
+X-OriginalArrivalTime: 22 Aug 2011 22:10:35.0142 (UTC) FILETIME=[50E86A60:01CC6118]
+
+Anu Jain sent you $300.00 USD
+Transaction ID: 99C8553194239201V
+Get the details: https://www.paypal.com/us/cgi-bin/?cmd=_view-a-trans&id=99C8553194239201V
+Options: Spend online, transfer to bank, PayPal Debit MasterCard
+Footer: Copyright © 2011 PayPal, Inc. PayPal Email ID PP1546
