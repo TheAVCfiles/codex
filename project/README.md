@@ -1,8 +1,9 @@
-# Sovereign Beta Portal
+# Sovereign Liquidation & Recovery Package
 
-A single-page, dark-themed astrology landing page for The Sovereign Beta Portal. It uses Tailwind CSS via CDN and vanilla JavaScript to power cosmic visuals, monetized offerings, and birth-chart intake forms. The countdown targets the portal's closing time and adapts to timezone changes.
+A single-page, dark-themed executive hand-off portal for the Sovereign Liquidation & Recovery Package. It uses Tailwind CSS via CDN and vanilla JavaScript to present reconciliation highlights, waiver filing guidance, and a timezone-aware countdown utility for submission planning.
 
 ## Running locally
+
 Serve the `index.html` file with any static server, for example:
 
 ```
