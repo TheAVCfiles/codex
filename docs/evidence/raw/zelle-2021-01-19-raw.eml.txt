@@ -1,0 +1,46 @@
+Received: from DM3NAM05HT161.eop-nam05.prod.protection.outlook.com
+ (2603:10b6:208:256::7) by MN2PR14MB2672.namprd14.prod.outlook.com with HTTPS
+ via BL1PR13CA0002.NAMPRD13.PROD.OUTLOOK.COM; Tue, 19 Jan 2021 08:07:52 +0000
+Received: from DM3NAM05FT030.eop-nam05.prod.protection.outlook.com
+ (2a01:111:e400:7e51::51) by
+ DM3NAM05HT161.eop-nam05.prod.protection.outlook.com (2a01:111:e400:7e51::105)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.6; Tue, 19 Jan
+ 2021 08:07:52 +0000
+Authentication-Results: spf=pass (sender IP is 199.47.139.181)
+ smtp.mailfrom=zellepay.com; hotmail.com; dkim=pass (signature was verified)
+ header.d=zellepay.com;hotmail.com; dmarc=pass action=none
+ header.from=zellepay.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of zellepay.com designates
+ 199.47.139.181 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.47.139.181; helo=smtp2.earlywarning.com;
+Received: from smtp2.earlywarning.com (199.47.139.181) by
+ DM3NAM05FT030.mail.protection.outlook.com (10.152.98.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3784.7 via Frontend Transport; Tue, 19 Jan 2021 08:07:52 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:3694A0656A020A0C456B57FC0B29BCFA62CBA7CBADA15105F0B248463BA7424C;UpperCasedChecksum:F246D9A13899389EC06FD88C58B608938A2E9D38CD5D6C754D9A05FD77D6E63F;SizeAsReceived:1824;Count:14
+Received: from pps.filterd (a2280caop.earlywarning.com [127.0.0.1])
+	by a2280caop.earlywarning.com (8.16.0.42/8.16.0.42) with SMTP id 10J85vGe013694
+	for <alias1133@hotmail.com>; Tue, 19 Jan 2021 02:07:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zellepay.com; h=from : to : date :
+ subject : content-type : message-id; s=august2016;
+ bh=aPADNxjyKgklTcLNObNgiqc2daIJtHaSW4ttAkspONU=;
+ b=Jgl3diiLPJbw80dh1UqTIm82sqCA2ds9PbQR28+Jd+JifLMgwwnvL+PRFHxhtd744E1Q
+ ...
+From: "Zelle"<DoNotReply@zellepay.com>
+To: <alias1133@hotmail.com>
+Date: Tue, 19 Jan 2021 08:07:50 GMT
+Subject: DANCE FACTORY RIDGEFIELD LLC sent you $625.00
+Content-Type: text/html
+Message-ID: <S6305POWAPUR4UV6rJ8002091bd@s6305powa.prodew.int>
+X-MS-Exchange-Organization-Network-Message-Id: 344a1f44-a877-49c5-0f59-08d8bc5151d1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 344a1f44-a877-49c5-0f59-08d8bc5151d1
+MIME-Version: 1.0
+
+<html>
+...
+DANCE F. has sent you $625.00. Enjoy!
+...
+dec 28 2020 to jan 10 2021  adjusted for overpayment for sat dec 19 2020
+...
+</html>
