@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Users,
   Layout,
@@ -10,6 +10,14 @@ import {
   X,
   Move,
   Maximize2,
+  Music,
+  Timer,
+  Plus,
+  SkipBack,
+  SkipForward,
+  Download,
+  Play,
+  Pause,
 } from "lucide-react";
 
 const DANCER_ROSTER = [
@@ -104,6 +112,29 @@ const MetricCard = ({ label, value, subtext, alert = false }) => (
         {value}
       </span>
       {subtext && <span className="text-xs text-zinc-600">{subtext}</span>}
+    </div>
+  </div>
+);
+
+const LabanControl = ({ label, value, onChange, options }) => (
+  <div className="space-y-2">
+    <div className="text-[10px] uppercase tracking-widest text-zinc-500">
+      {label}
+    </div>
+    <div className="grid grid-cols-2 gap-1">
+      {options.map((option) => (
+        <button
+          key={option}
+          onClick={() => onChange(option)}
+          className={`px-2 py-1 text-[10px] uppercase border transition-colors ${
+            value === option
+              ? "border-zinc-500 bg-zinc-700 text-zinc-100"
+              : "border-zinc-800 text-zinc-500 hover:text-zinc-300"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
     </div>
   </div>
 );
@@ -260,81 +291,445 @@ const RosterView = () => (
 
 const SandboxView = () => {
   const [elements, setElements] = useState([
-    { id: 1, x: 100, y: 100, label: "Seraphina", color: "bg-stone-400" },
-    { id: 2, x: 200, y: 150, label: "Mercer", color: "bg-red-800" },
-    { id: 3, x: 300, y: 100, label: "Vance", color: "bg-emerald-700" },
-  ]);
-  const [dragging, setDragging] = useState(null);
-  const containerRef = useRef(null);
-
-  const handlePointerDown = (event, id) => {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    const rect = event.currentTarget.getBoundingClientRect();
-    setDragging({
-      id,
-      offset: {
-        x: event.clientX - rect.left - rect.width / 2,
-        y: event.clientY - rect.top - rect.height / 2,
+    {
+      id: 1,
+      x: 120,
+      y: 120,
+      label: "Seraphina",
+      color: "bg-stone-400",
+      laban: {
+        weight: "Strong",
+        space: "Direct",
+        time: "Sudden",
+        flow: "Bound",
       },
+    },
+    {
+      id: 2,
+      x: 240,
+      y: 180,
+      label: "Mercer",
+      color: "bg-red-800",
+      laban: {
+        weight: "Light",
+        space: "Indirect",
+        time: "Sustained",
+        flow: "Free",
+      },
+    },
+    {
+      id: 3,
+      x: 340,
+      y: 140,
+      label: "Vance",
+      color: "bg-emerald-700",
+      laban: {
+        weight: "Strong",
+        space: "Direct",
+        time: "Sustained",
+        flow: "Bound",
+      },
+    },
+  ]);
+
+  const [mode, setMode] = useState("count");
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(20);
+  const [bpm, setBpm] = useState(100);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [keyframes, setKeyframes] = useState([]);
+  const [draggingId, setDraggingId] = useState(null);
+  const [selectedDancerId, setSelectedDancerId] = useState(null);
+
+  const containerRef = useRef(null);
+  const audioRef = useRef(null);
+  const rafRef = useRef(null);
+  const timeRef = useRef(0);
+
+  useEffect(() => {
+    timeRef.current = currentTime;
+  }, [currentTime]);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAudioUrl(url);
+      setMode("audio");
+      setKeyframes([]);
+      setCurrentTime(0);
+    }
+  };
+
+  const togglePlayback = () => setIsPlaying((playing) => !playing);
+
+  const captureKeyframe = () => {
+    const frame = {
+      id: `kf-${Date.now()}`,
+      time: currentTime,
+      elements: JSON.parse(JSON.stringify(elements)),
+    };
+
+    setKeyframes((prev) => {
+      const filtered = prev.filter(
+        (keyframe) => Math.abs(keyframe.time - currentTime) > 0.08,
+      );
+      return [...filtered, frame].sort((a, b) => a.time - b.time);
     });
   };
 
+  const jumpToTime = (time) => {
+    const targetTime = Number.isFinite(time)
+      ? Math.max(0, Math.min(duration, time))
+      : 0;
+    setCurrentTime(targetTime);
+    if (mode === "audio" && audioRef.current) {
+      audioRef.current.currentTime = targetTime;
+    }
+
+    const nearest = keyframes.find(
+      (keyframe) => Math.abs(keyframe.time - targetTime) < 0.08,
+    );
+    if (nearest) {
+      setElements(nearest.elements);
+    }
+  };
+
+  const stepKeyframe = (direction) => {
+    if (!keyframes.length) {
+      return;
+    }
+
+    const sorted = [...keyframes].sort((a, b) => a.time - b.time);
+    const index =
+      direction === "next"
+        ? sorted.findIndex((keyframe) => keyframe.time > currentTime + 0.05)
+        : sorted.findLastIndex(
+            (keyframe) => keyframe.time < currentTime - 0.05,
+          );
+
+    const targetIndex =
+      index === -1 ? (direction === "next" ? sorted.length - 1 : 0) : index;
+    jumpToTime(sorted[targetIndex].time);
+  };
+
+  useEffect(() => {
+    if (!isPlaying) {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      return;
+    }
+
+    let last = performance.now();
+
+    const tick = (now) => {
+      const delta = (now - last) / 1000;
+      last = now;
+
+      let nextTime = timeRef.current;
+
+      if (mode === "audio" && audioRef.current) {
+        nextTime = audioRef.current.currentTime;
+      } else {
+        nextTime += delta * playbackSpeed * (bpm / 60);
+        if (nextTime > duration) {
+          nextTime = 0;
+        }
+      }
+
+      setCurrentTime(nextTime);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [isPlaying, mode, playbackSpeed, bpm, duration]);
+
+  const handlePointerDown = (event, id) => {
+    if (isPlaying) {
+      return;
+    }
+
+    event.preventDefault();
+    setDraggingId(id);
+    setSelectedDancerId(id);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
   const handlePointerMove = (event) => {
-    if (!dragging || !containerRef.current) return;
+    if (!draggingId || !containerRef.current) {
+      return;
+    }
+
+    event.preventDefault();
     const rect = containerRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left - 24 - dragging.offset.x;
-    const y = event.clientY - rect.top - 24 - dragging.offset.y;
+    const x = Math.max(
+      20,
+      Math.min(rect.width - 40, event.clientX - rect.left),
+    );
+    const y = Math.max(
+      20,
+      Math.min(rect.height - 40, event.clientY - rect.top),
+    );
 
     setElements((prev) =>
       prev.map((element) =>
-        element.id === dragging.id ? { ...element, x, y } : element,
+        element.id === draggingId ? { ...element, x, y } : element,
       ),
     );
   };
 
-  const handlePointerUp = () => setDragging(null);
+  const handlePointerUp = () => setDraggingId(null);
+
+  const updateLaban = (type, value) => {
+    if (!selectedDancerId) {
+      return;
+    }
+
+    setElements((prev) =>
+      prev.map((element) =>
+        element.id === selectedDancerId
+          ? { ...element, laban: { ...element.laban, [type]: value } }
+          : element,
+      ),
+    );
+  };
+
+  const exportPayload = () => {
+    const data = {
+      timestamp: new Date().toISOString(),
+      mode,
+      bpm,
+      playbackSpeed,
+      elements,
+      keyframes,
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `pyrouette_export_${Date.now()}.json`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const selectedDancer = elements.find(
+    (element) => element.id === selectedDancerId,
+  );
 
   return (
-    <div className="h-full flex flex-col animate-in fade-in duration-500">
-      <header className="mb-4 flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-light text-zinc-100">The Sandbox</h2>
-          <p className="text-zinc-500 text-sm">
-            Choreography & Spatial Planning
-          </p>
+    <div className="h-full flex flex-col animate-in fade-in duration-500 relative overflow-hidden">
+      <audio
+        ref={audioRef}
+        src={audioUrl || undefined}
+        onLoadedMetadata={() => {
+          if (audioRef.current?.duration) {
+            setDuration(audioRef.current.duration);
+          }
+        }}
+        onEnded={() => {
+          setIsPlaying(false);
+          setCurrentTime(0);
+        }}
+      />
+
+      <header className="mb-4 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-2xl font-light text-zinc-100">The Sandbox</h2>
+            <p className="text-zinc-500 text-sm">
+              Choreography, timing, and mobile-safe dragging
+            </p>
+          </div>
+
+          <div className="inline-flex border border-zinc-800 text-xs uppercase tracking-widest">
+            <button
+              onClick={() => {
+                setMode("count");
+                setCurrentTime(0);
+                setDuration(20);
+              }}
+              className={`px-3 py-2 ${mode === "count" ? "bg-zinc-800 text-white" : "text-zinc-500"}`}
+            >
+              <Timer className="w-4 h-4 inline mr-2" /> Count
+            </button>
+            <button
+              onClick={() => {
+                setMode("audio");
+                setCurrentTime(0);
+              }}
+              className={`px-3 py-2 ${mode === "audio" ? "bg-zinc-800 text-white" : "text-zinc-500"}`}
+            >
+              <Music className="w-4 h-4 inline mr-2" /> Audio
+            </button>
+          </div>
         </div>
-        <div className="text-xs text-zinc-500">
-          Drag dots to position assets
+
+        <div className="flex flex-wrap gap-2 items-center">
+          <button
+            onClick={() => stepKeyframe("prev")}
+            className="px-3 py-2 border border-zinc-700 hover:bg-zinc-900"
+            type="button"
+          >
+            <SkipBack className="w-4 h-4" />
+          </button>
+          <button
+            onClick={togglePlayback}
+            className="px-3 py-2 border border-zinc-700 hover:bg-zinc-900"
+            type="button"
+          >
+            {isPlaying ? (
+              <Pause className="w-4 h-4" />
+            ) : (
+              <Play className="w-4 h-4" />
+            )}
+          </button>
+          <button
+            onClick={() => stepKeyframe("next")}
+            className="px-3 py-2 border border-zinc-700 hover:bg-zinc-900"
+            type="button"
+          >
+            <SkipForward className="w-4 h-4" />
+          </button>
+
+          <input
+            type="range"
+            min={0}
+            max={duration}
+            step={0.01}
+            value={currentTime}
+            onChange={(event) => jumpToTime(parseFloat(event.target.value))}
+            className="flex-1 min-w-36 accent-emerald-500"
+          />
+
+          {mode === "count" && (
+            <label className="text-xs text-zinc-500 border border-zinc-800 px-2 py-1">
+              BPM
+              <input
+                type="number"
+                value={bpm}
+                onChange={(event) => setBpm(Number(event.target.value) || 1)}
+                className="w-12 bg-transparent text-right ml-2 text-zinc-100"
+              />
+            </label>
+          )}
+
+          <label className="text-xs text-zinc-500 border border-zinc-800 px-2 py-1 cursor-pointer">
+            Upload
+            <input
+              type="file"
+              accept="audio/*"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+          </label>
+
+          <button
+            onClick={captureKeyframe}
+            disabled={isPlaying}
+            className="px-3 py-2 border border-zinc-700 hover:bg-zinc-900 disabled:opacity-50"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={exportPayload}
+            className="px-3 py-2 border border-zinc-700 hover:bg-zinc-900"
+          >
+            <Download className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
-      <div
-        ref={containerRef}
-        className="flex-1 border border-zinc-700 bg-zinc-900/50 relative overflow-hidden cursor-crosshair"
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #3f3f46 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      >
-        <div className="absolute top-1/2 left-0 w-full h-px bg-zinc-800 pointer-events-none" />
-        <div className="absolute top-0 left-1/2 h-full w-px bg-zinc-800 pointer-events-none" />
+      <div className="flex-1 flex flex-col lg:flex-row min-h-0 gap-4">
+        <div
+          ref={containerRef}
+          className="flex-1 border border-zinc-700 bg-zinc-900/50 relative overflow-hidden touch-none"
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #3f3f46 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        >
+          <div className="absolute top-1/2 left-0 w-full h-px bg-zinc-800 pointer-events-none" />
+          <div className="absolute top-0 left-1/2 h-full w-px bg-zinc-800 pointer-events-none" />
 
-        {elements.map((element) => (
-          <div
-            key={element.id}
-            onPointerDown={(event) => handlePointerDown(event, element.id)}
-            style={{ left: element.x, top: element.y }}
-            className={`absolute w-12 h-12 rounded-full ${element.color} shadow-lg shadow-black/50 flex items-center justify-center cursor-move hover:scale-110 transition-transform z-10`}
-          >
-            <span className="text-[10px] text-white font-bold uppercase tracking-tighter truncate w-full text-center px-1 pointer-events-none">
-              {element.label}
-            </span>
+          {mode === "count" && isPlaying && (
+            <div className="absolute inset-0 flex items-center justify-center text-zinc-900 text-8xl font-bold pointer-events-none select-none">
+              {Math.floor(currentTime % 8) + 1}
+            </div>
+          )}
+
+          {elements.map((element) => (
+            <div
+              key={element.id}
+              onPointerDown={(event) => handlePointerDown(event, element.id)}
+              style={{ left: element.x, top: element.y }}
+              className={`absolute w-12 h-12 rounded-full ${element.color} shadow-lg shadow-black/50 flex items-center justify-center cursor-move hover:scale-110 transition-transform z-10 ${selectedDancerId === element.id ? "ring-2 ring-white" : ""}`}
+            >
+              <span className="text-[10px] text-white font-bold uppercase tracking-tighter truncate w-full text-center px-1 pointer-events-none">
+                {element.label.slice(0, 3)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {selectedDancer ? (
+          <div className="fixed lg:relative bottom-0 left-0 right-0 border-t lg:border lg:border-zinc-800 bg-zinc-950 p-4 z-40 lg:w-72">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-zinc-100 text-sm uppercase tracking-widest">
+                Laban Inspector
+              </h3>
+              <button
+                onClick={() => setSelectedDancerId(null)}
+                className="text-zinc-500 hover:text-zinc-300"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <LabanControl
+                label="Weight"
+                value={selectedDancer.laban.weight}
+                onChange={(value) => updateLaban("weight", value)}
+                options={["Strong", "Light"]}
+              />
+              <LabanControl
+                label="Space"
+                value={selectedDancer.laban.space}
+                onChange={(value) => updateLaban("space", value)}
+                options={["Direct", "Indirect"]}
+              />
+              <LabanControl
+                label="Time"
+                value={selectedDancer.laban.time}
+                onChange={(value) => updateLaban("time", value)}
+                options={["Sudden", "Sustained"]}
+              />
+              <LabanControl
+                label="Flow"
+                value={selectedDancer.laban.flow}
+                onChange={(value) => updateLaban("flow", value)}
+                options={["Bound", "Free"]}
+              />
+            </div>
           </div>
-        ))}
+        ) : null}
       </div>
     </div>
   );
