@@ -174,4 +174,5 @@ This aligns with the statutory ingest schema’s guardrails and keeps the dossie
 If you need a one‑page, print‑ready intake for advocates or intake teams, use:
 
 - **`docs/forensic-alignment-onepage.md`** — a compact, evidence‑first relief sheet with the same guardrails and privacy‑safe defaults.
+- **`docs/core-case-base.md`** — command-layer controls for verification-gated damages, filing order, and handoff guardrails.
 - The one‑pager includes manual PDF export steps (Print → Save as PDF).
