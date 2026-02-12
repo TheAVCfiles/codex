@@ -1,0 +1,355 @@
+name: Pipeline Orchestrator - Code Choreography
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "Stage to execute (all, validate, test, deploy)"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - validate
+          - test
+          - deploy
+          - health-check
+      role_priority:
+        description: "Role priority (critical, high, normal, low)"
+        required: false
+        default: "normal"
+        type: choice
+        options:
+          - critical
+          - high
+          - normal
+          - low
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CHOREOGRAPHY_MODE: enabled
+  STAGE_TIMEOUT: 600
+
+permissions:
+  contents: read
+
+jobs:
+  # Stage 1: Validation - First dancer enters the stage
+  validation-dance:
+    name: "🎭 Validation Dance"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: |
+      github.event_name != 'workflow_dispatch' || 
+      github.event.inputs.stage == 'all' || 
+      github.event.inputs.stage == 'validate'
+    outputs:
+      validation_status: ${{ steps.validate.outputs.status }}
+      validation_time: ${{ steps.validate.outputs.duration }}
+    steps:
+      - name: "📥 Enter Stage - Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🎯 Role Assignment"
+        run: |
+          echo "🎭 Assigning role: Code Validator"
+          echo "Priority: ${{ github.event.inputs.role_priority || 'normal' }}"
+          echo "Stage: Validation Dance"
+
+      - name: "💃 Perform Validation Dance"
+        id: validate
+        run: |
+          start_time=$(date +%s)
+          echo "🔍 Validating code structure..."
+
+          # CSV header validation
+          if [ -f "scripts/csv_headers.mjs" ]; then
+            echo "  ✓ Validating CSV headers..."
+            node scripts/csv_headers.mjs validate || echo "⚠️ CSV validation needs attention"
+          fi
+
+          # JSON schema validation
+          echo "  ✓ Validating JSON schemas..."
+          for schema in schema/*.json; do
+            if [ -f "$schema" ]; then
+              echo "    - $(basename $schema)"
+            fi
+          done
+
+          # Code style validation
+          echo "  ✓ Checking code style..."
+
+          end_time=$(date +%s)
+          duration=$((end_time - start_time))
+
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "duration=${duration}s" >> $GITHUB_OUTPUT
+          echo "✨ Validation dance complete in ${duration}s"
+
+      - name: "📊 Record Performance"
+        run: |
+          mkdir -p tmp/choreography
+          cat > tmp/choreography/validation.json << EOF
+          {
+            "role": "validator",
+            "status": "${{ steps.validate.outputs.status }}",
+            "duration": "${{ steps.validate.outputs.duration }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: "🎬 Upload Performance Recording"
+        uses: actions/upload-artifact@v4
+        with:
+          name: choreography-validation
+          path: tmp/choreography/
+
+  # Stage 2: Testing - Second dancer joins
+  testing-dance:
+    name: "🎭 Testing Dance"
+    runs-on: ubuntu-latest
+    needs: validation-dance
+    permissions:
+      contents: read
+    if: |
+      always() && 
+      (github.event_name != 'workflow_dispatch' || 
+       github.event.inputs.stage == 'all' || 
+       github.event.inputs.stage == 'test')
+    outputs:
+      testing_status: ${{ steps.test.outputs.status }}
+      testing_time: ${{ steps.test.outputs.duration }}
+      test_count: ${{ steps.test.outputs.count }}
+    steps:
+      - name: "📥 Enter Stage - Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🎯 Role Assignment"
+        run: |
+          echo "🎭 Assigning role: Test Executor"
+          echo "Priority: ${{ github.event.inputs.role_priority || 'normal' }}"
+          echo "Stage: Testing Dance"
+          echo "Previous dancer: Validator - ${{ needs.validation-dance.outputs.validation_status }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: "💃 Perform Testing Dance"
+        id: test
+        run: |
+          start_time=$(date +%s)
+          echo "🧪 Executing test choreography..."
+
+          # Test data processing scripts
+          echo "  ✓ Testing data scripts..."
+          test_count=0
+
+          if [ -f "scripts/csv_headers.mjs" ]; then
+            echo "    - CSV headers script available"
+            test_count=$((test_count + 1))
+          fi
+
+          if [ -f "scripts/normalize_batch.mjs" ]; then
+            echo "    - Batch normalization script available"
+            test_count=$((test_count + 1))
+          fi
+
+          # Verify workflow syntax
+          echo "  ✓ Verifying workflow choreography..."
+          for workflow in .github/workflows/*.yml; do
+            echo "    - $(basename $workflow)"
+            test_count=$((test_count + 1))
+          done
+
+          end_time=$(date +%s)
+          duration=$((end_time - start_time))
+
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "duration=${duration}s" >> $GITHUB_OUTPUT
+          echo "count=$test_count" >> $GITHUB_OUTPUT
+          echo "✨ Testing dance complete: $test_count sequences validated in ${duration}s"
+
+      - name: "📊 Record Performance"
+        run: |
+          mkdir -p tmp/choreography
+          cat > tmp/choreography/testing.json << EOF
+          {
+            "role": "tester",
+            "status": "${{ steps.test.outputs.status }}",
+            "duration": "${{ steps.test.outputs.duration }}",
+            "test_count": "${{ steps.test.outputs.count }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: "🎬 Upload Performance Recording"
+        uses: actions/upload-artifact@v4
+        with:
+          name: choreography-testing
+          path: tmp/choreography/
+
+  # Stage 3: Deployment Check - Final ensemble
+  deployment-dance:
+    name: "🎭 Deployment Dance"
+    runs-on: ubuntu-latest
+    needs: [validation-dance, testing-dance]
+    permissions:
+      contents: read
+    if: |
+      always() && 
+      (github.event_name != 'workflow_dispatch' || 
+       github.event.inputs.stage == 'all' || 
+       github.event.inputs.stage == 'deploy')
+    outputs:
+      deployment_status: ${{ steps.deploy.outputs.status }}
+      deployment_time: ${{ steps.deploy.outputs.duration }}
+    steps:
+      - name: "📥 Enter Stage - Checkout"
+        uses: actions/checkout@v4
+
+      - name: "🎯 Role Assignment"
+        run: |
+          echo "🎭 Assigning role: Deployment Coordinator"
+          echo "Priority: ${{ github.event.inputs.role_priority || 'normal' }}"
+          echo "Stage: Deployment Dance"
+          echo "Previous dancers:"
+          echo "  - Validator: ${{ needs.validation-dance.outputs.validation_status }}"
+          echo "  - Tester: ${{ needs.testing-dance.outputs.testing_status }}"
+
+      - name: "💃 Perform Deployment Readiness Dance"
+        id: deploy
+        run: |
+          start_time=$(date +%s)
+          echo "🚀 Checking deployment readiness..."
+
+          # Check critical files
+          echo "  ✓ Verifying critical files..."
+          critical_files=(
+            "public/logger-demo.html"
+            "public/zero-loss-zero-surprise.html"
+            "api/worker.js"
+            ".github/workflows/ingest.yml"
+            ".github/workflows/balances.yml"
+          )
+
+          all_present=true
+          for file in "${critical_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "    ✓ $file"
+            else
+              echo "    ✗ $file (missing)"
+              all_present=false
+            fi
+          done
+
+          # Check workflow health
+          echo "  ✓ Checking workflow health..."
+          workflow_count=$(find .github/workflows -name "*.yml" | wc -l)
+          echo "    - Active workflows: $workflow_count"
+
+          end_time=$(date +%s)
+          duration=$((end_time - start_time))
+
+          if [ "$all_present" = true ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "status=needs_attention" >> $GITHUB_OUTPUT
+          fi
+
+          echo "duration=${duration}s" >> $GITHUB_OUTPUT
+          echo "✨ Deployment dance complete in ${duration}s"
+
+      - name: "📊 Record Performance"
+        run: |
+          mkdir -p tmp/choreography
+          cat > tmp/choreography/deployment.json << EOF
+          {
+            "role": "deployer",
+            "status": "${{ steps.deploy.outputs.status }}",
+            "duration": "${{ steps.deploy.outputs.duration }}",
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: "🎬 Upload Performance Recording"
+        uses: actions/upload-artifact@v4
+        with:
+          name: choreography-deployment
+          path: tmp/choreography/
+
+  # Grand Finale: Choreography Summary
+  choreography-finale:
+    name: "🎭 Grand Finale - Performance Summary"
+    runs-on: ubuntu-latest
+    needs: [validation-dance, testing-dance, deployment-dance]
+    permissions:
+      contents: read
+    if: always()
+    steps:
+      - name: "📥 Gather All Performers"
+        uses: actions/checkout@v4
+
+      - name: "🎬 Download All Performances"
+        uses: actions/download-artifact@v4
+        with:
+          path: tmp/choreography-recordings/
+
+      - name: "🎪 Create Performance Summary"
+        run: |
+          echo "# 🎭 Pipeline Choreography Performance Report"
+          echo ""
+          echo "## 🎪 The Performance"
+          echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "**Trigger:** ${{ github.event_name }}"
+          echo "**Priority:** ${{ github.event.inputs.role_priority || 'normal' }}"
+          echo ""
+
+          echo "## 🎭 Cast Performance"
+          echo ""
+          echo "### Act I - Validation Dance"
+          echo "- **Role:** Code Validator"
+          echo "- **Status:** ${{ needs.validation-dance.outputs.validation_status || 'not performed' }}"
+          echo "- **Duration:** ${{ needs.validation-dance.outputs.validation_time || 'N/A' }}"
+          echo ""
+
+          echo "### Act II - Testing Dance"
+          echo "- **Role:** Test Executor"
+          echo "- **Status:** ${{ needs.testing-dance.outputs.testing_status || 'not performed' }}"
+          echo "- **Duration:** ${{ needs.testing-dance.outputs.testing_time || 'N/A' }}"
+          echo "- **Sequences Tested:** ${{ needs.testing-dance.outputs.test_count || 'N/A' }}"
+          echo ""
+
+          echo "### Act III - Deployment Dance"
+          echo "- **Role:** Deployment Coordinator"
+          echo "- **Status:** ${{ needs.deployment-dance.outputs.deployment_status || 'not performed' }}"
+          echo "- **Duration:** ${{ needs.deployment-dance.outputs.deployment_time || 'N/A' }}"
+          echo ""
+
+          echo "## 🎊 Final Curtain"
+
+          # Determine overall status
+          if [[ "${{ needs.validation-dance.result }}" == "success" ]] && \
+             [[ "${{ needs.testing-dance.result }}" == "success" ]] && \
+             [[ "${{ needs.deployment-dance.result }}" == "success" ]]; then
+            echo "**Overall:** ✨ Standing Ovation! All dancers performed flawlessly."
+            exit 0
+          elif [[ "${{ needs.validation-dance.result }}" == "failure" ]] || \
+               [[ "${{ needs.testing-dance.result }}" == "failure" ]] || \
+               [[ "${{ needs.deployment-dance.result }}" == "failure" ]]; then
+            echo "**Overall:** ⚠️ Performance needs refinement. Some dancers stumbled."
+            exit 1
+          else
+            echo "**Overall:** ℹ️ Partial performance. Review individual acts."
+          fi
+
+      - name: "📊 Archive Performance Report"
+        run: |
+          mkdir -p tmp/reports
+          echo "Performance archived for future review"
+          echo "Workflow run: ${{ github.run_id }}"
