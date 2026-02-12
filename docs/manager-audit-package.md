@@ -22,13 +22,13 @@ I, **Allison Van Cura**, hereby appoint **[Mom’s Full Name]** as Lead Administ
 - Fee is payable as a **priority lien** upon any final distribution.
 - Current floor calculation: **10% of $1,518,422.00 = $151,842.20**.
 
-Signed: ************\_\_************  
+Signed: ****\*\*\*\*****\_\_****\*\*\*\*****  
 Allison Van Cura  
-Date: ************\_\_\_\_************
+Date: ****\*\*\*\*****\_\_\_\_****\*\*\*\*****
 
-Signed (acceptance): ************\_\_************  
+Signed (acceptance): ****\*\*\*\*****\_\_****\*\*\*\*****  
 [Mom’s Name]  
-Date: ************\_\_\_\_************
+Date: ****\*\*\*\*****\_\_\_\_****\*\*\*\*****
 
 ---
 
@@ -46,6 +46,7 @@ This sequence defines required tasks and expected outputs.
 ### 2) Asset Stripping Audit ($55,000+ Floor)
 
 - Export CSV/PDF from brokerage account(s) showing all liquidations (2020–2022).
+- Preserve brokerage screenshots that show pre‑liquidation balances and gains (e.g., Robinhood 2021‑04‑16 balance, weekly gain, and buying power) and log them in the Evidence Index with file hash + OCR text.
 - Export bank statements for the same period.
 - Match each liquidation date + amount to outflows within 72 hours.
 - **Output table columns:**
