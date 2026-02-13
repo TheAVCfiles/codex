@@ -1,0 +1,17 @@
+{
+  "pack_type": "UPGRADE",
+  "upgrade_id": "YYYY-MM-DD__AI_EXTRACT_v1",
+  "applies_to_core": "AVC_CASEPACK_CORE_YYYY-MM-DD",
+  "created_at": "YYYY-MM-DDThh:mm:ssZ",
+  "adds": [
+    "03_OVERLAYS/02_TRANSCRIPTS/",
+    "03_OVERLAYS/03_AI_NOTES/",
+    "03_OVERLAYS/05_BADGES/"
+  ],
+  "ai_generation": {
+    "model": "local-llm-name",
+    "prompt_hash": "sha256:...",
+    "policy": "ephemeral",
+    "expires_at": "YYYY-MM-DDThh:mm:ssZ"
+  }
+}

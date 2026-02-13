@@ -1,0 +1,11 @@
+[
+  {
+    "from_exhibit": "EX-PLACEHOLDER-001",
+    "to_exhibit": "EX-PLACEHOLDER-002",
+    "relation": "TEMPORAL_PROXIMITY_SUPPORTS",
+    "note": "[[GREEN]]Add evidence-based reasoning or remove.[[/GREEN]]",
+    "confidence": 60,
+    "layer": "AI_SUGGESTED_EPHEMERAL",
+    "expires_at": "YYYY-MM-DDThh:mm:ssZ"
+  }
+]
