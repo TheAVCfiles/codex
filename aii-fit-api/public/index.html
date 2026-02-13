@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aesthetic Intelligence Infrastructure (AII)</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #f8f9fb;
+      }
+      body {
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+        max-width: 720px;
+        line-height: 1.65;
+        color: #111827;
+        background: inherit;
+      }
+      header {
+        margin-bottom: 2rem;
+      }
+      code {
+        background: rgba(15, 23, 42, 0.08);
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.4rem;
+        font-size: 0.95rem;
+      }
+      pre {
+        background: #0b1220;
+        color: #e8f3ff;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+      }
+      a {
+        color: #2563eb;
+      }
+      footer {
+        margin-top: 3rem;
+        font-size: 0.85rem;
+        color: #4b5563;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Decrypt — Aesthetic Intelligence Infrastructure (AII)</h1>
+      <p>
+        Persona fits delivered as a lightweight serverless API, ready to deploy
+        on Vercel.
+      </p>
+    </header>
+
+    <section>
+      <h2>Endpoints</h2>
+      <ul>
+        <li><a href="/api/fits">GET /api/fits</a> — list available fits</li>
+        <li>
+          <a href="/api/fits/tutu">GET /api/fits/tutu</a> — fetch a specific fit
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Quickstart</h2>
+      <pre><code>curl https://your-aii-deployment.vercel.app/api/fits
+curl https://your-aii-deployment.vercel.app/api/fits/oracle</code></pre>
+      <p>
+        Use the returned <code>prompt_additions</code> array to augment your
+        system prompt or agent initialization.
+      </p>
+    </section>
+
+    <section>
+      <h2>Webhook Evidence Trail</h2>
+      <p>
+        Point Ko-fi webhooks at <code>/api/kofi-webhook</code> with
+        <code>KOFI_TOKEN</code>, <code>NOTION_DB_ID</code>, and
+        <code>NOTION_API_KEY</code> configured in your Vercel project.
+        Successful events append a Pending entry in your Notion Evidence Index
+        for downstream fulfillment tracking.
+      </p>
+    </section>
+
+    <footer>
+      <p>
+        Crafted for rapid-fit drops from phone to production. Maintain your
+        creative cadence.
+      </p>
+    </footer>
+  </body>
+</html>

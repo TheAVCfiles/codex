@@ -1,0 +1,19 @@
+data:
+  mode: "csv"
+  csv_path: "./engines/koll_core/datasets/asset_a.csv"
+  symbol: "ASSET_A"
+
+features:
+  am_window: 30
+  vm_short: 10
+  vm_long: 50
+  vm_norm: 240
+
+strategy:
+  low_quantile: 0.60
+  high_quantile: 0.90
+
+outputs:
+  folder: "./engines/koll_core/reports"
+  save_csv: true
+  save_plots: true

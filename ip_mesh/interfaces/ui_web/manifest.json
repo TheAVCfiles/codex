@@ -1,0 +1,7 @@
+{
+  "type": "interface",
+  "name": "ui_web",
+  "version": "0.1.0",
+  "docs": ["api_gateway.md"],
+  "depends_on": ["koll_core"]
+}

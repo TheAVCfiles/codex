@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "connectors": [
+    { "name": "google_drive", "module": "./src/google_workspace" },
+    { "name": "dropbox", "module": "./src/dropbox" },
+    { "name": "notion", "module": "./src/notion" },
+    { "name": "crm", "module": "./src/crm" }
+  ]
+}

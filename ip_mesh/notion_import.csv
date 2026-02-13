@@ -1,0 +1,8 @@
+Category,Path,Description
+Artifacts,engines/koll_core/backtest.py,Backtest runner binding features and strategy outputs.
+Artifacts,engines/mayfleur_core/touchdesigner/Mayfleur_Receiver.tox,TouchDesigner receiver for EI signals.
+Concepts,narrative/mythematics_docs/somatic_manifest.md,Somatic manifest framing ritual pacing and birth chart filters.
+Systems,ops/autopilot_scheduler.py,Autopilot loop chaining mesh refresh and backtest run.
+Systems,ops/compose_suite.py,Dynamic launcher that reads suite manifests.
+Variables,engines/koll_core/configs/koll_config.yaml,Single-asset YAML controlling EI quantiles and risk.
+Philosophies,narrative/decrypt_assets/development_plan.md,Delivery framing integrating decrypt pedagogy and birth chart context.

@@ -1,0 +1,9 @@
+{
+  "type": "app",
+  "name": "ledger_demo",
+  "version": "0.1.0",
+  "routes": ["/"],
+  "environment": "cloudflare-pages",
+  "depends_on": ["dtg_worker"],
+  "docs": ["README.md"]
+}

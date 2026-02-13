@@ -1,0 +1,30 @@
+{
+  "type": "suite",
+  "name": "intuition_autopilot",
+  "version": "0.1.0",
+  "includes": ["koll_core", "mayfleur_core", "ui_td", "mythematics_docs"],
+  "description": "Luxury-scale autopilot: run KOLL → stream EI% to Mayfleur → generate Proof artifacts.",
+  "entrypoints": [
+    {
+      "cli": "python engines/koll_core/backtest.py --config engines/koll_core/configs/koll_config.yaml"
+    },
+    {
+      "cli": "python interfaces/ui_td/receiver_bridge.py"
+    },
+    {
+      "cli": "python engines/koll_core/report_generator.py"
+    }
+  ],
+  "outputs": [
+    "engines/koll_core/reports/equity_curve.jpeg",
+    "engines/koll_core/reports/ei_last_day.jpeg"
+  ],
+  "constraints": {
+    "dry_run_only": true,
+    "keys_required": false
+  },
+  "notes": [
+    "EI/quantile strategy parameters and risk breaker are defined in koll_config.yaml",
+    "Multi-asset Top-N + risk/quantiles are in koll_portfolio.yaml when you expand the entrypoints"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "edition",
+  "name": "archive",
+  "assets": [
+    "assets/rouette_001.gliss",
+    "assets/folio_001.pdf",
+    "assets/ledger_001.json"
+  ],
+  "license": "codex-archive-v1",
+  "includes": []
+}
