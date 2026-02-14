@@ -22,13 +22,15 @@ I, **Allison Van Cura**, hereby appoint **[Mom’s Full Name]** as Lead Administ
 - Fee is payable as a **priority lien** upon any final distribution.
 - Current floor calculation: **10% of $1,518,422.00 = $151,842.20**.
 
-Signed: ************\_\_************  
+Signed: ****\*\*\*\*****\_\_****\*\*\*\*****  
 Allison Van Cura  
-Date: ************\_\_\_\_************
+Date: ****\*\*\*\*****\_\_\_\_****\*\*\*\*****
 
-Signed (acceptance): ************\_\_************  
+Signed (acceptance): ****\*\*\*\*****\_\_****\*\*\*\*****  
 [Mom’s Name]  
-Date: ************\_\_\_\_************
+Date: ****\*\*\*\*****\_\_\_\_****\*\*\*\*****
+
+**Related reference:** For a fuller factual context, reimbursement ledger template, and priority‑payment framework, see `docs/uncompensated-managerial-support.md`.
 
 ---
 
