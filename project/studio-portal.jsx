@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Users,
   Layout,
@@ -266,10 +266,21 @@ const SandboxView = () => {
   ]);
   const [dragging, setDragging] = useState(null);
   const containerRef = useRef(null);
+  const pointerIdRef = useRef(null);
+  const captureElRef = useRef(null);
 
   const handlePointerDown = (event, id) => {
-    event.currentTarget.setPointerCapture(event.pointerId);
+    event.preventDefault();
     const rect = event.currentTarget.getBoundingClientRect();
+
+    pointerIdRef.current = event.pointerId;
+    captureElRef.current = event.currentTarget;
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // ignore capture failures in unsupported environments
+    }
+
     setDragging({
       id,
       offset: {
@@ -292,7 +303,36 @@ const SandboxView = () => {
     );
   };
 
-  const handlePointerUp = () => setDragging(null);
+  const handlePointerUp = () => {
+    if (captureElRef.current && pointerIdRef.current != null) {
+      try {
+        captureElRef.current.releasePointerCapture(pointerIdRef.current);
+      } catch {
+        // ignore release failures in unsupported environments
+      }
+      captureElRef.current = null;
+      pointerIdRef.current = null;
+    }
+
+    setDragging(null);
+  };
+
+  useEffect(() => {
+    if (!dragging) return undefined;
+
+    const move = (event) => handlePointerMove(event);
+    const up = () => handlePointerUp();
+
+    document.addEventListener("pointermove", move, { passive: false });
+    document.addEventListener("pointerup", up);
+    document.addEventListener("pointercancel", up);
+
+    return () => {
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      document.removeEventListener("pointercancel", up);
+    };
+  }, [dragging]);
 
   return (
     <div className="h-full flex flex-col animate-in fade-in duration-500">
@@ -311,7 +351,6 @@ const SandboxView = () => {
       <div
         ref={containerRef}
         className="flex-1 border border-zinc-700 bg-zinc-900/50 relative overflow-hidden cursor-crosshair"
-        onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
         style={{
