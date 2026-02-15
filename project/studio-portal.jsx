@@ -404,6 +404,15 @@ const BalletBankView = () => {
         Bank tab is live. Next: connect this feed to real receipts (Stripe +
         ledger API).
       </div>
+
+      <div>
+        <button
+          onClick={startCheckout}
+          className="px-4 py-3 border border-zinc-700 hover:bg-zinc-900 transition-colors"
+        >
+          Subscribe — StudioOS + Ballet Bank • $497/mo
+        </button>
+      </div>
     </div>
   );
 };
