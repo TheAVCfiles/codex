@@ -1,0 +1,43 @@
+{
+  "serial": "FOLIO-AVC-0001",
+  "title": "Lilith Loop in 6/8",
+  "dedication": "this one’s for you",
+  "timestamp_utc": "2025-07-29T13:22:41Z",
+  "author": {
+    "name": "Allison Van Cura",
+    "handle": "@TheAVCfiles"
+  },
+  "system_stack": ["PyRouette", "Cipherette", "Glisscode", "EnCroix"],
+  "tempo_bpm": 66,
+  "meter": "6/8",
+  "style": "Balanchinian glitch",
+  "dancers": [
+    {
+      "role": "principal",
+      "name": "Aurora",
+      "inheritance": "LilithLoopClass"
+    },
+    {
+      "role": "shadow",
+      "name": "Echo",
+      "inheritance": "SigilFoldClass"
+    }
+  ],
+  "phrases": [
+    "spiral invocation",
+    "glitch pivot",
+    "aurora recursion",
+    "reverence"
+  ],
+  "export_targets": ["glisscode_pdf", "encroix_score", "metadata_json"],
+  "license": {
+    "name": "Codex License",
+    "version": "1.0",
+    "document": "../CODEX_LICENSE_V1.md"
+  },
+  "hashes": {
+    "rouette_sha256": "PLACEHOLDER_TO_BE_GENERATED",
+    "folio_pdf_sha256": "PENDING",
+    "metadata_sha256": "PENDING"
+  }
+}
