@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, ValidationError
@@ -98,6 +98,18 @@ def load_balletbank_config() -> Dict[str, Any]:
 
 
 BALLETBANK_CONFIG = load_balletbank_config()
+
+
+def _load_stripe_module():
+    try:
+        import stripe  # type: ignore
+
+        return stripe
+    except ImportError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Stripe SDK is not installed on the API server.",
+        ) from exc
 
 
 def initialize_ledger_db() -> None:
@@ -276,6 +288,68 @@ def get_receipt(receipt_hash: str):
         "created_at": row[4],
         "qr_url": _resolve_qr_url(row[3]),
     }
+
+
+@app.post("/api/stripe/create-checkout-session")
+def create_checkout_session():
+    stripe = _load_stripe_module()
+
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    price_id = os.getenv("STRIPE_PRICE_ID")
+    app_url = os.getenv("NEXT_PUBLIC_APP_URL")
+
+    missing = [
+        key
+        for key, value in {
+            "STRIPE_SECRET_KEY": secret_key,
+            "STRIPE_PRICE_ID": price_id,
+            "NEXT_PUBLIC_APP_URL": app_url,
+        }.items()
+        if not value
+    ]
+    if missing:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Missing Stripe configuration: {', '.join(missing)}",
+        )
+
+    stripe.api_key = secret_key
+
+    session = stripe.checkout.Session.create(
+        mode="subscription",
+        line_items=[{"price": price_id, "quantity": 1}],
+        success_url=f"{app_url}/success?session_id={{CHECKOUT_SESSION_ID}}",
+        cancel_url=f"{app_url}/ballet-bank",
+    )
+
+    return {"url": session.url}
+
+
+@app.post("/stripe-webhook")
+async def stripe_webhook(request: Request):
+    stripe = _load_stripe_module()
+
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+    endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+    if not endpoint_secret:
+        raise HTTPException(status_code=500, detail="Missing STRIPE_WEBHOOK_SECRET")
+
+    payload = await request.body()
+    signature_header = request.headers.get("stripe-signature")
+
+    try:
+        event = stripe.Webhook.construct_event(payload, signature_header, endpoint_secret)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid signature") from exc
+
+    if event.get("type") == "checkout.session.completed":
+        session = event.get("data", {}).get("object", {})
+        customer_details = session.get("customer_details") or {}
+        email = customer_details.get("email") or session.get("customer_email")
+        logger.info("Checkout completed for customer email=%s", email)
+        # TODO: initialize_studio_for_customer(email)
+
+    return {"status": "ok"}
 
 
 # Optional: run with `uvicorn api:app --reload`
