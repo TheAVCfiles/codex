@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prima • First Dreamm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f6f2;
+      --text: #1a1a1a;
+      --overlay-top: rgba(0, 0, 0, 0.15);
+      --overlay-bottom: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    .hero {
+      min-height: 100vh;
+      background:
+        linear-gradient(var(--overlay-top), var(--overlay-bottom)),
+        url('https://images.unsplash.com/photo-1513725675424-50e90f0c7f6e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      padding: 2rem;
+    }
+
+    .hero-content {
+      max-width: 42.5rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 4.2rem);
+      font-weight: 400;
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .tag {
+      font-size: 1rem;
+      letter-spacing: 0.25rem;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    .abstract {
+      font-size: 1.15rem;
+      max-width: 32.5rem;
+      margin: 2.5rem auto 0;
+      opacity: 0.95;
+    }
+
+    .enter {
+      margin-top: 3rem;
+      display: inline-block;
+      padding: 0.875rem 2.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 999px;
+      min-height: 44px;
+      transition: all 0.3s ease;
+    }
+
+    .enter:hover,
+    .enter:focus-visible {
+      background: #fff;
+      color: #1a1a1a;
+      outline: none;
+    }
+
+    footer {
+      padding: 4rem 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <div class="hero-content">
+      <div class="tag">Corridor 3 • Memory</div>
+      <h1>Prima</h1>
+      <p class="abstract">
+        The internet gave programmable money to code.<br>
+        We give programmable value to the body.
+      </p>
+      <a href="#" class="enter" aria-label="Enter the Republic">Enter the Republic →</a>
+    </div>
+  </main>
+
+  <footer>
+    First public Dreamm • MythOS / Prima • A quiet soubresaut into existence
+  </footer>
+</body>
+</html>
