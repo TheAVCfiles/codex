@@ -45,6 +45,48 @@ python scripts/stageport/push_raw_ingest.py
 
 The script maps fields using the canonical `RAW_INGEST` names (`Source`, `Project`, `Raw_Text`, `Tags`).
 
+## PAS DE CHAT VAULT helper (`Table 1` workflow)
+
+Use `scripts/stageport/pas_de_chat_vault.py` for the `Name`/`MemJar`/`Status` table shape.
+
+### `pas de chat push` equivalent
+
+```bash
+export AIRTABLE_PAT="..."
+export AIRTABLE_BASE_ID="appS16p6gJO5U78JS"
+export AIRTABLE_TABLE="Table 1"
+
+# from stdin
+python scripts/stageport/pas_de_chat_vault.py push <<'TXT'
+Pas de chat push!
+TXT
+
+# or from a file (verbatim capture)
+python scripts/stageport/pas_de_chat_vault.py push --input-file ./capture.txt --category File
+```
+
+Behavior:
+
+- `Name` is written as the raw capture verbatim.
+- `MemJar` defaults to `ChatGPT` when uncertain.
+- `Status` is always set to `Todo`.
+- The script never writes AI/derived fields.
+
+### `rinse` equivalent
+
+```bash
+export AIRTABLE_PAT="..."
+export AIRTABLE_BASE_ID="appS16p6gJO5U78JS"
+export AIRTABLE_TABLE="Table 1"
+export AIRTABLE_PENDING_VALUE="Todo"
+export AIRTABLE_PROCESSED_VALUE="Done"
+
+python scripts/stageport/pas_de_chat_vault.py rinse
+```
+
+This fetches Todo records, computes SHA-256 over `Name`, prints a concise Gossip Rag summary,
+and patches processed records to `Done` in batches of 10.
+
 ## Weekly Sunday rinse report
 
 Use `scripts/stageport/sunday_rinse.py` to generate a weekly `GOSSIP_RAG_YYYYMMDD.md`
