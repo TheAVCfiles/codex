@@ -94,6 +94,17 @@ class SundayRinse:
         return loaded
 
     @staticmethod
+    def _stringify_field(value: Any) -> str:
+        """Convert Airtable-ish field values into stable strings."""
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value
+        if isinstance(value, list):
+            return " ".join(str(item) for item in value if item is not None)
+        return str(value)
+
+    @staticmethod
     def _extract_fields(entry: dict[str, Any]) -> dict[str, Any]:
         fields = entry.get("fields")
         return fields if isinstance(fields, dict) else entry
@@ -101,14 +112,19 @@ class SundayRinse:
     @staticmethod
     def _normalize_record(entry: dict[str, Any]) -> RinseRecord:
         fields = SundayRinse._extract_fields(entry)
-        proves = str(
+        # Prefer long-form text fields first. In some StagePort schemas MemJar is a
+        # single-select category, while Name/Raw_Text hold the raw capture payload.
+        proves = SundayRinse._stringify_field(
             fields.get("proves")
             or fields.get("Raw_Text")
             or fields.get("Raw Content")
+            or fields.get("Name")
             or fields.get("MemJar")
             or ""
         )
-        title = str(fields.get("title") or fields.get("Title") or fields.get("Name") or "Untitled")
+        title = SundayRinse._stringify_field(
+            fields.get("title") or fields.get("Title") or fields.get("Name") or "Untitled"
+        )
         sha = str(fields.get("sha256") or fields.get("SHA-256 Seal") or "")
         if not sha:
             sha = hashlib.sha256(proves.encode("utf-8")).hexdigest() if proves else ""
@@ -161,14 +177,34 @@ class SundayRinse:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
-        params = {
-            "filterByFormula": f"{{{status_field}}} = '{pending_value}'",
-            "maxRecords": 200,
-        }
         requests = _require_requests()
-        response = requests.get(url, headers=headers, params=params, timeout=30)
-        response.raise_for_status()
-        return response.json().get("records", [])
+        records: list[dict[str, Any]] = []
+        offset: str | None = None
+        max_records = int(os.environ.get("AIRTABLE_MAX_RECORDS", "200"))
+
+        while True:
+            params: dict[str, Any] = {
+                "filterByFormula": f"{{{status_field}}} = '{pending_value}'",
+                "pageSize": min(max_records, 100),
+            }
+            if offset:
+                params["offset"] = offset
+
+            response = requests.get(url, headers=headers, params=params, timeout=30)
+            response.raise_for_status()
+
+            payload = response.json()
+            batch = payload.get("records", [])
+            if not isinstance(batch, list):
+                break
+
+            records.extend(batch)
+            if len(records) >= max_records:
+                return records[:max_records]
+
+            offset = payload.get("offset")
+            if not offset:
+                return records
 
     @staticmethod
     def _mark_airtable_processed(record_ids: list[str]) -> None:
