@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StagePort Pack v1",
+  "type": "object",
+  "required": [
+    "pack_id",
+    "studio_id",
+    "name",
+    "pack_type",
+    "manifest",
+    "sealed_at",
+    "status"
+  ],
+  "properties": {
+    "pack_id": { "type": "string" },
+    "studio_id": { "type": "string" },
+    "name": { "type": "string" },
+    "pack_type": { "type": "string" },
+    "root_artifact_id": { "type": ["string", "null"] },
+    "manifest": {
+      "type": "object",
+      "required": ["manifest_sha256", "file_count"],
+      "properties": {
+        "manifest_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "merkle_root": { "type": ["string", "null"] },
+        "file_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "sealed_at": { "type": "string", "format": "date-time" },
+    "status": { "type": "string" }
+  }
+}
