@@ -44,3 +44,31 @@ python scripts/stageport/push_raw_ingest.py
 ```
 
 The script maps fields using the canonical `RAW_INGEST` names (`Source`, `Project`, `Raw_Text`, `Tags`).
+
+## Weekly Sunday rinse report
+
+Use `scripts/stageport/sunday_rinse.py` to generate a weekly `GOSSIP_RAG_YYYYMMDD.md`
+with hash/semantic conflict checks.
+
+### Option A: from Airtable pending records
+
+```bash
+export AIRTABLE_PAT="..."
+export AIRTABLE_BASE_ID="appS16p6gJO5U78JS"
+export AIRTABLE_TABLE="Table 1"
+export AIRTABLE_PENDING_VALUE="Todo"
+export AIRTABLE_PROCESSED_VALUE="Done"
+python scripts/stageport/sunday_rinse.py --output-dir output --mark-processed
+```
+
+### Option B: from local JSON records
+
+```bash
+python scripts/stageport/sunday_rinse.py --weekly-json weekly_records.json --vault-csv artifact_index.csv
+```
+
+Expected input fields can include canonical names (`title`, `proves`, `sha256`) or
+Airtable-friendly names (`Title`, `Raw_Text`, `Raw Content`, `MemJar`, `SHA-256 Seal`).
+
+For Airtable fetch mode, the script reads `AIRTABLE_PAT` (or `AIRTABLE_TOKEN` / `AIRTABLE_KEY`) and
+parses Airtable-shaped records from `records[].fields` (including `Name`, `MemJar`, `Raw Content`, and `Status`).
