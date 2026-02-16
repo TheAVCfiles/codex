@@ -40,6 +40,7 @@ class RinseRecord:
     proves: str
     sha256: str
     source_id: str = ""
+    has_payload: bool = True
 
 
 class SundayRinse:
@@ -101,12 +102,25 @@ class SundayRinse:
     @staticmethod
     def _normalize_record(entry: dict[str, Any]) -> RinseRecord:
         fields = SundayRinse._extract_fields(entry)
+        raw_field_preference = [
+            os.environ.get("AIRTABLE_RAW_FIELD", "").strip(),
+            "proves",
+            "Raw_Text",
+            "Raw Content",
+            "Name",
+            "MemJar",
+        ]
+        normalized_preference = [field for field in raw_field_preference if field]
+        proves = ""
+        for field in normalized_preference:
+            candidate = fields.get(field)
+            if candidate is not None:
+                proves = str(candidate)
+                break
+
+        proves = proves.strip()
         proves = str(
-            fields.get("proves")
-            or fields.get("Raw_Text")
-            or fields.get("Raw Content")
-            or fields.get("MemJar")
-            or ""
+            proves
         )
         title = str(fields.get("title") or fields.get("Title") or fields.get("Name") or "Untitled")
         sha = str(fields.get("sha256") or fields.get("SHA-256 Seal") or "")
@@ -114,7 +128,13 @@ class SundayRinse:
             sha = hashlib.sha256(proves.encode("utf-8")).hexdigest() if proves else ""
 
         source_id = str(entry.get("source_id") or entry.get("id") or fields.get("source_id") or "")
-        return RinseRecord(title=title, proves=proves, sha256=sha, source_id=source_id)
+        return RinseRecord(
+            title=title,
+            proves=proves,
+            sha256=sha,
+            source_id=source_id,
+            has_payload=bool(proves),
+        )
 
     @staticmethod
     def _load_json_records(path: str) -> list[dict[str, Any]]:
@@ -161,14 +181,30 @@ class SundayRinse:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
-        params = {
-            "filterByFormula": f"{{{status_field}}} = '{pending_value}'",
-            "maxRecords": 200,
-        }
         requests = _require_requests()
-        response = requests.get(url, headers=headers, params=params, timeout=30)
-        response.raise_for_status()
-        return response.json().get("records", [])
+        records: list[dict[str, Any]] = []
+        offset: str | None = None
+        max_records = int(os.environ.get("AIRTABLE_MAX_RECORDS", "200"))
+
+        while True:
+            params = {
+                "filterByFormula": f"{{{status_field}}} = '{pending_value}'",
+                "pageSize": 100,
+            }
+            if offset:
+                params["offset"] = offset
+
+            response = requests.get(url, headers=headers, params=params, timeout=30)
+            response.raise_for_status()
+            payload = response.json()
+            records.extend(payload.get("records", []))
+
+            if len(records) >= max_records:
+                return records[:max_records]
+
+            offset = payload.get("offset")
+            if not offset:
+                return records
 
     @staticmethod
     def _mark_airtable_processed(record_ids: list[str]) -> None:
@@ -277,6 +313,7 @@ def main() -> None:
         existing_vault = rinse.load_vault_csv()
 
     weekly_records = [rinse._normalize_record(r) for r in weekly_raw]
+    weekly_records = [record for record in weekly_records if record.has_payload]
     report_path = rinse.generate_gossip_rag(weekly_records, existing_vault, args.output_dir)
 
     if args.mark_processed and not args.weekly_json:
