@@ -1,0 +1,146 @@
+{
+  "version": "1.0",
+  "system": "StagePort Ops",
+  "philosophy": {
+    "content_addressed": true,
+    "max_default_privacy": "MAX_NO_PII",
+    "proof_over_policy": true,
+    "artifact_first_model": true
+  },
+  "enums": {
+    "privacy_level": ["MAX_NO_PII", "PSEUDONYMOUS", "LIMITED_PII"],
+    "status": ["DRAFT", "LOCKED", "SEALED", "ANCHORED", "REVOKED"],
+    "access_level": ["VIEWER", "OPERATOR", "ADMIN", "ROOT_0"],
+    "pack_type": ["GENESIS", "PILOT", "EXPORT", "CLIENT_DELIVERY"],
+    "proof_type": [
+      "ISOTROPIC_ACCESS_AUDIT",
+      "DENSITY_AUDIT",
+      "CLIMATE_LOG",
+      "CREDENTIAL_SCORE"
+    ],
+    "event_type": [
+      "ORIGIN_KEY_ACTIVATED",
+      "PACK_SEALED",
+      "PROOF_GENERATED",
+      "ANCHORED_ONCHAIN",
+      "REFUSAL_TRIGGERED"
+    ]
+  },
+  "tables": {
+    "studios": {
+      "primary": "studio_id",
+      "fields": [
+        "studio_id",
+        "name",
+        "node_label",
+        "timezone",
+        "status",
+        "primary_operator",
+        "active_license",
+        "last_pack_sealed"
+      ]
+    },
+    "operators": {
+      "primary": "operator_id",
+      "fields": [
+        "operator_id",
+        "display_name",
+        "role",
+        "access_level",
+        "status",
+        "public_key"
+      ]
+    },
+    "artifacts": {
+      "primary": "artifact_id",
+      "fields": [
+        "artifact_id",
+        "studio_id",
+        "corridor_id",
+        "artifact_type",
+        "title",
+        "sha256",
+        "size_bytes",
+        "mime",
+        "privacy_level",
+        "tags",
+        "storage_ref",
+        "status",
+        "created_at",
+        "created_by"
+      ]
+    },
+    "packs": {
+      "primary": "pack_id",
+      "fields": [
+        "pack_id",
+        "studio_id",
+        "pack_type",
+        "root_artifact_id",
+        "manifest_sha256",
+        "merkle_root",
+        "sealed_at",
+        "status",
+        "anchor_id"
+      ]
+    },
+    "proofs": {
+      "primary": "proof_id",
+      "fields": [
+        "proof_id",
+        "studio_id",
+        "proof_type",
+        "standard_ref",
+        "method_version",
+        "output_artifact_id",
+        "score",
+        "passing_threshold",
+        "status",
+        "timestamp"
+      ]
+    },
+    "events": {
+      "primary": "event_id",
+      "fields": [
+        "event_id",
+        "studio_id",
+        "corridor_id",
+        "event_type",
+        "timestamp",
+        "artifact_id",
+        "pack_id",
+        "proof_id",
+        "operator_id",
+        "narrative_string",
+        "status"
+      ]
+    },
+    "licenses": {
+      "primary": "license_id",
+      "fields": [
+        "license_id",
+        "studio_id",
+        "tier",
+        "issuance_rights",
+        "scope",
+        "valid_from",
+        "valid_until",
+        "hmac_signature",
+        "status"
+      ]
+    },
+    "anchors": {
+      "primary": "anchor_id",
+      "fields": [
+        "anchor_id",
+        "pack_id",
+        "chain",
+        "merkle_root",
+        "tx_hash",
+        "explorer_link",
+        "anchored_at",
+        "status"
+      ]
+    }
+  }
+}

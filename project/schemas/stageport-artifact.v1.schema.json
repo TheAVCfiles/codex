@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "StagePort Artifact v1",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "studio_id",
+    "artifact_type",
+    "title",
+    "content_address",
+    "privacy_level",
+    "created_at",
+    "status"
+  ],
+  "properties": {
+    "artifact_id": { "type": "string" },
+    "studio_id": { "type": "string" },
+    "corridor_id": { "type": ["string", "null"] },
+    "artifact_type": { "type": "string" },
+    "title": { "type": "string" },
+    "content_address": {
+      "type": "object",
+      "required": ["sha256", "size_bytes", "mime"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "size_bytes": { "type": "integer", "minimum": 0 },
+        "mime": { "type": "string" }
+      }
+    },
+    "storage_ref": { "type": "object" },
+    "privacy_level": { "type": "string" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "created_by": { "type": ["string", "null"] },
+    "status": { "type": "string" }
+  }
+}

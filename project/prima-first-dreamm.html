@@ -3,113 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prima • First Dreamm</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>PRIMA | The Embodied Intelligence Protocol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --bg: #f8f6f2;
-      --text: #1a1a1a;
-      --overlay-top: rgba(0, 0, 0, 0.15);
-      --overlay-bottom: rgba(0, 0, 0, 0.35);
-    }
-
-    * {
-      box-sizing: border-box;
+      --bg-dark: #050505;
+      --text-primary: #e5e5e5;
+      --text-soft: #9ca3af;
+      --text-faint: #4b5563;
+      --line: #333;
+      --accent: #3b82f6;
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      line-height: 1.6;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: "Courier New", monospace;
     }
 
-    .hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(var(--overlay-top), var(--overlay-bottom)),
-        url('https://images.unsplash.com/photo-1513725675424-50e90f0c7f6e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-      display: flex;
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 6rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      padding: 1rem 2rem;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.125rem;
+      font-size: 0.8rem;
+      min-height: 44px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      color: #fff;
-      padding: 2rem;
-    }
-
-    .hero-content {
-      max-width: 42.5rem;
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 8vw, 4.2rem);
-      font-weight: 400;
-      margin: 0 0 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .tag {
-      font-size: 1rem;
-      letter-spacing: 0.25rem;
-      text-transform: uppercase;
-      opacity: 0.9;
-      margin-bottom: 2rem;
-    }
-
-    .abstract {
-      font-size: 1.15rem;
-      max-width: 32.5rem;
-      margin: 2.5rem auto 0;
-      opacity: 0.95;
-    }
-
-    .enter {
-      margin-top: 3rem;
-      display: inline-block;
-      padding: 0.875rem 2.25rem;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      color: #fff;
       text-decoration: none;
-      font-weight: 500;
-      border-radius: 999px;
-      min-height: 44px;
-      transition: all 0.3s ease;
     }
 
-    .enter:hover,
-    .enter:focus-visible {
-      background: #fff;
-      color: #1a1a1a;
+    .btn:hover,
+    .btn:focus-visible {
+      background: var(--text-primary);
+      color: #000;
+      border-color: var(--text-primary);
       outline: none;
-    }
-
-    footer {
-      padding: 4rem 2rem;
-      text-align: center;
-      font-size: 0.95rem;
-      color: #666;
     }
   </style>
 </head>
-<body>
-  <main class="hero">
-    <div class="hero-content">
-      <div class="tag">Corridor 3 • Memory</div>
-      <h1>Prima</h1>
-      <p class="abstract">
-        The internet gave programmable money to code.<br>
-        We give programmable value to the body.
+<body class="h-screen w-screen overflow-hidden flex flex-col items-center justify-center relative">
+  <div
+    class="absolute inset-0 z-0 opacity-10"
+    style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 40px 40px;"
+    aria-hidden="true"
+  ></div>
+
+  <main class="z-10 text-center space-y-8 px-6 max-w-4xl">
+    <h1 class="hero-title" aria-label="Prima">
+      PRIMA<span class="accent">.</span>
+    </h1>
+
+    <p class="text-xl tracking-widest uppercase text-gray-400">
+      A Protocol for Embodied Intelligence
+    </p>
+
+    <div class="max-w-2xl mx-auto text-sm leading-relaxed text-gray-400 mt-8">
+      <p>
+        The body does not speculate. The body remembers.<br>
+        Prima turns movement into proof, ritual into governance,<br>
+        and presence into sovereign value.
       </p>
-      <a href="#" class="enter" aria-label="Enter the Republic">Enter the Republic →</a>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-12">
+      <a href="https://prima.systems/genesis" class="btn" aria-label="Read Prima whitepaper">Read Whitepaper</a>
+      <a href="./data/prima-genesis-origin-key.json" class="btn" aria-label="Open PRIMA Genesis Origin Key metadata">Mint Genesis Key</a>
     </div>
   </main>
 
-  <footer>
-    First public Dreamm • MythOS / Prima • A quiet soubresaut into existence
-  </footer>
+  <aside class="absolute bottom-8 left-8 text-xs text-gray-500 space-y-1" aria-label="Kinetic status">
+    <div>KINETIC STATE: <span class="text-green-500">ACTIVE</span></div>
+    <div>BLOCK HEIGHT: 1,024,859</div>
+    <div>SENTIENT CENTS: 0.618</div>
+  </aside>
+
+  <aside class="absolute bottom-8 right-8 text-xs text-gray-500 text-right space-y-1" aria-label="Node status">
+    <div>PRIMA SYSTEMS v1.0</div>
+    <div>EAST SYRACUSE NODE</div>
+  </aside>
 </body>
 </html>
