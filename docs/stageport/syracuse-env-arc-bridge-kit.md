@@ -46,7 +46,16 @@ SYR_ENV_ARC_PILOT_2026/
 Generate the full kit with:
 
 ```bash
-python3 scripts/stageport/build_bridge_kit.py
+python3 scripts/stageport/build_bridge_kit.py --zip --studio-id SYR_ENV_ARC_PILOT_2026
 ```
 
-The script writes a deterministic folder skeleton, injects a `SPC_PC8_Equity_Proof.json` scaffold, and creates `00_MANIFEST.txt` with SHA-256 digests for every generated file.
+The script writes a deterministic folder skeleton, injects a `SPC_PC8_Equity_Proof.json` scaffold, creates `00_MANIFEST.txt` with SHA-256 digests, and prints a Merkle root derived from manifest lines. The optional `--zip` flag emits a deterministic archive (`SYR_ENV_ARC_PILOT_2026.zip`) for handoff.
+
+For reproducible builds across environments, pass a fixed timestamp:
+
+```bash
+python3 scripts/stageport/build_bridge_kit.py \
+  --output SYR_ENV_ARC_PILOT_2026 \
+  --timestamp 2026-01-15T00:00:00+00:00 \
+  --force
+```

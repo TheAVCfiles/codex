@@ -57,3 +57,19 @@ Notes:
 - `push` stores the exact raw bytes as `Name` and only writes `Name`, `MemJar`, and `Status`.
 - Empty captures are skipped.
 - `rinse` computes SHA-256 from `Name`, prints a concise Gossip Rag, then patches `Status` to `Done`.
+
+## NAAB Bridge Kit builder
+
+Build the Syracuse ENV-ARC evidence scaffold, deterministic manifest, and optional ZIP:
+
+```bash
+python build_bridge_kit.py --output SYR_ENV_ARC_PILOT_2026 --studio-id SYR_ENV_ARC_PILOT_2026 --zip
+```
+
+Useful flags:
+
+- `--timestamp <ISO8601>`: freeze generated timestamps for reproducible outputs.
+- `--force`: overwrite scaffold artifacts if they already exist.
+- `--zip`: package a deterministic archive after manifest generation.
+
+The builder also prints a Merkle root over manifest lines. The PC.8 proof schema used for validation is stored at `schemas/spc_pc8_equity_proof.schema.json`.
