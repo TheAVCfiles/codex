@@ -30,3 +30,30 @@ creates parent folders for the destination automatically.
 The script centers the masthead, preserves the covenant language, and builds
 bullet lists for packet contents and corridor actions. Directories for the
 output path are created automatically.
+
+## PAS DE CHAT VAULT helper
+
+Use `pas_de_chat_vault.py` for Airtable capture + rinse workflows aligned with the
+`Table 1` schema (`Name`, `MemJar`, `Status`).
+
+### Push a verbatim capture
+
+```bash
+export AIRTABLE_API_KEY=...
+python pas_de_chat_vault.py push --raw-file /path/to/capture.txt
+# or:
+echo "Pas de chat push" | python pas_de_chat_vault.py push
+```
+
+### Run rinse (Todo → Done)
+
+```bash
+export AIRTABLE_API_KEY=...
+python pas_de_chat_vault.py rinse
+```
+
+Notes:
+
+- `push` stores the exact raw bytes as `Name` and only writes `Name`, `MemJar`, and `Status`.
+- Empty captures are skipped.
+- `rinse` computes SHA-256 from `Name`, prints a concise Gossip Rag, then patches `Status` to `Done`.
