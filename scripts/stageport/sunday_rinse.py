@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import html
 import json
 import os
 import re
@@ -163,15 +164,29 @@ class SundayRinse:
         }
         params = {
             "filterByFormula": f"{{{status_field}}} = '{pending_value}'",
+            "pageSize": 100,
             "maxRecords": 200,
         }
         requests = _require_requests()
-        response = requests.get(url, headers=headers, params=params, timeout=30)
-        response.raise_for_status()
-        return response.json().get("records", [])
+        records: list[dict[str, Any]] = []
+        offset: str | None = None
+
+        while True:
+            page_params = dict(params)
+            if offset:
+                page_params["offset"] = offset
+            response = requests.get(url, headers=headers, params=page_params, timeout=30)
+            response.raise_for_status()
+            payload = response.json()
+            records.extend(payload.get("records", []))
+            if len(records) >= int(params["maxRecords"]):
+                return records[: int(params["maxRecords"])]
+            offset = payload.get("offset")
+            if not offset:
+                return records
 
     @staticmethod
-    def _mark_airtable_processed(record_ids: list[str]) -> None:
+    def _mark_airtable_processed(record_ids: list[str], seals: dict[str, str] | None = None) -> None:
         if not record_ids:
             return
 
@@ -180,6 +195,7 @@ class SundayRinse:
         table = os.environ.get("AIRTABLE_TABLE", "Table 1")
         status_field = os.environ.get("AIRTABLE_STATUS_FIELD", "Status")
         processed_value = os.environ.get("AIRTABLE_PROCESSED_VALUE", "Done")
+        key_topics_field = os.environ.get("AIRTABLE_KEY_TOPICS_FIELD")
 
         url = SundayRinse._airtable_url(base_id, table)
         headers = {
@@ -193,12 +209,32 @@ class SundayRinse:
             batch = record_ids[i : i + 10]
             payload = {
                 "records": [
-                    {"id": record_id, "fields": {status_field: processed_value}}
+                    {
+                        "id": record_id,
+                        "fields": {
+                            **({key_topics_field: f"Forensic Seal (SHA-256): {seals[record_id]}"} if key_topics_field and seals and record_id in seals else {}),
+                            status_field: processed_value,
+                        },
+                    }
                     for record_id in batch
                 ]
             }
             response = requests.patch(url, headers=headers, json=payload, timeout=30)
             response.raise_for_status()
+
+    @staticmethod
+    def _require_reportlab() -> tuple[Any, Any, Any, Any, Any]:
+        try:
+            from reportlab.lib.pagesizes import LETTER  # type: ignore
+            from reportlab.lib.styles import getSampleStyleSheet  # type: ignore
+            from reportlab.lib.units import inch  # type: ignore
+            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer  # type: ignore
+
+            return LETTER, getSampleStyleSheet, inch, Paragraph, SimpleDocTemplate, Spacer
+        except ModuleNotFoundError as exc:
+            raise RuntimeError(
+                "The 'reportlab' package is required for PDF output. Install with: pip install reportlab"
+            ) from exc
 
     def generate_gossip_rag(
         self,
@@ -232,6 +268,39 @@ class SundayRinse:
 
         return output_path
 
+    def write_pdf_report(self, weekly_records: list[RinseRecord], output_dir: str = ".") -> Path:
+        LETTER, get_sample_style_sheet, inch, Paragraph, SimpleDocTemplate, Spacer = (
+            self._require_reportlab()
+        )
+
+        filename = f"GOSSIP_RAG_{datetime.now().strftime('%Y%m%d')}.pdf"
+        output_path = Path(output_dir) / filename
+        styles = get_sample_style_sheet()
+
+        doc = SimpleDocTemplate(
+            str(output_path),
+            pagesize=LETTER,
+            rightMargin=0.75 * inch,
+            leftMargin=0.75 * inch,
+            topMargin=0.75 * inch,
+            bottomMargin=0.75 * inch,
+        )
+
+        story: list[Any] = []
+        story.append(Paragraph("STAGEPORT · SUNDAY BRUNCH RINSE", styles["Heading1"]))
+        story.append(Paragraph(f"Weekly Momentum + Integrity Report — {datetime.now().date()}", styles["BodyText"]))
+        story.append(Spacer(1, 12))
+
+        for idx, chunk in enumerate(weekly_records, 1):
+            story.append(Paragraph(f"{idx}. {html.escape(chunk.title)}", styles["Heading2"]))
+            story.append(Paragraph(f"Hash: {html.escape(chunk.sha256[:16])}…", styles["BodyText"]))
+            safe_preview = html.escape(chunk.proves[:900] + ("..." if len(chunk.proves) > 900 else ""))
+            story.append(Paragraph(safe_preview.replace("\n", "<br/>"), styles["BodyText"]))
+            story.append(Spacer(1, 10))
+
+        doc.build(story)
+        return output_path
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run Sunday integrity rinse over weekly records")
@@ -258,6 +327,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="When fetching from Airtable, update processed records after report generation",
     )
+    parser.add_argument(
+        "--write-pdf",
+        action="store_true",
+        help="Also render a PDF report (requires reportlab)",
+    )
     return parser.parse_args()
 
 
@@ -277,13 +351,18 @@ def main() -> None:
         existing_vault = rinse.load_vault_csv()
 
     weekly_records = [rinse._normalize_record(r) for r in weekly_raw]
+    weekly_records = [r for r in weekly_records if r.proves.strip()]
     report_path = rinse.generate_gossip_rag(weekly_records, existing_vault, args.output_dir)
+    print(f"Generated report: {report_path}")
+
+    if args.write_pdf:
+        pdf_path = rinse.write_pdf_report(weekly_records, args.output_dir)
+        print(f"Generated PDF: {pdf_path}")
 
     if args.mark_processed and not args.weekly_json:
         ids = [r.source_id for r in weekly_records if r.source_id]
-        SundayRinse._mark_airtable_processed(ids)
-
-    print(f"Generated report: {report_path}")
+        seals = {r.source_id: r.sha256 for r in weekly_records if r.source_id and r.sha256}
+        SundayRinse._mark_airtable_processed(ids, seals)
 
 
 if __name__ == "__main__":
