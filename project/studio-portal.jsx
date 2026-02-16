@@ -10,6 +10,16 @@ import {
   X,
   Move,
   Maximize2,
+  Fingerprint,
+  Scale,
+  Database,
+  Shield,
+  Zap,
+  Award,
+  Video,
+  FileCheck,
+  ClipboardList,
+  Terminal,
 } from "lucide-react";
 
 const DANCER_ROSTER = [
@@ -258,6 +268,245 @@ const RosterView = () => (
   </div>
 );
 
+
+const ArtifactCard = ({ title, icon, value, footer }) => (
+  <div className="bg-zinc-950 p-5 rounded-2xl border border-zinc-800 shadow-sm flex flex-col justify-between">
+    <div className="flex items-center gap-3 mb-3">
+      {icon}
+      <h5 className="text-[10px] font-black uppercase text-zinc-500 tracking-wider">{title}</h5>
+    </div>
+    <div className="text-sm font-mono font-bold text-zinc-100 break-all mb-3">{value}</div>
+    <div className="text-[10px] text-zinc-500 italic border-t border-zinc-800 pt-2">{footer}</div>
+  </div>
+);
+
+const PayGaitView = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingComplete, setProcessingComplete] = useState(false);
+  const [stakeData, setStakeData] = useState({
+    workTitle: "",
+    choreographer: "",
+    syntax: "Py.Rouette",
+    stakePercentage: 100,
+    claimType: "Whole-Work",
+  });
+  const [kineticArtifact, setKineticArtifact] = useState(null);
+
+  const handleProcess = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setKineticArtifact({
+        qftPeaks: [0.88, 0.42, 0.91, 0.12, 0.67],
+        qrngSeed: "7a29f8e1c4b2f0de91ac4f3b5dd3c2a1",
+        signature: "PyR_v1_HASH_9921_SIG",
+        royalty: {
+          sc: "0.042 ETH",
+          stagecoin: "500 STG",
+          streetcred: "+12.5",
+        },
+      });
+      setIsProcessing(false);
+      setProcessingComplete(true);
+    }, 1200);
+  };
+
+  return (
+    <div className="max-w-6xl animate-in fade-in slide-in-from-bottom-4">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-zinc-100">PayGait Local Ingest</h2>
+        <p className="text-zinc-400 mt-1">High-fidelity kinesthetic hashing & choreographer claim stake.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-zinc-950 p-8 rounded-3xl border border-zinc-800 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <Video className="text-blue-500" size={24} />
+              <h3 className="text-xl font-bold text-zinc-100">Choreographer’s Claim Stake</h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-wider">Work Title</label>
+                <input
+                  className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-800 focus:ring-2 focus:ring-blue-500 outline-none transition text-zinc-100"
+                  placeholder="e.g. Serenade Analysis v2"
+                  value={stakeData.workTitle}
+                  onChange={(e) => setStakeData({ ...stakeData, workTitle: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-wider">Choreographer</label>
+                <input
+                  className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-800 focus:ring-2 focus:ring-blue-500 outline-none transition text-zinc-100"
+                  placeholder="Name or Studio ID"
+                  value={stakeData.choreographer}
+                  onChange={(e) => setStakeData({ ...stakeData, choreographer: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-wider">Claim Type</label>
+                <select
+                  className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-100"
+                  value={stakeData.claimType}
+                  onChange={(e) => setStakeData({ ...stakeData, claimType: e.target.value })}
+                >
+                  <option>Whole-Work</option>
+                  <option>Solo</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase text-zinc-500 tracking-wider">Claim Stake (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-100"
+                  value={stakeData.stakePercentage}
+                  onChange={(e) => setStakeData({ ...stakeData, stakePercentage: Number(e.target.value) })}
+                />
+              </div>
+            </div>
+
+            <div className="bg-zinc-900 rounded-2xl p-6 mb-6 text-blue-100 relative overflow-hidden border border-zinc-800">
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-2">
+                  <Scale size={16} className="text-blue-400" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-blue-400">Syntactic Protection Protocol</span>
+                </div>
+                <p className="text-sm leading-relaxed opacity-90">
+                  "I hereby claim the <strong>movement syntax</strong> of this work. This claim utilizes Balanchine's syntax,
+                  Laban notation, and Pilates principles processed via <strong>{stakeData.syntax} kinesthetic hashing</strong>.
+                  This claim pertains to the movement logic and sequence, <strong>never the bodies</strong>."
+                </p>
+              </div>
+              <div className="absolute -right-4 -bottom-4 opacity-10">
+                <Fingerprint size={120} />
+              </div>
+            </div>
+
+            <button
+              onClick={handleProcess}
+              disabled={isProcessing}
+              className="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isProcessing ? <Zap className="animate-spin" size={20} /> : <FileCheck size={20} />}
+              {isProcessing ? "GENERATING ARTIFACTS..." : "INGEST & HASH WORK"}
+            </button>
+          </div>
+
+          {processingComplete && kineticArtifact && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-4">
+              <ArtifactCard
+                title="QFT Spectral Peaks"
+                icon={<Activity className="text-emerald-500" />}
+                value={kineticArtifact.qftPeaks.join(" | ")}
+                footer="Domain Frequency Analysis Complete"
+              />
+              <ArtifactCard
+                title="QRNG Seed Origin"
+                icon={<Zap className="text-orange-500" />}
+                value={kineticArtifact.qrngSeed}
+                footer="Quantum Entropy Source Verified"
+              />
+              <ArtifactCard
+                title="Py.Rouette Signature"
+                icon={<Fingerprint className="text-blue-500" />}
+                value={kineticArtifact.signature}
+                footer="Movement Lexicon Locked"
+              />
+              <ArtifactCard
+                title="Stake Rewards"
+                icon={<Award className="text-purple-500" />}
+                value={`${kineticArtifact.royalty.stagecoin} / ${kineticArtifact.royalty.streetcred} Cred / ${kineticArtifact.royalty.sc}`}
+                footer="Stagecoin + SC royalty pathway initialized"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-zinc-950 text-white p-6 rounded-3xl shadow-xl border border-zinc-800">
+            <h4 className="text-xs font-black uppercase text-blue-400 tracking-widest mb-4">Live System Metrics</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-between"><span className="text-zinc-400">Gait Entropy</span><span className="font-mono">94.2%</span></div>
+              <div className="flex items-center justify-between"><span className="text-zinc-400">Syntactic Proof</span><span className="text-green-400 font-mono">High</span></div>
+              <div className="flex items-center justify-between"><span className="text-zinc-400">Ledger Latency</span><span className="font-mono">12ms</span></div>
+            </div>
+            <div className="mt-8 pt-6 border-t border-zinc-800">
+              <p className="text-[10px] text-zinc-500 leading-relaxed uppercase font-bold">
+                Protocol Note: Whole-work analysis requires minimum 60s of motion data for valid Py.Rouette syntax verification.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-950 border border-zinc-800 rounded-3xl p-6">
+            <h4 className="text-xs font-black uppercase text-zinc-500 tracking-widest mb-3">Operator Session</h4>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-xs font-mono text-zinc-300">NODE: CANONICAL-01</span>
+              </div>
+              <Terminal size={14} className="text-zinc-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EcosystemMapView = () => {
+  const rows = [
+    ["Identity Layer", "Soloist Aura", "Balanchine Trust → Casa Savoia → AVC Systems"],
+    ["Infrastructure", "StagePort OS", "PyRouette compiler, validator, evolution engine, GLISSÉ triage"],
+    ["Product Layer", "Studio Shelf", "9 tools across dev/planning/studio/ops/analytics/comms/research"],
+    ["Orchestration", "Theatre System", "Firebase sovereign vault + multi-agent terminal/publisher views"],
+  ];
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <header className="mb-2">
+        <h1 className="text-4xl font-light text-zinc-100 tracking-tight">Ecosystem Map</h1>
+        <p className="text-zinc-500 mt-2">AVC Systems Studios — nested architecture and integration pathways.</p>
+      </header>
+
+      <div className="border border-zinc-800 bg-zinc-950 p-6 rounded-2xl">
+        <h3 className="text-zinc-300 uppercase text-xs tracking-widest mb-4 flex items-center gap-2">
+          <Shield className="w-4 h-4 text-blue-400" /> System Layers
+        </h3>
+        <div className="space-y-3">
+          {rows.map(([layer, name, detail]) => (
+            <div key={layer} className="grid grid-cols-1 md:grid-cols-3 gap-3 border-b border-zinc-800 pb-3">
+              <div className="text-zinc-500 text-xs uppercase tracking-widest">{layer}</div>
+              <div className="text-zinc-200 font-medium">{name}</div>
+              <div className="text-zinc-400 text-sm">{detail}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="border border-zinc-800 bg-zinc-950 p-5 rounded-2xl">
+          <h4 className="text-zinc-300 text-sm mb-2 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-500"/>Option A</h4>
+          <p className="text-zinc-500 text-sm">Unified Interface: merge StagePort + Theatre System into one admin panel.</p>
+        </div>
+        <div className="border border-zinc-800 bg-zinc-950 p-5 rounded-2xl">
+          <h4 className="text-zinc-300 text-sm mb-2 flex items-center gap-2"><ClipboardList className="w-4 h-4 text-amber-500"/>Option B</h4>
+          <p className="text-zinc-500 text-sm">Shelf Rebranding: package the 9 tools as StagePort modules.</p>
+        </div>
+        <div className="border border-zinc-800 bg-zinc-950 p-5 rounded-2xl">
+          <h4 className="text-zinc-300 text-sm mb-2 flex items-center gap-2"><Database className="w-4 h-4 text-purple-500"/>Option C</h4>
+          <p className="text-zinc-500 text-sm">Enterprise Demo: build a live walkthrough for first institutional contract.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SandboxView = () => {
   const [elements, setElements] = useState([
     { id: 1, x: 100, y: 100, label: "Seraphina", color: "bg-stone-400" },
@@ -434,6 +683,8 @@ export default function StudioPortal() {
     { id: "sandbox", label: "The Floor", icon: Move },
     { id: "bank", label: "Ballet Bank", icon: Maximize2 },
     { id: "company", label: "The Ledger", icon: DollarSign },
+    { id: "paygait", label: "PayGait Local", icon: Fingerprint },
+    { id: "ecosystem", label: "Ecosystem Map", icon: Shield },
   ];
 
   return (
@@ -507,6 +758,8 @@ export default function StudioPortal() {
             {currentView === "sandbox" && <SandboxView />}
             {currentView === "bank" && <BalletBankView />}
             {currentView === "company" && <CompanyView />}
+            {currentView === "paygait" && <PayGaitView />}
+            {currentView === "ecosystem" && <EcosystemMapView />}
           </div>
         </div>
       </main>
