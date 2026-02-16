@@ -94,6 +94,23 @@ class SundayRinse:
         return loaded
 
     @staticmethod
+    def _to_text(value: Any) -> str:
+        """Coerce Airtable-style field values into plain text."""
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value
+        if isinstance(value, list):
+            parts = [SundayRinse._to_text(item).strip() for item in value]
+            return " ".join(part for part in parts if part)
+        if isinstance(value, dict):
+            if "name" in value:
+                return SundayRinse._to_text(value.get("name"))
+            if "text" in value:
+                return SundayRinse._to_text(value.get("text"))
+        return str(value)
+
+    @staticmethod
     def _extract_fields(entry: dict[str, Any]) -> dict[str, Any]:
         fields = entry.get("fields")
         return fields if isinstance(fields, dict) else entry
@@ -101,14 +118,17 @@ class SundayRinse:
     @staticmethod
     def _normalize_record(entry: dict[str, Any]) -> RinseRecord:
         fields = SundayRinse._extract_fields(entry)
-        proves = str(
+        proves = SundayRinse._to_text(
             fields.get("proves")
             or fields.get("Raw_Text")
             or fields.get("Raw Content")
+            or fields.get("Name")
             or fields.get("MemJar")
             or ""
         )
-        title = str(fields.get("title") or fields.get("Title") or fields.get("Name") or "Untitled")
+        title = SundayRinse._to_text(
+            fields.get("title") or fields.get("Title") or fields.get("Name") or "Untitled"
+        )
         sha = str(fields.get("sha256") or fields.get("SHA-256 Seal") or "")
         if not sha:
             sha = hashlib.sha256(proves.encode("utf-8")).hexdigest() if proves else ""
