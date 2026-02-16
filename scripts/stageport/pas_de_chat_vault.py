@@ -114,9 +114,14 @@ def _extract_keywords(raw: str, limit: int = 6) -> list[str]:
 
 
 def _salvage(raw: str, category: str) -> SalvageSummary:
-    keywords = _extract_keywords(raw)
-    if not keywords:
-        keywords = ["capture", "archive", "forensics"]
+    keywords = _extract_keywords(raw, limit=8)
+    fallback_keywords = ["capture", "archive", "forensics"]
+    for word in fallback_keywords:
+        if len(keywords) >= 3:
+            break
+        if word not in keywords:
+            keywords.append(word)
+    keywords = keywords[:8]
 
     why = (
         "This capture preserves operator intent and implementation details in a verifiable form, "
@@ -144,7 +149,7 @@ def _read_raw(args: argparse.Namespace) -> str:
 
 def push(args: argparse.Namespace) -> int:
     raw = _read_raw(args)
-    if raw == "":
+    if raw.strip() == "":
         print("RAW capture is empty; no record created.")
         return 0
 
