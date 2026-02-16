@@ -70,6 +70,12 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 
 For detailed DTG project documentation, see the [project wiki](../../wiki) or explore the `public/` directory for interactive demos.
 
+### Evidence-First Case Docs
+
+- [`docs/forensic-alignment-fast-dossier.md`](docs/forensic-alignment-fast-dossier.md)
+- [`docs/forensic-alignment-onepage.md`](docs/forensic-alignment-onepage.md)
+- [`docs/core-case-base.md`](docs/core-case-base.md)
+
 <!-- ![Codex demo GIF using: codex "explain this codebase to me"](./.github/demo.gif) -->
 
 ---
