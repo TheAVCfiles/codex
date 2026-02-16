@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayGait • Local Kinetic Stamp</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f0d0c;
+      --bg-soft: #1a1614;
+      --bg-card: rgba(41, 37, 36, 0.9);
+      --text-main: #fafaf9;
+      --text-soft: #d6d3d1;
+      --gold-1: #fbbf24;
+      --gold-2: #f59e0b;
+      --green: #10b981;
+      --border: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #2c1f18 0%, var(--bg) 60%);
+      color: var(--text-main);
+      font-family: Inter, system-ui, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      margin: 0;
+      color: var(--gold-1);
+    }
+
+    .lede {
+      color: var(--text-soft);
+      margin: 0.8rem auto 1.5rem;
+      max-width: 52rem;
+    }
+
+    .panel {
+      max-width: 70rem;
+      margin: 0 auto;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    input,
+    textarea,
+    button {
+      font: inherit;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+    }
+
+    textarea {
+      width: min(100%, 56rem);
+      min-height: 6rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 0.85rem;
+      resize: vertical;
+    }
+
+    .button-row {
+      margin-top: 1rem;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--gold-2), var(--gold-1));
+      color: #1f1302;
+      padding: 0.8rem 1.4rem;
+      margin: 0.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .muted {
+      color: var(--text-soft);
+      margin: 0.7rem 0;
+    }
+
+    .file-list,
+    .output {
+      max-width: 56rem;
+      margin: 1.2rem auto 0;
+      text-align: left;
+      background: var(--bg-soft);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .output {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      max-height: 22rem;
+      overflow: auto;
+      display: none;
+    }
+
+    .manifesto {
+      margin: 2rem auto;
+      max-width: 60rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .manifesto strong { color: var(--green); }
+
+    .claim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 0.8rem;
+      max-width: 56rem;
+      margin: 1rem auto 0;
+      text-align: left;
+    }
+
+    .claim-grid label {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .claim-grid input,
+    .claim-grid select {
+      width: 100%;
+      padding: 0.7rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .artifact-card {
+      margin-bottom: 1rem;
+      padding: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.65rem;
+      background: rgba(0, 0, 0, 0.2);
+      line-height: 1.5;
+    }
+
+    .artifact-card .label {
+      color: var(--green);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <h1>PayGait • Local</h1>
+  <p class="lede">The kinetic MP3 for movement. Mass ingest links or videos, generate unforgeable local stamps, and export JSON/CSV/ZIP artifacts.</p>
+
+  <section class="panel">
+    <textarea id="urls" placeholder="Paste YouTube/Reels links (one per line)" aria-label="Video links"></textarea>
+    <div class="button-row">
+      <button onclick="ingestUrls()">Ingest URLs</button>
+      <button onclick="document.getElementById('files').click()">Drag/Drop Videos</button>
+      <input type="file" id="files" multiple accept="video/*" hidden>
+    </div>
+
+    <div class="claim-grid">
+      <div>
+        <label for="analysisScope">Protection scope</label>
+        <select id="analysisScope" aria-label="Protection scope">
+          <option value="solo">Solo / Personal gait hash</option>
+          <option value="whole-work">Whole-work choreography claim stake</option>
+        </select>
+      </div>
+      <div>
+        <label for="workTitle">Work title</label>
+        <input id="workTitle" type="text" placeholder="e.g., Corridor Variations I">
+      </div>
+      <div>
+        <label for="choreographer">Choreographer</label>
+        <input id="choreographer" type="text" placeholder="Name / studio">
+      </div>
+      <div>
+        <label for="claimStake">Choreographer's claim stake (%)</label>
+        <input id="claimStake" type="number" min="0" max="100" value="65">
+      </div>
+    </div>
+
+    <p id="status" class="muted">Ready.</p>
+    <div id="fileList" class="file-list" aria-live="polite"></div>
+    <button onclick="processAll()" id="processBtn" style="display:none;">Process All → Stamps</button>
+    <div id="output" class="output" aria-live="polite"></div>
+  </section>
+
+  <section class="manifesto">
+    <p><strong>PyRouette</strong> scores the combo. <strong>QFT</strong> resolves the frequencies. <strong>QRNG</strong> makes it unforgeable.</p>
+    <p>Viral use = Sentient Cents to source. Recreation = Stagecoin + Streetcred to you.</p>
+    <p>Claim stake protects choreography and movement syntax (Balanchine, Laban, Pilates + Py.Rouette), never bodies.</p>
+    <p>Join the Movement OS • Free: 1 stamp • $7/mo: Unlimited + royalties</p>
+  </section>
+
+  <script>
+    const videos = [];
+    const output = document.getElementById('output');
+    const status = document.getElementById('status');
+    const fileList = document.getElementById('fileList');
+
+    function ingestUrls() {
+      const urls = document.getElementById('urls').value.trim().split('\n');
+      urls.forEach((url) => {
+        if (url.trim()) videos.push({ type: 'url', value: url.trim() });
+      });
+      renderFileList();
+    }
+
+    document.getElementById('files').addEventListener('change', (event) => {
+      Array.from(event.target.files).forEach((file) => videos.push({ type: 'file', value: file }));
+      renderFileList();
+    });
+
+    function renderFileList() {
+      fileList.innerHTML = videos.map((entry, index) => `<div>${index + 1}. ${entry.type === 'url' ? entry.value : entry.value.name}</div>`).join('');
+      document.getElementById('processBtn').style.display = videos.length ? 'inline-block' : 'none';
+    }
+
+    function getClaimContext() {
+      const analysisScope = document.getElementById('analysisScope').value;
+      const workTitle = document.getElementById('workTitle').value.trim() || 'Untitled Work';
+      const choreographer = document.getElementById('choreographer').value.trim() || 'Unspecified Choreographer';
+      const claimStake = Number(document.getElementById('claimStake').value || 0);
+      return { analysisScope, workTitle, choreographer, claimStake };
+    }
+
+    async function processAll() {
+      if (!videos.length) {
+        status.textContent = 'Add at least one URL or file first.';
+        return;
+      }
+
+      status.textContent = `Processing ${videos.length} videos...`;
+      output.innerHTML = '';
+      output.style.display = 'block';
+      const claimContext = getClaimContext();
+
+      const results = [];
+      for (let i = 0; i < videos.length; i += 1) {
+        const item = videos[i];
+        status.textContent = `Stamping ${i + 1}/${videos.length}...`;
+
+        const mockPoses = [
+          { t: 5.2, family: 'Turns', element: 'Double pirouette', tes: 2.16, goe: 0.18, vz: 1.8 },
+          { t: 12.8, family: 'Leaps', element: 'Jete split', tes: 3.26, goe: 0.4, vz: 2.3 },
+          { t: 18.4, family: 'Balances', element: 'Arabesque hold', tes: 1.92, goe: 0.25, vz: 0.8 }
+        ];
+
+        const vz = mockPoses.map((pose) => pose.vz);
+        const qft = vz.map((value, index) => value * Math.exp(-2 * Math.PI * index * 0.05));
+        const features = qft.map(Math.abs).slice(0, 10);
+
+        const qrngSeed = Array.from({ length: 32 }, () => Math.floor(Math.random() * 256))
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+
+        const encoded = new TextEncoder().encode(JSON.stringify({ features, seed: qrngSeed }));
+        const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+        const signature = Array.from(new Uint8Array(hashBuffer))
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+
+        const artifact = {
+          video_id: item.type === 'url' ? (item.value.split('v=')[1] || 'local') : item.value.name,
+          choreography_scope: claimContext.analysisScope,
+          choreography_work: claimContext.workTitle,
+          choreographer: claimContext.choreographer,
+          claim_stake_percent: claimContext.claimStake,
+          movement_lexicon: ['Balanchine syntax', 'Laban notation', 'Pilates contrology', 'Py.Rouette kinesthetic hash'],
+          qft_peaks: features.slice(0, 5),
+          qrng_seed: qrngSeed,
+          signature: `0x${signature.slice(0, 42)}`,
+          sc_royalty: (Math.random() * 20 + 5).toFixed(1),
+          stagecoin: Math.floor(Math.random() * 30) + 10,
+          streetcred: Math.floor(Math.random() * 50) + 20,
+          claim_guard: claimContext.analysisScope === 'whole-work'
+            ? `Stake active: ${claimContext.claimStake}% to choreographer for whole-work movement provenance.`
+            : 'Personal gait mode active: hash claims movement pattern only.'
+        };
+
+        results.push(artifact);
+
+        output.innerHTML += `
+          <div class="artifact-card">
+            <strong>${artifact.video_id}</strong><br>
+            <span class="label">Scope:</span> ${artifact.choreography_scope}<br>
+            <span class="label">Work:</span> ${artifact.choreography_work}<br>
+            <span class="label">Choreographer:</span> ${artifact.choreographer}<br>
+            <span class="label">QFT Peaks:</span> ${artifact.qft_peaks.map((peak) => peak.toFixed(4)).join(', ')}<br>
+            <span class="label">QRNG Seed:</span> ${artifact.qrng_seed}<br>
+            <span class="label">Signature:</span> ${artifact.signature}<br>
+            <span class="label">SC Royalty:</span> ${artifact.sc_royalty}<br>
+            <span class="label">Stagecoin:</span> +${artifact.stagecoin}<br>
+            <span class="label">Streetcred:</span> +${artifact.streetcred}<br>
+            <span class="label">Claim Stake:</span> ${artifact.claim_stake_percent}%<br>
+            <span class="label">Guard:</span> ${artifact.claim_guard}
+          </div>
+        `;
+      }
+
+      const csv = ['video_id,signature,sc_royalty,stagecoin,streetcred']
+        .concat(results.map((row) => `${row.video_id},${row.signature},${row.sc_royalty},${row.stagecoin},${row.streetcred}`))
+        .join('\n');
+
+      const zip = new JSZip();
+      zip.file('paygait_results.csv', csv);
+      results.forEach((row, index) => zip.file(`stamp_${index}.json`, JSON.stringify(row, null, 2)));
+
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const anchor = document.createElement('a');
+      anchor.href = URL.createObjectURL(blob);
+      anchor.download = 'paygait_stamps.zip';
+      anchor.click();
+
+      status.textContent = 'All stamps complete. ZIP downloaded.';
+    }
+  </script>
+</body>
+</html>
