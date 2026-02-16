@@ -1,0 +1,41 @@
+{
+  "panel_version": "0.1",
+  "movement": "pirouette",
+  "age_group": 8,
+  "judges": [
+    {
+      "school": "Balanchine-derived neoclassical",
+      "focus": "speed, line, attack",
+      "assessment": {
+        "axis_clarity": 8.5,
+        "musicality_readiness": 7.0,
+        "risk_flag": false,
+        "notes": "Strong axis language. Could add tempo acceleration drills."
+      }
+    },
+    {
+      "school": "Vaganova classical method",
+      "focus": "placement, épaulement, graduated strength",
+      "assessment": {
+        "foundational_progression": 9.0,
+        "arm_path_integrity": 8.0,
+        "risk_flag": false,
+        "notes": "Clear scaffolding. Arm pathway could be described more explicitly."
+      }
+    },
+    {
+      "school": "Biomechanics lens",
+      "focus": "joint loading and torque safety",
+      "assessment": {
+        "knee_tracking": 9.5,
+        "ankle_safety": 9.8,
+        "risk_flag": false,
+        "notes": "No torque-based cues detected."
+      }
+    }
+  ],
+  "consensus": {
+    "overall_alignment": "high",
+    "structural_conflict_detected": false
+  }
+}
