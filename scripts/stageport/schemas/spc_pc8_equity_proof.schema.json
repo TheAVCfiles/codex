@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stageport.os/schemas/spc_pc8_equity_proof.json",
+  "title": "StagePort PC.8 Neutral Moat Proof",
+  "type": "object",
+  "required": [
+    "artifact_type",
+    "naab_standard",
+    "studio_id",
+    "timestamp",
+    "proof_method",
+    "isotropic_index",
+    "spatial_friction_log",
+    "signature"
+  ],
+  "properties": {
+    "artifact_type": {
+      "const": "STAGEPORT_SOVEREIGN_PROOF"
+    },
+    "naab_standard": {
+      "enum": ["2020_Conditions_PC.8_Social_Equity"]
+    },
+    "studio_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "proof_method": {
+      "const": "ISOTROPIC_ACCESS_AUDIT"
+    },
+    "privacy_level": {
+      "enum": ["MAXIMUM_NO_PII"]
+    },
+    "versions": {
+      "type": "object",
+      "properties": {
+        "engine": {
+          "type": "string"
+        },
+        "grid_cm": {
+          "type": "integer"
+        },
+        "min_width_mm": {
+          "type": "integer"
+        },
+        "turn_radius_mm": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "isotropic_index": {
+      "type": "object",
+      "required": ["score", "passing_threshold"],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "passing_threshold": {
+          "type": "number",
+          "minimum": 0.8,
+          "maximum": 1
+        },
+        "method": {
+          "type": "string",
+          "default": "1 - CV(max access cost per cell)"
+        }
+      }
+    },
+    "spatial_friction_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "zone_id",
+          "access_width_mm",
+          "ADA_compliant",
+          "friction_coefficient"
+        ],
+        "properties": {
+          "zone_id": {
+            "type": "string"
+          },
+          "access_width_mm": {
+            "type": "integer"
+          },
+          "ADA_compliant": {
+            "type": "boolean"
+          },
+          "friction_coefficient": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "demographic_blind_hash": {
+      "type": "object",
+      "required": ["cohort_size"],
+      "properties": {
+        "cohort_size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "diversity_entropy_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "method": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "signature": {
+      "type": "object",
+      "required": ["auditor", "hash"],
+      "properties": {
+        "auditor": {
+          "type": "string"
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
