@@ -1,315 +1,485 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sovereign Beta Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --bg-primary: #1a1614;
-      --bg-secondary: #0f0d0c;
-      --text-bright: #fafaf9;
-      --text-medium: #e7e5e4;
-      --text-soft: #d6d3d1;
-      --accent-emerald: #10b981;
-      --accent-purple: #7c3aed;
-      --accent-gold: #fbbf24;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sovereign Liquidation & Recovery Package</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --bg-primary: #1a1614;
+        --bg-secondary: #0f0d0c;
+        --text-bright: #fafaf9;
+        --text-medium: #e7e5e4;
+        --text-soft: #d6d3d1;
+        --accent-emerald: #10b981;
+        --accent-purple: #7c3aed;
+        --accent-gold: #fbbf24;
+      }
 
-    body {
-      background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.07), transparent 25%),
-        radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.08), transparent 30%),
-        radial-gradient(circle at 10% 90%, rgba(251, 191, 36, 0.06), transparent 25%),
-        linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
-      color: var(--text-bright);
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
+      body {
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(16, 185, 129, 0.07),
+            transparent 25%
+          ),
+          radial-gradient(
+            circle at 80% 0%,
+            rgba(124, 58, 237, 0.08),
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 10% 90%,
+            rgba(251, 191, 36, 0.06),
+            transparent 25%
+          ),
+          linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+        color: var(--text-bright);
+        min-height: 100vh;
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
 
-    .glass {
-      background: rgba(24, 20, 18, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(20px);
-    }
+      .glass {
+        background: rgba(24, 20, 18, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(20px);
+      }
 
-    .orb {
-      position: absolute;
-      width: 340px;
-      height: 340px;
-      filter: blur(80px);
-      opacity: 0.6;
-      animation: float 8s ease-in-out infinite;
-      border-radius: 999px;
-      pointer-events: none;
-    }
+      .orb {
+        position: absolute;
+        width: 340px;
+        height: 340px;
+        filter: blur(80px);
+        opacity: 0.6;
+        animation: float 8s ease-in-out infinite;
+        border-radius: 999px;
+        pointer-events: none;
+      }
 
-    .orb-emerald { background: rgba(16, 185, 129, 0.24); left: 5%; top: 12%; }
-    .orb-purple { background: rgba(124, 58, 237, 0.22); right: 2%; top: 20%; animation-delay: 2s; }
-    .orb-gold { background: rgba(251, 191, 36, 0.18); left: 10%; bottom: 8%; animation-delay: 4s; }
+      .orb-emerald {
+        background: rgba(16, 185, 129, 0.24);
+        left: 5%;
+        top: 12%;
+      }
+      .orb-purple {
+        background: rgba(124, 58, 237, 0.22);
+        right: 2%;
+        top: 20%;
+        animation-delay: 2s;
+      }
+      .orb-gold {
+        background: rgba(251, 191, 36, 0.18);
+        left: 10%;
+        bottom: 8%;
+        animation-delay: 4s;
+      }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); opacity: 0.6; }
-      50% { transform: translateY(-20px); opacity: 0.8; }
-    }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-20px);
+          opacity: 0.8;
+        }
+      }
 
-    .zodiac-wheel {
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      top: -40px;
-      right: -40px;
-      opacity: 0.14;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-      background-size: 22px 22px;
-      border-radius: 999px;
-      animation: spin 60s linear infinite;
-      pointer-events: none;
-    }
+      .zodiac-wheel {
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        top: -40px;
+        right: -40px;
+        opacity: 0.14;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 1px,
+          transparent 1px
+        );
+        background-size: 22px 22px;
+        border-radius: 999px;
+        animation: spin 60s linear infinite;
+        pointer-events: none;
+      }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
 
-    .glow-button {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+      .glow-button {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
 
-    .glow-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
-    }
+      .glow-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
+      }
 
-    .modal-backdrop {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
-    }
+      .modal-backdrop {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(12px);
+      }
 
-    .field {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-bright);
-    }
-  </style>
-</head>
-<body class="relative">
-  <div class="orb orb-emerald"></div>
-  <div class="orb orb-purple"></div>
-  <div class="orb orb-gold"></div>
-  <div class="zodiac-wheel"></div>
+      .field {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-bright);
+      }
+    </style>
+  </head>
+  <body class="relative">
+    <div class="orb orb-emerald"></div>
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-gold"></div>
+    <div class="zodiac-wheel"></div>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
-    <section class="glass rounded-2xl p-7 md:p-10">
-      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
-      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl leading-tight text-white mt-3">
-        Decode your karmic code — and move with precision this season.
-      </h1>
-      <p class="mt-4 text-lg text-stone-200 max-w-3xl">
-        A paid download for founders and creators who want one sharp cosmic operating system: what to pursue,
-        what to pause, and what to protect over the next 30 days.
-      </p>
-      <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Transit timing</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♄ Boundary strategy</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Sovereign execution</span>
-      </div>
-      <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
-          Buy the Primer → Instant Download
+    <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
+      <section class="glass rounded-2xl p-7 md:p-10">
+        <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">
+          Executive hand-off dossier
+        </p>
+        <h1
+          class="font-['Playfair_Display',serif] text-4xl md:text-5xl leading-tight text-white mt-3"
+        >
+          Sovereign Liquidation & Recovery Package
+        </h1>
+        <p class="mt-4 text-lg text-stone-200 max-w-3xl">
+          Version 2026-02-03 · Prepared for Administrative Manager (Mom) ·
+          Prepared by Allison Van Cura (Principal). This is an administrative
+          recovery package grounded in documented assets, unpaid labor, and
+          reconciled wage data.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
+          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5"
+            >Project: AVC Asset & Wage Reconciliation</span
+          >
+          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5"
+            >Principal Floor: $1,518,422.00</span
+          >
+          <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5"
+            >Management Fee: 10% ($151,842.20)</span
+          >
+        </div>
+        <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
+          <button
+            data-modal="guideModal"
+            class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]"
+          >
+            Open package summary
+          </button>
+          <p class="text-sm text-stone-300">
+            Target entity: Savatara Corporation / Dance Factory Ridgefield, LLC
+            / Kristin Leggio Sedita
+          </p>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-7 md:p-8">
+        <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">
+          Data view
+        </p>
+        <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
+          <li class="border border-white/10 rounded-xl bg-white/5 p-4">
+            Primary location reference: 21 Irmgard Lane, Ridgefield, CT.
+          </li>
+          <li class="border border-white/10 rounded-xl bg-white/5 p-4">
+            Active performance period: 2019–2022, with documented recovery floor
+            set conservatively.
+          </li>
+          <li class="border border-white/10 rounded-xl bg-white/5 p-4">
+            Operating posture: high-stakes administrative recovery, not a family
+            favor.
+          </li>
+        </ul>
+      </section>
+
+      <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
+        <div>
+          <p class="text-xs uppercase tracking-[0.35em] text-purple-200">
+            Waiver operations
+          </p>
+          <h2 class="font-['Playfair_Display',serif] text-3xl mt-3">
+            CT Victim Compensation filing deadline workflow
+          </h2>
+          <p class="mt-3 text-stone-200">
+            Standard filing deadline is 3 years from the crime date (or from
+            discovery of injury/loss). Older matters require the Application for
+            Waiver of Three Year Filing Requirement.
+          </p>
+          <p class="mt-4 text-stone-300">
+            Submit the waiver form with the main claim package via mail, fax, or
+            email and attach concise good-cause documentation.
+          </p>
+        </div>
+        <div
+          class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6"
+        >
+          <p class="text-sm uppercase tracking-[0.2em] text-amber-200">
+            Expected processing
+          </p>
+          <p class="mt-2 font-['Playfair_Display',serif] text-5xl text-white">
+            1–3 mo
+          </p>
+          <p class="mt-3 text-stone-200">
+            Waivers are commonly approved in documented DV and exploitation
+            patterns with supporting evidence.
+          </p>
+          <button
+            data-modal="guideModal"
+            class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]"
+          >
+            View waiver checklist
+          </button>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-7 md:p-8">
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-200">
+          Trust + boundaries
+        </p>
+        <h2 class="font-['Playfair_Display',serif] text-3xl mt-3">
+          What supports a good-cause waiver narrative
+        </h2>
+        <div class="mt-5 grid gap-4 md:grid-cols-2">
+          <div class="border border-white/10 rounded-xl bg-white/5 p-4">
+            <h3 class="text-lg font-semibold text-emerald-100">
+              Helpful supporting evidence
+            </h3>
+            <ul class="mt-2 space-y-2 text-stone-200 text-sm">
+              <li>• Protective order or police case references</li>
+              <li>• Medical notes indicating trauma impacts</li>
+              <li>• Advocate letter on coercion or retaliation risk</li>
+            </ul>
+          </div>
+          <div class="border border-white/10 rounded-xl bg-white/5 p-4">
+            <h3 class="text-lg font-semibold text-rose-100">
+              Avoid weak submissions
+            </h3>
+            <ul class="mt-2 space-y-2 text-stone-200 text-sm">
+              <li>• Missing waiver form for late filings</li>
+              <li>• No explanation for delayed filing timeline</li>
+              <li>• Attachments that do not tie to good cause</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-7 md:p-9 text-center">
+        <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">
+          Final call
+        </p>
+        <h2 class="font-['Playfair_Display',serif] text-3xl md:text-4xl mt-3">
+          Attach the waiver, submit the packet, preserve the claim.
+        </h2>
+        <button
+          data-modal="guideModal"
+          class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]"
+        >
+          Open waiver sample language
         </button>
-        <p class="text-sm text-stone-300">$49 · Private PDF · No account required</p>
-      </div>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Proof</p>
-      <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Built for women navigating asymmetric risk, hidden labor extraction, and high-responsibility decisions.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Readers leave with a clear 30/60/90 rhythm to prioritize focus, money moves, and relational boundaries.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Grounded in real operator architecture: receipts, governed choices, and evidence over hype.</li>
-      </ul>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
-      <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Offer</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Founder-Safe Systems Primer</h2>
-        <p class="mt-3 text-stone-200">A 28–32 page PDF that maps extraction patterns, introduces the consideration framework, and helps you move from chaos to optionality without leaking power.</p>
-        <p class="mt-4 text-stone-300">Includes: core framework, plain-English licensing orientation, and a calm implementation arc for the next 90 days.</p>
-      </div>
-      <div class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6">
-        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Price anchor</p>
-        <p class="mt-2 font-[\"Playfair Display\",serif] text-5xl text-white">$49</p>
-        <p class="mt-3 text-stone-200">Lower than a strategy session. Higher leverage than random content consumption.</p>
-        <button data-modal="guideModal" class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]">Buy the Primer → Instant Download</button>
-      </div>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Trust + boundaries</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">What this is — and what it is not</h2>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-emerald-100">This is for</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Founders carrying real responsibility</li>
-            <li>• Builders who need structural clarity, not motivation</li>
-            <li>• Operators who value evidence and constraints</li>
-          </ul>
+        <div
+          class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300"
+        >
+          <span id="countdown">--d --h --m --s</span>
+          <label for="timezone" class="inline-flex items-center gap-2">
+            <span>Timezone</span>
+            <select
+              id="timezone"
+              class="field rounded-lg px-3 py-2 text-sm min-h-[44px]"
+            >
+              <option value="America/New_York">Eastern (EST/EDT)</option>
+              <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
+              <option value="Europe/London">London (GMT/BST)</option>
+              <option value="UTC">UTC</option>
+            </select>
+          </label>
         </div>
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-rose-100">This is not</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Not legal, financial, or therapeutic advice</li>
-            <li>• Not a coaching subscription</li>
-            <li>• Not access to sealed operator methods</li>
-          </ul>
-        </div>
+        <p id="footerNote" class="text-xs text-stone-400 mt-3">
+          Use timezone controls to align your packet prep and submission timing.
+        </p>
+      </section>
+    </main>
+
+    <div
+      id="modalContainer"
+      class="hidden fixed inset-0 z-30 flex items-center justify-center modal-backdrop"
+    >
+      <div
+        class="bg-[rgba(24,20,18,0.95)] border border-white/10 rounded-2xl shadow-2xl max-w-lg w-[92%] md:w-[560px] p-6 relative"
+      >
+        <button
+          id="closeModal"
+          class="absolute top-4 right-4 text-stone-300 hover:text-white min-h-[44px] min-w-[44px]"
+          aria-label="Close modal"
+        >
+          ✕
+        </button>
+        <div id="modalContent"></div>
       </div>
-    </section>
+    </div>
 
-    <section class="glass rounded-2xl p-7 md:p-9 text-center">
-      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
-      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
-      <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
-        <span id="countdown">--d --h --m --s</span>
-        <label for="timezone" class="inline-flex items-center gap-2">
-          <span>Timezone</span>
-          <select id="timezone" class="field rounded-lg px-3 py-2 text-sm min-h-[44px]">
-            <option value="America/New_York">Eastern (EST/EDT)</option>
-            <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
-            <option value="Europe/London">London (GMT/BST)</option>
-            <option value="UTC">UTC</option>
-          </select>
-        </label>
+    <template id="guideModal">
+      <div class="space-y-3">
+        <h3 class="font-['Playfair_Display',serif] text-3xl">
+          Sample waiver explanation language
+        </h3>
+        <p class="text-stone-300">
+          "Severe domestic violence and trauma prevented timely filing. Ongoing
+          coercion and fear of retaliation delayed disclosure. Please see
+          attached protective order, advocate statement, and treatment notes for
+          good cause."
+        </p>
+        <a
+          href="#"
+          class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black"
+          aria-label="Copy waiver language"
+          >Copy and adapt this language</a
+        >
       </div>
-      <p id="footerNote" class="text-xs text-stone-400 mt-3">Portal closes at midnight on October 31, 2025 (Eastern).</p>
-    </section>
-  </main>
+    </template>
 
-  <div id="modalContainer" class="hidden fixed inset-0 z-30 flex items-center justify-center modal-backdrop">
-    <div class="bg-[rgba(24,20,18,0.95)] border border-white/10 rounded-2xl shadow-2xl max-w-lg w-[92%] md:w-[560px] p-6 relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-stone-300 hover:text-white min-h-[44px] min-w-[44px]" aria-label="Close modal">✕</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
+    <script>
+      const countdownEl = document.getElementById("countdown");
+      const timezoneSelect = document.getElementById("timezone");
+      const footerNote = document.getElementById("footerNote");
+      const baseDate = {
+        year: 2025,
+        month: 10,
+        day: 31,
+        hour: 0,
+        minute: 0,
+        second: 0,
+      };
+      let countdownTimer = null;
+      let countdownTarget = null;
 
-  <template id="guideModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Founder-Safe Systems Primer • $49</h3>
-      <p class="text-stone-300">Instant PDF download. Orientation only — not legal, financial, or therapeutic advice.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Primer">Buy the Primer → Instant Download</a>
-    </div>
-  </template>
+      const getTimeZoneOffsetMinutes = (date, timeZone) => {
+        const parts = new Intl.DateTimeFormat("en-US", {
+          timeZone,
+          hour12: false,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+          .formatToParts(date)
+          .reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
 
-  <script>
-    const countdownEl = document.getElementById('countdown');
-    const timezoneSelect = document.getElementById('timezone');
-    const footerNote = document.getElementById('footerNote');
-    const baseDate = { year: 2025, month: 10, day: 31, hour: 0, minute: 0, second: 0 };
-    let countdownTimer = null;
-    let countdownTarget = null;
+        const asUTC = Date.UTC(
+          parts.year,
+          Number(parts.month) - 1,
+          parts.day,
+          parts.hour,
+          parts.minute,
+          parts.second,
+        );
+        return (asUTC - date.getTime()) / 60000;
+      };
 
-    const getTimeZoneOffsetMinutes = (date, timeZone) => {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).formatToParts(date).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
+      const buildZonedTargetDate = (timeZone) => {
+        const utcDate = Date.UTC(
+          baseDate.year,
+          baseDate.month - 1,
+          baseDate.day,
+          baseDate.hour,
+          baseDate.minute,
+          baseDate.second,
+        );
+        const reference = new Date(utcDate);
+        const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
+        return new Date(utcDate - offsetMinutes * 60000);
+      };
 
-      const asUTC = Date.UTC(parts.year, Number(parts.month) - 1, parts.day, parts.hour, parts.minute, parts.second);
-      return (asUTC - date.getTime()) / 60000;
-    };
+      const formatDuration = (ms) => {
+        if (ms <= 0) return "0d 0h 0m 0s";
+        const totalSeconds = Math.floor(ms / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      };
 
-    const buildZonedTargetDate = (timeZone) => {
-      const utcDate = Date.UTC(baseDate.year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
-      const reference = new Date(utcDate);
-      const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
-      return new Date(utcDate - offsetMinutes * 60000);
-    };
+      const updateFooter = () => {
+        const formatter = new Intl.DateTimeFormat("en-US", {
+          timeZone: timezoneSelect.value,
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short",
+        });
+        footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
+      };
 
-    const formatDuration = (ms) => {
-      if (ms <= 0) return '0d 0h 0m 0s';
-      const totalSeconds = Math.floor(ms / 1000);
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    };
+      const tick = () => {
+        const now = new Date();
+        const diff = countdownTarget - now;
+        countdownEl.textContent = formatDuration(diff);
+      };
 
-    const updateFooter = () => {
-      const formatter = new Intl.DateTimeFormat('en-US', {
-        timeZone: timezoneSelect.value,
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        timeZoneName: 'short'
+      const startCountdown = () => {
+        if (countdownTimer) clearInterval(countdownTimer);
+        countdownTarget = buildZonedTargetDate(timezoneSelect.value);
+        tick();
+        countdownTimer = setInterval(tick, 1000);
+        updateFooter();
+      };
+
+      startCountdown();
+      timezoneSelect.addEventListener("change", startCountdown);
+
+      const modalContainer = document.getElementById("modalContainer");
+      const modalContent = document.getElementById("modalContent");
+      const closeModalButton = document.getElementById("closeModal");
+
+      const openModal = (id) => {
+        const template = document.getElementById(id);
+        if (!template) return;
+        modalContent.innerHTML = template.innerHTML;
+        modalContainer.classList.remove("hidden");
+      };
+
+      const closeModal = () => {
+        modalContainer.classList.add("hidden");
+        modalContent.innerHTML = "";
+      };
+
+      document.addEventListener("click", (event) => {
+        const modalTarget = event.target.closest("[data-modal]");
+        if (modalTarget) {
+          event.preventDefault();
+          openModal(modalTarget.dataset.modal);
+        }
       });
-      footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
-    };
 
-    const tick = () => {
-      const now = new Date();
-      const diff = countdownTarget - now;
-      countdownEl.textContent = formatDuration(diff);
-    };
+      modalContainer.addEventListener("click", (event) => {
+        if (event.target === modalContainer) {
+          closeModal();
+        }
+      });
 
-    const startCountdown = () => {
-      if (countdownTimer) clearInterval(countdownTimer);
-      countdownTarget = buildZonedTargetDate(timezoneSelect.value);
-      tick();
-      countdownTimer = setInterval(tick, 1000);
-      updateFooter();
-    };
-
-    startCountdown();
-    timezoneSelect.addEventListener('change', startCountdown);
-
-    const modalContainer = document.getElementById('modalContainer');
-    const modalContent = document.getElementById('modalContent');
-    const closeModalButton = document.getElementById('closeModal');
-
-    const openModal = (id) => {
-      const template = document.getElementById(id);
-      if (!template) return;
-      modalContent.innerHTML = template.innerHTML;
-      modalContainer.classList.remove('hidden');
-    };
-
-    const closeModal = () => {
-      modalContainer.classList.add('hidden');
-      modalContent.innerHTML = '';
-    };
-
-    document.addEventListener('click', (event) => {
-      const modalTarget = event.target.closest('[data-modal]');
-      if (modalTarget) {
-        event.preventDefault();
-        openModal(modalTarget.dataset.modal);
-      }
-    });
-
-    modalContainer.addEventListener('click', (event) => {
-      if (event.target === modalContainer) {
-        closeModal();
-      }
-    });
-
-    closeModalButton.addEventListener('click', closeModal);
-  </script>
-</body>
+      closeModalButton.addEventListener("click", closeModal);
+    </script>
+  </body>
 </html>
