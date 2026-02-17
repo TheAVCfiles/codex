@@ -14,12 +14,14 @@ class LearnEvent:
     predicted_ts: datetime
     realized_ts: datetime
     hit: bool
+    social_peak_ts: datetime | None = None
 
 
 def _default_state() -> dict[str, dict[str, float | int]]:
     return {
         "rain": {"hits": 1, "misses": 1, "shift_minutes": 0.0},
         "sun": {"hits": 1, "misses": 1, "shift_minutes": 0.0},
+        "lightning": {"hits": 1, "misses": 1, "shift_minutes": 0.0},
     }
 
 
@@ -37,7 +39,7 @@ def save_state(state: dict[str, dict[str, float | int]]) -> None:
     STATE_PATH.write_text(json.dumps(state, indent=2), encoding="utf-8")
 
 
-def update_state(event: LearnEvent, *, ewma_alpha: float = 0.2) -> dict[str, dict[str, float | int]]:
+def update_state(event: LearnEvent, *, ewma_alpha: float = 0.2, social_ewma_alpha: float = 0.2) -> dict[str, dict[str, float | int]]:
     state = load_state()
     bucket = state.setdefault(event.event, {"hits": 1, "misses": 1, "shift_minutes": 0.0})
 
@@ -49,6 +51,14 @@ def update_state(event: LearnEvent, *, ewma_alpha: float = 0.2) -> dict[str, dic
     delta_min = (event.realized_ts - event.predicted_ts).total_seconds() / 60.0
     prev_shift = float(bucket.get("shift_minutes", 0.0))
     bucket["shift_minutes"] = (1.0 - ewma_alpha) * prev_shift + ewma_alpha * delta_min
+
+    if event.social_peak_ts is not None:
+        lightning = state.setdefault("lightning", {"hits": 1, "misses": 1, "shift_minutes": 0.0})
+        social_delta = (event.social_peak_ts - event.realized_ts).total_seconds() / 60.0
+        prev_social_shift = float(lightning.get("shift_minutes", 0.0))
+        lightning["shift_minutes"] = (1.0 - social_ewma_alpha) * prev_social_shift + social_ewma_alpha * social_delta
+        if event.hit:
+            lightning["hits"] = int(lightning.get("hits", 0)) + 1
 
     state["updated_utc"] = datetime.now(timezone.utc).isoformat()
     save_state(state)

@@ -7,3 +7,6 @@ brier_kill_switch_wins: 100
 kelly_clip: 0.25
 max_position_pct: 0.015
 learn_ewma_alpha: 0.2
+
+lightning_threshold: 0.75
+social_timing_ewma_alpha: 0.2

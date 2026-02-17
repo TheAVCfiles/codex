@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from api import learn
-from api.forecast import kelly_fraction, size_notional
+from api.forecast import generate_forecast, kelly_fraction, size_notional
 from api.learn import LearnEvent, calibrated_probability, load_state, update_state
 
 
@@ -35,12 +35,21 @@ class ForecastLearnTests(unittest.TestCase):
                 predicted_ts=now,
                 realized_ts=now + timedelta(minutes=10),
                 hit=True,
+                social_peak_ts=now + timedelta(minutes=30),
             ),
             ewma_alpha=0.2,
         )
-        after_hits = int(load_state().get("rain", {}).get("hits", 1))
+        state = load_state()
+        after_hits = int(state.get("rain", {}).get("hits", 1))
+        lightning_shift = float(state.get("lightning", {}).get("shift_minutes", 0.0))
         self.assertGreater(after_hits, before_hits)
+        self.assertNotEqual(lightning_shift, 0.0)
         self.assertGreaterEqual(calibrated_probability("rain", 0.5), 0.0)
+
+    def test_forecast_includes_lightning_windows(self) -> None:
+        fc = generate_forecast("2026-02-12", horizon_minutes=240)
+        self.assertIsInstance(fc.lightning_windows, list)
+        self.assertIn("lightning", fc.grid[0])
 
 
 if __name__ == "__main__":

@@ -22,6 +22,7 @@ class ForecastResult:
     grid: list[dict[str, Any]]
     rain_windows: list[str]
     sun_windows: list[str]
+    lightning_windows: list[str]
 
 
 def _atr(df: pd.DataFrame, n: int = 14) -> pd.Series:
@@ -42,7 +43,15 @@ def _synthetic_grid(anchor_date: str, horizon_minutes: int) -> pd.DataFrame:
     x = np.linspace(0, 6 * np.pi, len(idx))
     rain = 0.5 + 0.2 * np.sin(x)
     sun = 0.5 + 0.2 * np.cos(x)
-    return pd.DataFrame({"ts": idx, "rain": rain.clip(0.0, 1.0), "sun": sun.clip(0.0, 1.0)})
+    lightning = np.abs(np.sin(x * 1.7 + 1.1)) * 0.7
+    social_tilt = np.sin(x * 0.9)
+    return pd.DataFrame({
+        "ts": idx,
+        "rain": rain.clip(0.0, 1.0),
+        "sun": sun.clip(0.0, 1.0),
+        "lightning": lightning.clip(0.0, 1.0),
+        "social_tilt": social_tilt,
+    })
 
 
 def generate_forecast(anchor_date: str, horizon_minutes: int | None = None) -> ForecastResult:
@@ -53,42 +62,54 @@ def generate_forecast(anchor_date: str, horizon_minutes: int | None = None) -> F
         bars = pd.read_parquet(BARS_PATH)
         bars["time"] = pd.to_datetime(bars["time"], utc=True)
         bars = bars.sort_values("time").tail(24 * 60)
-        bars["atr"] = _atr(bars.rename(columns={"time": "ts"}))
+        bars["atr"] = _atr(bars)
         grid = bars[["time"]].rename(columns={"time": "ts"}).copy()
         if grid.empty:
             grid = _synthetic_grid(anchor_date, horizon)
         else:
             noise = np.linspace(0, 2 * np.pi, len(grid))
-            grid["rain"] = (0.5 + 0.15 * np.sin(noise)).clip(0.0, 1.0)
+            tri_alpha = 0.5 + 0.15 * np.sin(noise)
+            social_tilt = np.sin(noise * 1.3)
+            lightning = (np.abs(np.gradient(tri_alpha)) * 6.0 + np.abs(social_tilt) * 0.4).clip(0.0, 1.0)
+            grid["rain"] = tri_alpha.clip(0.0, 1.0)
             grid["sun"] = (0.5 + 0.15 * np.cos(noise)).clip(0.0, 1.0)
+            grid["social_tilt"] = social_tilt
+            grid["lightning"] = lightning
     else:
         grid = _synthetic_grid(anchor_date, horizon)
 
     state = load_state()
     rain_shift = float(state.get("rain", {}).get("shift_minutes", 0.0))
     sun_shift = float(state.get("sun", {}).get("shift_minutes", 0.0))
+    lightning_shift = float(state.get("lightning", {}).get("shift_minutes", 0.0))
 
     grid["rain"] = grid["rain"].map(lambda p: calibrated_probability("rain", float(p)))
     grid["sun"] = grid["sun"].map(lambda p: calibrated_probability("sun", float(p)))
+    grid["lightning"] = grid["lightning"].map(lambda p: calibrated_probability("lightning", float(p)))
     grid["rain_ts"] = grid["ts"] + pd.to_timedelta(rain_shift, unit="m")
     grid["sun_ts"] = grid["ts"] + pd.to_timedelta(sun_shift, unit="m")
+    grid["lightning_ts"] = grid["ts"] + pd.to_timedelta(lightning_shift, unit="m")
 
     rain_windows = [ts.isoformat() for ts in grid.loc[grid["rain"] >= 0.70, "rain_ts"].head(5)]
     sun_windows = [ts.isoformat() for ts in grid.loc[grid["sun"] >= 0.70, "sun_ts"].head(5)]
+    lightning_windows = [ts.isoformat() for ts in grid.loc[grid["lightning"] >= float(cfg.get("lightning_threshold", 0.75)), "lightning_ts"].head(5)]
 
     return ForecastResult(
         symbol=cfg["symbol"],
-        generated_at_utc=pd.Timestamp.utcnow().isoformat(),
+        generated_at_utc=pd.Timestamp.now(tz="UTC").isoformat(),
         grid=[
             {
                 "ts": row.ts.isoformat(),
                 "rain": float(row.rain),
                 "sun": float(row.sun),
+                "lightning": float(row.lightning),
+                "social_tilt": float(row.social_tilt),
             }
             for row in grid.itertuples()
         ],
         rain_windows=rain_windows,
         sun_windows=sun_windows,
+        lightning_windows=lightning_windows,
     )
 
 

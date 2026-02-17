@@ -1,12 +1,14 @@
 import { defineConfig } from 'vite';
 
+const target = process.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
+
 export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/forecast': 'http://api:8000',
-      '/learn': 'http://api:8000',
-      '/health': 'http://api:8000'
-    }
-  }
+      '/forecast': target,
+      '/learn': target,
+      '/health': target,
+    },
+  },
 });
