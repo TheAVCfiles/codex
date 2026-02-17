@@ -71,4 +71,7 @@ Expected input fields can include canonical names (`title`, `proves`, `sha256`) 
 Airtable-friendly names (`Title`, `Raw_Text`, `Raw Content`, `MemJar`, `SHA-256 Seal`).
 
 For Airtable fetch mode, the script reads `AIRTABLE_PAT` (or `AIRTABLE_TOKEN` / `AIRTABLE_KEY`) and
-parses Airtable-shaped records from `records[].fields` (including `Name`, `MemJar`, `Raw Content`, and `Status`).
+parses Airtable-shaped records from `records[].fields`.
+For schemas where `MemJar` is a single-select category, raw text is taken from
+`Name` / `Raw_Text` / `Raw Content` first, then `MemJar` as a fallback.
+Use `AIRTABLE_MAX_RECORDS` (default `200`) to control pagination limits.
