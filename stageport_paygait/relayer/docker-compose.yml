@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  relayer:
+    build: .
+    environment:
+      - RPC_URL=${RPC_URL}
+      - RELAYER_PRIVATE_KEY=${RELAYER_PRIVATE_KEY}
+      - STAGECOIN_ADDRESS=${STAGECOIN_ADDRESS}
+      - CHAIN_ID=${CHAIN_ID}
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./db.json:/app/db.json
