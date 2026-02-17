@@ -1,0 +1,9 @@
+symbol: "ETHUSDT"
+upper_band_atr_k: 1.2
+lower_band_atr_k: 1.2
+horizon_minutes: 10080
+minute_history_days: 60
+brier_kill_switch_wins: 100
+kelly_clip: 0.25
+max_position_pct: 0.015
+learn_ewma_alpha: 0.2
