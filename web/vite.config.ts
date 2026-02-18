@@ -9,6 +9,7 @@ export default defineConfig({
       '/forecast': target,
       '/learn': target,
       '/health': target,
+      '/api': target,
     },
   },
 });

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 from .forecast import generate_forecast
 from .learn import LearnEvent, update_state
+from .tempo import forecast_tempo
 
 CFG = yaml.safe_load((Path(__file__).resolve().parent / "config.yaml").read_text(encoding="utf-8"))
 
@@ -61,3 +62,19 @@ def learn_eth(payload: LearnRequest):
         return {"ok": True, "state": state}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"learn failed: {exc}") from exc
+
+
+@app.get("/api/forecast-tempo")
+def forecast_tempo_endpoint(days: int = 30):
+    """Expose SARIMA/fallback tempo projection for the rhythm machine."""
+    try:
+        result = forecast_tempo(days=days)
+        return {"forecasted_tempo": result.forecasted_tempo, "model": result.model}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"tempo forecast failed: {exc}") from exc
+
+
+@app.get("/forecast-tempo")
+def forecast_tempo_endpoint_compat(days: int = 30):
+    # compatibility alias used by some clients
+    return forecast_tempo_endpoint(days=days)

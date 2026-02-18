@@ -24,6 +24,7 @@ import {
   YAxis,
   ReferenceLine,
 } from 'recharts';
+import RhythmMachine from './RhythmMachine';
 
 type ForecastGridRow = {
   ts: string;
@@ -281,6 +282,8 @@ const App = (): JSX.Element => {
               </table>
             </div>
           </section>
+
+          <RhythmMachine />
 
           <section className="bg-slate-900 border border-slate-800 rounded-lg overflow-hidden">
             <div className="px-4 py-2 border-b border-slate-800 bg-slate-950/50 text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2"><Cpu className="w-3 h-3" /> Relativity Payload</div>

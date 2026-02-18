@@ -45,3 +45,12 @@ python single_file_fortress.py
 ```
 
 This serves a self-contained FastAPI + inline React/Babel UI with forecast, signal, learn loop, sparkline, and WebAudio rhythm controls.
+
+
+## Atmospheric Sentience Orchestrator
+
+The web dashboard includes a rhythm-machine panel driven by market tempo projection.
+
+- API endpoint: `GET /api/forecast-tempo` (or compatibility alias `/forecast-tempo`)
+- Model: SARIMA when available (`statsmodels` + CoinGecko), with deterministic fallback tempo logic when offline
+- UI: rhythm presets, 16-step drum grid, and tempo slider seeded from forecast tempo
