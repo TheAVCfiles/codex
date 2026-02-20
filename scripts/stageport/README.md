@@ -73,3 +73,22 @@ Useful flags:
 - `--zip`: package a deterministic archive after manifest generation.
 
 The builder also prints a Merkle root over manifest lines. The PC.8 proof schema used for validation is stored at `schemas/spc_pc8_equity_proof.schema.json`.
+
+## Generating AVC Welcome Stack PDFs
+
+1. Install dependencies (if not already installed):
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Generate PDF #2 and #3 in `/mnt/data` (default):
+   ```bash
+   python avc_welcome_stack.py
+   ```
+3. Optionally generate all three PDFs (#1/#2/#3):
+   ```bash
+   python avc_welcome_stack.py --include-welcome
+   ```
+4. Write output somewhere else:
+   ```bash
+   python avc_welcome_stack.py --output-dir ./dist
+   ```
