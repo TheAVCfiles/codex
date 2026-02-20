@@ -17,6 +17,7 @@ Then open `http://localhost:8000/project/index.html` in your browser.
 - `project/studio-portal.jsx`: StudioOS operator interface now includes PayGait Local + Ecosystem Map views.
 - `project/ecosystem_map.md`: compact ecosystem architecture + integration map artifact.
 - `project/prima-first-dreamm.html`: standalone “Prima • First Dreamm” landing page for Carrd/Super-style publishing.
+- `project/founderos/`: clean FounderOS v0 scaffold (Dashboard, FSM kernel, role gating, multi-founder local ledger, hashing, and README).
 - `project/paygait-local.html`: standalone PayGait local prototype for ingesting links/videos, exporting stamp bundles, and handling choreographer claim stakes for whole-work protection.
 - `project/contracts/Stagecoin.sol` + `project/contracts/SentientCents.sol`: ERC-20 reward contracts for visible Stagecoin/Streetcred and source royalty flows.
 - `project/tokenomics_gasless_strategy.md`: rollout strategy for gasless UX, custodial SentientCents, and batched settlement.
