@@ -208,7 +208,7 @@ def parse_args() -> argparse.Namespace:
         "--output-dir",
         type=Path,
         default=Path("/mnt/data"),
-        help="Directory where generated PDFs are written.",
+        default=Path("./output"),
     )
     parser.add_argument(
         "--include-welcome",
