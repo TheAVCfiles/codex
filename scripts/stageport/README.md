@@ -80,7 +80,7 @@ The builder also prints a Merkle root over manifest lines. The PC.8 proof schema
    ```bash
    pip install -r requirements.txt
    ```
-2. Generate PDF #2 and #3 in `/mnt/data` (default):
+2. Generate PDF #2 and #3 in `./output` (default):
    ```bash
    python avc_welcome_stack.py
    ```
