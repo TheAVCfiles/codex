@@ -19,6 +19,7 @@ Then open `http://localhost:8000/project/index.html` in your browser.
 - `project/prima-first-dreamm.html`: standalone “Prima • First Dreamm” landing page for Carrd/Super-style publishing.
 - `project/founderos/`: clean FounderOS v0 scaffold (Dashboard, FSM kernel, role gating, multi-founder local ledger, hashing, and README).
 - `project/paygait-local.html`: standalone PayGait local prototype for ingesting links/videos, exporting stamp bundles, and handling choreographer claim stakes for whole-work protection.
+- `project/ballet-rubik-trader.jsx` + `project/stageTradeAdapter.js`: modular React prototype for choreography-driven trade simulation with audit snapshots and tuning controls.
 - `project/contracts/Stagecoin.sol` + `project/contracts/SentientCents.sol`: ERC-20 reward contracts for visible Stagecoin/Streetcred and source royalty flows.
 - `project/tokenomics_gasless_strategy.md`: rollout strategy for gasless UX, custodial SentientCents, and batched settlement.
 
