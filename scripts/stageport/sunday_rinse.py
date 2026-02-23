@@ -40,6 +40,8 @@ class RinseRecord:
     proves: str
     sha256: str
     source_id: str = ""
+    category: str = "Witness"
+    stagecoin: int = 27
 
 
 class SundayRinse:
@@ -94,6 +96,23 @@ class SundayRinse:
         return loaded
 
     @staticmethod
+    def classify_capture(raw_text: str) -> tuple[str, int]:
+        """Classify captures into Stagecoin categories.
+
+        Scoring intentionally stays deterministic and keyword-based so records
+        can be reprocessed with the same outcome.
+        """
+
+        lower = raw_text.lower()
+        if "#genesis" in lower or "movement operating system" in lower:
+            return "GENESIS_BLOCK", 1000
+        if any(token in lower for token in ["plié", "jeté", "tendu", "arabesque", "chainé"]):
+            return "Movement", 45
+        if any(token in lower for token in ["curate", "review", "resolve", "ticket"]):
+            return "Curation", 38
+        return "Witness", 27
+
+    @staticmethod
     def _extract_fields(entry: dict[str, Any]) -> dict[str, Any]:
         fields = entry.get("fields")
         return fields if isinstance(fields, dict) else entry
@@ -113,8 +132,29 @@ class SundayRinse:
         if not sha:
             sha = hashlib.sha256(proves.encode("utf-8")).hexdigest() if proves else ""
 
+        category = str(fields.get("Category") or fields.get("category") or "").strip()
+        stagecoin_raw = fields.get("Stagecoin") or fields.get("Stagecoin_Minted")
+        if isinstance(stagecoin_raw, str) and stagecoin_raw.isdigit():
+            stagecoin = int(stagecoin_raw)
+        elif isinstance(stagecoin_raw, (int, float)):
+            stagecoin = int(stagecoin_raw)
+        else:
+            inferred_category, inferred_stagecoin = SundayRinse.classify_capture(proves)
+            category = category or inferred_category
+            stagecoin = inferred_stagecoin
+
+        if not category:
+            category, _ = SundayRinse.classify_capture(proves)
+
         source_id = str(entry.get("source_id") or entry.get("id") or fields.get("source_id") or "")
-        return RinseRecord(title=title, proves=proves, sha256=sha, source_id=source_id)
+        return RinseRecord(
+            title=title,
+            proves=proves,
+            sha256=sha,
+            source_id=source_id,
+            category=category,
+            stagecoin=stagecoin,
+        )
 
     @staticmethod
     def _load_json_records(path: str) -> list[dict[str, Any]]:
@@ -210,6 +250,9 @@ class SundayRinse:
         output_path = Path(output_dir) / filename
 
         conflicts = self.detect_conflicts(weekly_records, existing_vault)
+        category_totals: dict[str, int] = {}
+        for record in weekly_records:
+            category_totals[record.category] = category_totals.get(record.category, 0) + record.stagecoin
 
         with output_path.open("w", encoding="utf-8") as handle:
             handle.write(f"# 🗞 THE SUNDAY BRUNCH RINSE | {datetime.now().date()}\n")
@@ -220,10 +263,20 @@ class SundayRinse:
                 for item in conflicts:
                     handle.write(f"⚠️ {item}\n")
 
+            if weekly_records:
+                total_sc = sum(record.stagecoin for record in weekly_records)
+                handle.write("\n## Stagecoin Summary\n")
+                handle.write(f"**Total Minted (estimate):** {total_sc} SC\n")
+                for category, score in sorted(category_totals.items()):
+                    handle.write(f"- {category}: {score} SC\n")
+                handle.write("\n")
+
             handle.write("\n## Weekly Chunks (Ready for CODA)\n---\n")
             for chunk in weekly_records:
                 preview = chunk.proves[:700] + "..." if len(chunk.proves) > 700 else chunk.proves
                 handle.write(f"### ✦ {chunk.title}\n")
+                handle.write(f"**Category:** {chunk.category}\n")
+                handle.write(f"**Stagecoin:** +{chunk.stagecoin} SC\n")
                 handle.write(f"**Proves:** {preview}\n")
                 handle.write(f"**Hash:** `{chunk.sha256[:16]}…`\n")
                 if chunk.source_id:
