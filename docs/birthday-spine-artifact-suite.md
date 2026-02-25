@@ -108,7 +108,7 @@ I am tired, not broken.
 ```json
 {
   "artifact_type": "BirthdaySpine",
-  "year": "XXXX",
+"year": "[YEAR]"
   "timestamp": "01:39_local_rollover",
   "identity": {
     "roles": ["Mother", "Founder", "Systems Architect"],
