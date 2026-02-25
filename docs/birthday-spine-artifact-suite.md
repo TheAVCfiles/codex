@@ -221,7 +221,7 @@ Tonight, the operator rests.
 
 ## Yearly Versioning Protocol
 
-- Create one file per year, e.g. `birthday-spine-2026.md`.
+- Create one file per year, e.g. `birthday-spine-[YYYY].md`.
 - Keep all four variants aligned to one core truth.
 - Archive unchanged prior years; never retro-edit the emotional record.
 - If systems evolve, increment schema (`v1.1`, `v2.0`) but preserve prior versions.
