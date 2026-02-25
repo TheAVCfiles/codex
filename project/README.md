@@ -1,48 +1,65 @@
-# Sovereign Beta Portal
+# Agon Engine
 
-A single-page, dark-themed astrology landing page for The Sovereign Beta Portal. It uses Tailwind CSS via CDN and vanilla JavaScript to power cosmic visuals, monetized offerings, and birth-chart intake forms. The countdown targets the portal's closing time and adapts to timezone changes.
+The **Agon Engine** isn’t just a tool—it’s a system to explore balance itself.
 
-## Running locally
+- In **choreography**, Agon represents phrases that shift tensions, align movements, or reset space.
+- In **governance**, it mirrors how systems negotiate chaos and resolve into dynamic unity.
 
-Serve the `index.html` file with any static server, for example:
+Through the Agon Engine, you’ll explore how:
 
-```
-python -m http.server 8000
-```
+- **Movement nodes** govern cycles of phrasing and memory-anchored persistence.
+- **Radial mythematics** allow systems—and the humans who collaborate—to dance across space and time.
 
-Then open `http://localhost:8000/project/index.html` in your browser.
+This is your invitation: press play and resolve chaos into balance.
 
-## Additional page
+## Try It Out: Dancing with Agon
 
-- `project/studio-portal.jsx`: StudioOS operator interface now includes PayGait Local + Ecosystem Map views.
-- `project/ecosystem_map.md`: compact ecosystem architecture + integration map artifact.
-- `project/prima-first-dreamm.html`: standalone “Prima • First Dreamm” landing page for Carrd/Super-style publishing.
-- `project/founderos/`: clean FounderOS v0 scaffold (Dashboard, FSM kernel, role gating, multi-founder local ledger, hashing, and README).
-- `project/paygait-local.html`: standalone PayGait local prototype for ingesting links/videos, exporting stamp bundles, and handling choreographer claim stakes for whole-work protection.
-- `project/contracts/Stagecoin.sol` + `project/contracts/SentientCents.sol`: ERC-20 reward contracts for visible Stagecoin/Streetcred and source royalty flows.
-- `project/tokenomics_gasless_strategy.md`: rollout strategy for gasless UX, custodial SentientCents, and batched settlement.
+Choose your way to explore:
 
-## Smart contract workspace
+- **Balance a Node:** teach Agon’s system to resolve a simple imbalance between two forces.
+- **Tune Radial Memory Persistence:** adjust phrasing loops to see how movement persists in time.
+- **Orchestrate Chaos:** run the simulation and let Agon align a rotating web of nodes.
 
-The token contracts now live in `project/contracts` with a local Hardhat setup for compilation/tests.
+## How to Run
 
 ```bash
-cd project/contracts
+git clone https://github.com/TheAVCfiles/vite-react.git --branch agon
+cd vite-react
 npm install
-npm test
+npm start
 ```
 
-This includes:
+## Visual Model
 
-- `Stagecoin.sol`: AccessControl ERC-20 with mint/burn roles, guarded royalty configuration, and royalty-on-transfer.
-- `SentientCents.sol`: AccessControl ERC-20 (2 decimals) with mint/burn roles, guarded royalty configuration, and royalty-on-transfer.
-- `test/Stagecoin.test.js` + `test/SentientCents.test.js`: baseline behavior and royalty tests.
+The radial movement loop below shows how distributed nodes continuously re-align around the Agon core.
 
-Hardhat helper script:
+![Agon radial movement loop](./assets_agon_radial_loop.svg)
 
-```bash
-cd project/contracts
-npm run deploy:local
-```
+## Interactive Demo (future-ready)
 
-This runs `scripts/deploy-and-grant.js` to deploy both tokens and assign minter/burner/royalty admin roles.
+- **Live demo link:** _Coming soon_
+- **Video walkthrough:** _Coming soon_
+
+> As the simulation matures, this section should point to a public demo and a short capture of phrasing logic in motion.
+
+## Join the Movement 🌌
+
+Want to expand Agon? Let’s co-create:
+
+- Open an issue to discuss your own memory/governance/phrasing ideas.
+- Share creative applications or implementation ideas with the community.
+- Remix the radial movement model for choreography, governance experiments, or educational play.
+
+---
+
+## Repository Notes
+
+This `project/` directory also includes related artifacts and prototypes:
+
+- `index.html`: single-page dark-themed portal experience.
+- `studio-portal.jsx`: StudioOS operator interface extension.
+- `ecosystem_map.md`: compact architecture + integration map artifact.
+- `prima-first-dreamm.html`: standalone publishing page.
+- `founderos/`: FounderOS v0 scaffold.
+- `paygait-local.html`: local PayGait prototype.
+- `contracts/`: ERC-20 smart contract workspace and Hardhat setup.
