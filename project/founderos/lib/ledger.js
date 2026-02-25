@@ -1,35 +1,28 @@
 import { hashEntry } from "./hash";
 
-const STORAGE_KEY = "founderos-ledger";
+const STORAGE_KEY = "founder_os_ledger_v1";
 
-function readLedger() {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { founders: {} };
-  } catch {
-    return { founders: {} };
-  }
+export function loadLedger() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : { founders: {} };
 }
 
-function writeLedgerState(ledger) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(ledger));
+function saveLedger(ledgerData) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(ledgerData));
 }
 
 export async function writeLedger(founderId, entry) {
-  const ledger = readLedger();
+  const ledgerData = loadLedger();
 
-  if (!ledger.founders[founderId]) {
-    ledger.founders[founderId] = [];
-  }
+  if (!ledgerData.founders[founderId]) ledgerData.founders[founderId] = [];
 
   const hash = await hashEntry(entry);
-  const hashed = { ...entry, hash };
-  ledger.founders[founderId].push(hashed);
-  writeLedgerState(ledger);
-  return hashed;
-}
 
-export function readFounderLedger(founderId) {
-  const ledger = readLedger();
-  return ledger.founders[founderId] || [];
+  const row = { ...entry, hash };
+  ledgerData.founders[founderId].push(row);
+
+  saveLedger(ledgerData);
+  console.log("Ledger persisted:", ledgerData);
+
+  return row;
 }
