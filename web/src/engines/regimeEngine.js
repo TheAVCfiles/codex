@@ -1,5 +1,7 @@
+const OVERDRIVE_VELOCITY_THRESHOLD = 75;
+
 export function runRegime({ velocity }) {
-  if (velocity > 75) {
+  if (velocity > OVERDRIVE_VELOCITY_THRESHOLD) {
     return { signal: "OVERDRIVE" };
   }
 
