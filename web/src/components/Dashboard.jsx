@@ -6,7 +6,7 @@ import { canTrigger, Roles } from "../lib/auth";
 
 export default function Dashboard() {
   const [state, setState] = useState(FounderStates.IDLE);
-  const [role] = useState(Roles.FOUNDER);
+  const role = Roles.FOUNDER;
 
   async function handleEvent(event) {
     if (!canTrigger(role, event)) {
