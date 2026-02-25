@@ -111,7 +111,7 @@ I am tired, not broken.
 "year": "[YEAR]"
 "timestamp": "[HH:MM_local_rollover]"
   "identity": {
-    "roles": ["Mother", "Founder", "Systems Architect"],
+"roles": ["[Role1]", "[Role2]", "[Role3]"]
     "core_trait": "Long-arc builder",
     "humor_function": "pressure_regulation"
   },
