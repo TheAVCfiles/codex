@@ -109,7 +109,7 @@ I am tired, not broken.
 {
   "artifact_type": "BirthdaySpine",
 "year": "[YEAR]"
-  "timestamp": "01:39_local_rollover",
+"timestamp": "[HH:MM_local_rollover]"
   "identity": {
     "roles": ["Mother", "Founder", "Systems Architect"],
     "core_trait": "Long-arc builder",
