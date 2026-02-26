@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FounderStates, transition } from "../fsm/founderMachine";
 import { canTrigger, Roles } from "../lib/auth";
 import { readFounderLedger, writeLedger } from "../lib/ledger";
 import { runRegime } from "../engines/regimeEngine";
+import FounderStudioOS from "./FounderStudioOS";
 
 const FOUNDER_ID = "avc_beta";
 
@@ -10,6 +11,8 @@ export default function Dashboard() {
   const [state, setState] = useState(FounderStates.IDLE);
   const [role, setRole] = useState(Roles.FOUNDER);
   const [ledger, setLedger] = useState(() => readFounderLedger(FOUNDER_ID));
+  const [apiLedger, setApiLedger] = useState([]);
+  const [ledgerSource, setLedgerSource] = useState("local");
   const [message, setMessage] = useState("");
 
   const summary = useMemo(
@@ -47,6 +50,35 @@ export default function Dashboard() {
     await guardedEvent(result.signal, result);
   }
 
+  useEffect(() => {
+    async function loadLedger() {
+      try {
+        const response = await fetch("/api/ledger");
+        if (!response.ok) throw new Error("ledger unavailable");
+
+        const payload = await response.json();
+        const rows = Array.isArray(payload) ? payload : payload.entries || [];
+        setApiLedger(rows.slice(-10).reverse());
+        setLedgerSource("api");
+      } catch {
+        setApiLedger(
+          [...readFounderLedger(FOUNDER_ID)]
+            .reverse()
+            .slice(0, 10)
+            .map((entry, index) => ({
+              id: `${entry.timestamp}-${index}`,
+              documentId: entry.metadata?.documentId || "local-founder-log",
+              eventType: entry.event,
+              timestamp: entry.timestamp,
+            })),
+        );
+        setLedgerSource("local");
+      }
+    }
+
+    loadLedger();
+  }, [ledger]);
+
   return (
     <div style={styles.container}>
       <h1>FounderOS Console</h1>
@@ -66,9 +98,9 @@ export default function Dashboard() {
       </div>
 
       <div style={styles.row}>
+        <button onClick={() => guardedEvent("START_BUILD")}>Start Build</button>
         <button onClick={runEngine}>Run Engine</button>
         <button onClick={() => guardedEvent("THROTTLE")}>Trigger Throttle</button>
-        <button onClick={() => guardedEvent("ESCALATE")}>Escalate</button>
         <button onClick={() => guardedEvent("RESET")}>Reset</button>
       </div>
 
@@ -89,6 +121,24 @@ export default function Dashboard() {
             <small>{new Date(entry.timestamp).toLocaleString()}</small>
           </div>
         ))}
+      </div>
+
+      <div style={styles.logBox}>
+        <h3>Ledger API Snapshot ({ledgerSource})</h3>
+        {apiLedger.map((entry, index) => (
+          <div key={entry.id || `${entry.timestamp}-${index}`} style={styles.logEntry}>
+            <div>
+              <strong>{entry.eventType || entry.event || "UNKNOWN"}</strong> · {entry.documentId || "n/a"}
+            </div>
+            <small>{entry.timestamp ? new Date(entry.timestamp).toLocaleString() : "n/a"}</small>
+          </div>
+        ))}
+      </div>
+
+      <div style={styles.logBox}>
+        <h3>Founder StudiOS</h3>
+        <a href="/founder-studios" style={styles.link}>Open standalone route: /founder-studios</a>
+        <FounderStudioOS />
       </div>
     </div>
   );
@@ -127,5 +177,9 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     gap: "1rem",
+  },
+  link: {
+    color: "#8de2ff",
+    fontSize: 14,
   },
 };
