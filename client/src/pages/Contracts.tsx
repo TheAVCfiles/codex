@@ -75,8 +75,8 @@ export default function Contracts() {
             <p>Type: {agreement.type}</p>
             <p>Status: {agreement.status}</p>
             <ul>
-              {agreement.provisions.map((provision) => (
-                <li key={provision}>{provision}</li>
+              {agreement.provisions.map((provision, index) => (
+                <li key={`${agreement.id}-provision-${index}`}>{provision}</li>
               ))}
             </ul>
             <details>
