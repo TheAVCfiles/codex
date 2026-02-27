@@ -14,7 +14,7 @@ const ledger: LedgerEntry[] = [];
 
 function notarize(documentId: string, hash: string, eventType = "NOTARIZE"): LedgerEntry {
   const entry: LedgerEntry = {
-    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    id: crypto.randomUUID(),
     documentId,
     hash,
     eventType,
