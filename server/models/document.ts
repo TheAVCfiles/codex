@@ -15,7 +15,7 @@ function sha256Hex(text: string): string {
   return crypto.createHash("sha256").update(text, "utf8").digest("hex");
 }
 
-const issuedAt = new Date();
+const issuedAt = new Date("2024-01-01T00:00:00.000Z");
 
 const documents: GovernanceDocument[] = [
   {
