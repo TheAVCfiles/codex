@@ -22,6 +22,11 @@ export default function Dashboard() {
 
   async function persistEvent(event, metadata = {}) {
     const newState = transition(state, event);
+    if (newState === state) {
+      setMessage(`Invalid transition: ${state} cannot handle ${event}.`);
+      return false;
+    }
+
     const entry = {
       previousState: state,
       event,
@@ -33,6 +38,7 @@ export default function Dashboard() {
     const saved = await writeLedger(FOUNDER_ID, entry);
     setState(newState);
     setLedger((prev) => [...prev, saved]);
+    return true;
   }
 
   async function guardedEvent(event, metadata) {
@@ -41,8 +47,10 @@ export default function Dashboard() {
       return;
     }
 
-    await persistEvent(event, metadata);
-    setMessage(`Transitioned via ${event}.`);
+    const didPersist = await persistEvent(event, metadata);
+    if (didPersist) {
+      setMessage(`Transitioned via ${event}.`);
+    }
   }
 
   async function runEngine() {

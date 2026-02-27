@@ -43,7 +43,7 @@ export default function FounderStudioOS() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          documentId: "founder-reality-kit-v1",
+          documentId: "founder_reality_kit_v1",
           hash,
           eventType: "ISSUED",
         }),
