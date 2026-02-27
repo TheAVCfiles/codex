@@ -1,95 +1,137 @@
 import { useMemo, useState } from "react";
+import {
+  founderSteps,
+  getStepIndex,
+  isFinal,
+  loadFounderState,
+  nextState,
+  saveFounderState,
+} from "../fsm/founderJourney";
 
-const STEPS = ["Crisis", "Lab Activation", "Receipts", "StageCred", "Capital"];
+async function sha256FromText(value) {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 export default function FounderStudioOS() {
-  const [hash, setHash] = useState("");
+  const [currentState, setCurrentState] = useState(() => loadFounderState());
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
-  const [selectedName, setSelectedName] = useState("");
+  const [lastHash, setLastHash] = useState("");
 
-  const shortHash = useMemo(() => (hash ? `${hash.slice(0, 18)}...${hash.slice(-12)}` : ""), [hash]);
+  const activeStep = useMemo(
+    () =>
+      founderSteps.find((step) => step.state === currentState) ||
+      founderSteps[0],
+    [currentState],
+  );
 
-  async function computeSha256(file) {
-    const buffer = await file.arrayBuffer();
-    const digest = await crypto.subtle.digest("SHA-256", buffer);
-    const view = Array.from(new Uint8Array(digest));
-    return view.map((value) => value.toString(16).padStart(2, "0")).join("");
-  }
+  const totalSteps = founderSteps.length;
 
-  async function handleUpload(event) {
-    setError("");
+  const completedCount = useMemo(
+    () => Math.max(0, Math.min(getStepIndex(currentState), totalSteps)),
+    [currentState, totalSteps],
+  );
+
+  async function markStepComplete() {
     setStatus("");
-
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const digest = await computeSha256(file);
-      setSelectedName(file.name);
-      setHash(digest);
-      setStatus("Hash computed");
-    } catch {
-      setError("Unable to compute file hash.");
-    }
-  }
-
-  async function notarizeHash() {
-    if (!hash) return;
-
     setError("");
+
     try {
+      const payload = JSON.stringify({
+        step: activeStep.state,
+        ts: Date.now(),
+      });
+      const hash = await sha256FromText(payload);
+
       const response = await fetch("/api/ledger/notarize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          documentId: "founder-reality-kit-v1",
+          documentId: "founder_journey",
           hash,
-          eventType: "ISSUED",
+          eventType: activeStep.ledgerEventType,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Ledger notarize failed");
+        throw new Error("Unable to notarize founder journey step");
       }
 
-      setStatus("Ledger notarized");
+      setLastHash(hash);
+      const newState = nextState(currentState);
+      saveFounderState(newState);
+      setCurrentState(newState);
+      setStatus(`Step complete: ${activeStep.label}`);
     } catch {
-      setError("Ledger notarization failed. Check /api/ledger/notarize availability.");
+      setError(
+        "Unable to complete step. Confirm /api/ledger/notarize availability.",
+      );
     }
   }
 
   return (
     <section style={styles.container}>
-      <h2 style={styles.title}>StagePort Startup StudiOS</h2>
-      <p style={styles.subtitle}>
-        Conservatory logic for founders: barre → repetition → receipts → credential → capital.
-      </p>
+      <h2 style={styles.title}>FOUNDER ONBOARDING</h2>
+      <p style={styles.subtitle}>Your Governed Journey</p>
 
       <div style={styles.steps}>
-        {STEPS.map((step, index) => (
-          <div key={step} style={styles.stepCard}>
-            <strong>{index + 1}. {step}</strong>
-          </div>
-        ))}
+        {founderSteps.map((step, index) => {
+          const active = step.state === currentState;
+          const done = completedCount > index;
+
+          return (
+            <div
+              key={step.state}
+              style={{
+                ...styles.stepCard,
+                borderColor: active ? "#67e8f9" : done ? "#34d399" : "#2d3340",
+                background: active ? "#102431" : done ? "#10281d" : "#141821",
+              }}
+            >
+              <strong>
+                {index + 1}. {step.label}
+              </strong>
+              <p style={styles.stepText}>{step.description}</p>
+              <p style={styles.stepText}>
+                <em>{step.requiredAction}</em>
+              </p>
+              {active && !isFinal(currentState) ? (
+                <button onClick={markStepComplete}>Mark Step Complete</button>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
 
       <div style={styles.panel}>
-        <label style={styles.label}>
-          Upload Founder Reality Kit (PDF)
-          <input type="file" accept="application/pdf" onChange={handleUpload} style={styles.input} />
-        </label>
-
-        <div style={styles.actions}>
-          <button onClick={notarizeHash} disabled={!hash}>Notarize in Ledger</button>
+        <div style={styles.meta}>
+          <strong>Progress:</strong> {completedCount} of {totalSteps} complete
         </div>
-
-        {selectedName ? <div style={styles.meta}><strong>File:</strong> {selectedName}</div> : null}
-        {status ? <div style={styles.meta}><strong>Status:</strong> {status}</div> : null}
-        {hash ? <div style={styles.meta}><strong>SHA-256:</strong> {shortHash}</div> : null}
-        {hash ? <code style={styles.hashBlock}>{hash}</code> : null}
+        {status ? (
+          <div style={styles.meta}>
+            <strong>Status:</strong> {status}
+          </div>
+        ) : null}
+        {lastHash ? (
+          <div style={styles.meta}>
+            <strong>Hash:</strong> {lastHash.slice(0, 14)}...
+            {lastHash.slice(-10)}
+          </div>
+        ) : null}
         {error ? <div style={styles.error}>{error}</div> : null}
       </div>
+
+      {isFinal(currentState) ? (
+        <div style={styles.completion}>
+          <strong>
+            Architecture complete. Your governance trail is on the ledger.
+          </strong>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -104,6 +146,7 @@ const styles = {
   title: {
     margin: 0,
     marginBottom: "0.25rem",
+    letterSpacing: "0.08em",
   },
   subtitle: {
     marginTop: 0,
@@ -111,44 +154,34 @@ const styles = {
   },
   steps: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
     gap: "0.6rem",
     marginBottom: "1rem",
   },
   stepCard: {
     padding: "0.65rem",
     borderRadius: 6,
-    background: "#141821",
     border: "1px solid #2d3340",
+  },
+  stepText: {
+    fontSize: 12,
+    opacity: 0.9,
   },
   panel: {
     padding: "0.75rem",
     borderRadius: 6,
     background: "#141821",
   },
-  label: {
-    display: "grid",
-    gap: "0.5rem",
-    marginBottom: "0.75rem",
-  },
-  input: {
-    color: "#fff",
-  },
-  actions: {
-    marginBottom: "0.75rem",
+  completion: {
+    marginTop: "1rem",
+    padding: "0.75rem",
+    borderRadius: 6,
+    background: "#0f2c21",
+    border: "1px solid #34d399",
   },
   meta: {
     fontSize: 13,
     marginBottom: "0.35rem",
-  },
-  hashBlock: {
-    display: "block",
-    whiteSpace: "break-spaces",
-    overflowWrap: "anywhere",
-    fontSize: 12,
-    padding: "0.5rem",
-    background: "#0d1118",
-    borderRadius: 4,
   },
   error: {
     marginTop: "0.6rem",

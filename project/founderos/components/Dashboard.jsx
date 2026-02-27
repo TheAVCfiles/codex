@@ -2,37 +2,92 @@ import { useEffect, useMemo, useState } from "react";
 import { FounderStates, transition } from "../fsm/founderMachine";
 import { canTrigger, Roles } from "../lib/auth";
 import { readFounderLedger, writeLedger } from "../lib/ledger";
+import {
+  founderSteps,
+  getStepIndex,
+  isFinal,
+  loadFounderState,
+} from "../fsm/founderJourney";
 import { runRegime } from "../engines/regimeEngine";
 import FounderStudioOS from "./FounderStudioOS";
+import StartupStudios from "./StartupStudios";
+import PricingSection from "./PricingSection";
 
 const FOUNDER_ID = "avc_beta";
+
+async function sha256FromText(value) {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 export default function Dashboard() {
   const [state, setState] = useState(FounderStates.IDLE);
   const [role, setRole] = useState(Roles.FOUNDER);
+  const [velocity, setVelocity] = useState(50);
   const [ledger, setLedger] = useState(() => readFounderLedger(FOUNDER_ID));
   const [apiLedger, setApiLedger] = useState([]);
   const [ledgerSource, setLedgerSource] = useState("local");
   const [message, setMessage] = useState("");
+  const [journeyState, setJourneyState] = useState(() => loadFounderState());
+  const [journeyLedgerCount, setJourneyLedgerCount] = useState(0);
 
   const summary = useMemo(
-    () => ({ entries: ledger.length, escalations: ledger.filter((entry) => entry.event === "ESCALATE").length }),
+    () => ({
+      entries: ledger.length,
+      escalations: ledger.filter((entry) => entry.event === "OVERDRIVE").length,
+    }),
     [ledger],
   );
 
+  const totalSteps = founderSteps.length;
+  const journeyIndex = getStepIndex(journeyState);
+  const journeyProgress = Math.max(0, Math.min(journeyIndex, totalSteps));
+  const regime = runRegime(velocity);
+
   async function persistEvent(event, metadata = {}) {
-    const newState = transition(state, event);
+    const previousState = state;
+    const newState = transition(previousState, event);
+    const timestamp = Date.now();
+    if (newState === previousState) {
+      setMessage(`No transition for ${event} from ${previousState}.`);
+      return false;
+    }
+
+    const transitionHash = await sha256FromText(
+      `${previousState}->${newState}:${event}:${timestamp}`,
+    );
+
     const entry = {
-      previousState: state,
+      previousState,
       event,
       newState,
       metadata,
-      timestamp: Date.now(),
+      timestamp,
+      transitionHash,
     };
 
     const saved = await writeLedger(FOUNDER_ID, entry);
     setState(newState);
     setLedger((prev) => [...prev, saved]);
+
+    try {
+      await fetch("/api/ledger/notarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentId: "founder-machine",
+          hash: transitionHash,
+          eventType: event,
+        }),
+      });
+    } catch {
+      // local fallback remains the source of truth when API is unavailable
+    }
+
+    return true;
   }
 
   async function guardedEvent(event, metadata) {
@@ -41,25 +96,36 @@ export default function Dashboard() {
       return;
     }
 
-    await persistEvent(event, metadata);
-    setMessage(`Transitioned via ${event}.`);
-  }
-
-  async function runEngine() {
-    const result = runRegime({ velocity: Math.random() * 100 });
-    await guardedEvent(result.signal, result);
+    const didTransition = await persistEvent(event, metadata);
+    if (didTransition) {
+      setMessage(`Transitioned via ${event}.`);
+    }
   }
 
   useEffect(() => {
     async function loadLedger() {
       try {
-        const response = await fetch("/api/ledger");
-        if (!response.ok) throw new Error("ledger unavailable");
+        const [recentResponse, journeyResponse] = await Promise.all([
+          fetch("/api/ledger"),
+          fetch("/api/ledger/founder_journey"),
+        ]);
 
-        const payload = await response.json();
+        if (!recentResponse.ok) {
+          throw new Error("ledger unavailable");
+        }
+
+        const payload = await recentResponse.json();
         const rows = Array.isArray(payload) ? payload : payload.entries || [];
         setApiLedger(rows.slice(-10).reverse());
         setLedgerSource("api");
+
+        if (journeyResponse.ok) {
+          const journeyPayload = await journeyResponse.json();
+          const journeyRows = Array.isArray(journeyPayload)
+            ? journeyPayload
+            : journeyPayload.entries || [];
+          setJourneyLedgerCount(journeyRows.length);
+        }
       } catch {
         setApiLedger(
           [...readFounderLedger(FOUNDER_ID)]
@@ -73,7 +139,14 @@ export default function Dashboard() {
             })),
         );
         setLedgerSource("local");
+        setJourneyLedgerCount(
+          ledger.filter(
+            (entry) => entry.metadata?.documentId === "founder_journey",
+          ).length,
+        );
       }
+
+      setJourneyState(loadFounderState());
     }
 
     loadLedger();
@@ -82,16 +155,27 @@ export default function Dashboard() {
   return (
     <div style={styles.container}>
       <h1>FounderOS Console</h1>
-      <p style={styles.muted}>Four-lever governance runtime with local append-only hash ledger.</p>
+      <p style={styles.muted}>
+        Governed runtime: doctrine, state transitions, and append-only receipts.
+      </p>
 
       <div style={styles.row}>
-        <div style={styles.card}><strong>Founder:</strong> {FOUNDER_ID}</div>
-        <div style={styles.card}><strong>Current State:</strong> {state}</div>
+        <div style={styles.card}>
+          <strong>Founder:</strong> {FOUNDER_ID}
+        </div>
+        <div style={styles.card}>
+          <strong>Current State:</strong> {state}
+        </div>
         <label style={styles.card}>
           <strong>Role:</strong>{" "}
-          <select value={role} onChange={(event) => setRole(event.target.value)}>
+          <select
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+          >
             {Object.values(Roles).map((option) => (
-              <option key={option} value={option}>{option}</option>
+              <option key={option} value={option}>
+                {option}
+              </option>
             ))}
           </select>
         </label>
@@ -99,47 +183,111 @@ export default function Dashboard() {
 
       <div style={styles.row}>
         <button onClick={() => guardedEvent("START_BUILD")}>Start Build</button>
-        <button onClick={runEngine}>Run Engine</button>
-        <button onClick={() => guardedEvent("THROTTLE")}>Trigger Throttle</button>
+        <button onClick={() => guardedEvent("THROTTLE")}>Throttle</button>
+        <button onClick={() => guardedEvent("OVERDRIVE")}>Overdrive</button>
         <button onClick={() => guardedEvent("RESET")}>Reset</button>
       </div>
 
       {message ? <p style={styles.muted}>{message}</p> : null}
 
       <div style={styles.row}>
-        <div style={styles.card}><strong>Total Entries:</strong> {summary.entries}</div>
-        <div style={styles.card}><strong>Escalations:</strong> {summary.escalations}</div>
+        <div style={styles.card}>
+          <strong>Total Entries:</strong> {summary.entries}
+        </div>
+        <div style={styles.card}>
+          <strong>Escalations:</strong> {summary.escalations}
+        </div>
+      </div>
+
+      <div style={styles.logBox}>
+        <h3>Founder Journey</h3>
+        <div style={styles.row}>
+          <div style={styles.card}>
+            <strong>State:</strong> {journeyState}
+          </div>
+          <div style={styles.card}>
+            <strong>Progress:</strong> {journeyProgress} of {totalSteps}
+          </div>
+          <div style={styles.card}>
+            <strong>Ledger Entries:</strong> {journeyLedgerCount}
+          </div>
+          <a href="/founder/onboarding" style={styles.link}>
+            {isFinal(journeyState)
+              ? "View Complete Journey"
+              : "Continue Journey →"}
+          </a>
+        </div>
+      </div>
+
+      <div style={styles.logBox}>
+        <h3>Founder Operational State</h3>
+        <div style={styles.row}>
+          <div style={styles.card}>
+            <strong>State:</strong> {state}
+          </div>
+          <div style={styles.card}>
+            <strong>Regime:</strong> {regime}
+          </div>
+          <div style={styles.card}>
+            <strong>Velocity:</strong> {velocity}
+          </div>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={velocity}
+          onChange={(event) => setVelocity(Number(event.target.value))}
+          style={{ width: "100%" }}
+        />
       </div>
 
       <div style={styles.logBox}>
         <h3>Ledger Preview</h3>
-        {[...ledger].reverse().slice(0, 12).map((entry, index) => (
-          <div key={`${entry.timestamp}-${index}`} style={styles.logEntry}>
-            <div>
-              {entry.previousState} → {entry.newState} via <strong>{entry.event}</strong>
+        {[...ledger]
+          .reverse()
+          .slice(0, 12)
+          .map((entry, index) => (
+            <div key={`${entry.timestamp}-${index}`} style={styles.logEntry}>
+              <div>
+                {entry.previousState} → {entry.newState} via{" "}
+                <strong>{entry.event}</strong>
+              </div>
+              <small>{new Date(entry.timestamp).toLocaleString()}</small>
             </div>
-            <small>{new Date(entry.timestamp).toLocaleString()}</small>
-          </div>
-        ))}
+          ))}
       </div>
 
       <div style={styles.logBox}>
         <h3>Ledger API Snapshot ({ledgerSource})</h3>
         {apiLedger.map((entry, index) => (
-          <div key={entry.id || `${entry.timestamp}-${index}`} style={styles.logEntry}>
+          <div
+            key={entry.id || `${entry.timestamp}-${index}`}
+            style={styles.logEntry}
+          >
             <div>
-              <strong>{entry.eventType || entry.event || "UNKNOWN"}</strong> · {entry.documentId || "n/a"}
+              <strong>{entry.eventType || entry.event || "UNKNOWN"}</strong> ·{" "}
+              {entry.documentId || "n/a"}
             </div>
-            <small>{entry.timestamp ? new Date(entry.timestamp).toLocaleString() : "n/a"}</small>
+            <small>
+              {entry.timestamp
+                ? new Date(entry.timestamp).toLocaleString()
+                : "n/a"}
+            </small>
           </div>
         ))}
       </div>
 
       <div style={styles.logBox}>
-        <h3>Founder StudiOS</h3>
-        <a href="/founder-studios" style={styles.link}>Open standalone route: /founder-studios</a>
+        <h3>Founder Onboarding</h3>
+        <a href="/founder/onboarding" style={styles.link}>
+          Open standalone route: /founder/onboarding
+        </a>
         <FounderStudioOS />
       </div>
+
+      <StartupStudios />
+      <PricingSection />
     </div>
   );
 }
@@ -158,6 +306,7 @@ const styles = {
     gap: "0.75rem",
     marginBottom: "1rem",
     flexWrap: "wrap",
+    alignItems: "center",
   },
   card: {
     padding: "0.75rem",
