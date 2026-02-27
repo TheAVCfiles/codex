@@ -64,7 +64,7 @@ export function loadFounderState(): FounderState {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && founderSteps.some((s) => s.state === stored)) return stored as FounderState;
-  } catch {}
+} catch (error) { console.error("Failed to load founder state from localStorage:", error); }
   return "CRISIS";
 }
 
