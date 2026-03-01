@@ -1,0 +1,209 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\usepackage{cite}
+
+% --- Minor IEEE-ish tightening ---
+\captionsetup{font=footnotesize}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+
+\title{Embodied Governance: Deterministic Governance Architecture with Bootstrap-Gated Escalation and Invariant Drift Detection}
+
+\author{
+\IEEEauthorblockN{AVC Systems Studio \quad / \quad Intuition Labs R\,+\,D}
+\IEEEauthorblockA{Working Draft (IEEE-style)\\Timestamp: 02-28-2026 06:29 PM EST}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We formalize a deterministic governance architecture for safety-critical early-stage organizations operating under asymmetric capital and regulatory pressure.
+The architecture integrates (i) a Structural Integrity Index (SSI), (ii) bootstrap confidence-interval (CI) gating for escalation decisions, (iii) a versioned invariant registry with drift detection, and (iv) an escalation finite-state machine (FSM) enforcing fail-closed defaults.
+We position SSI as a governance coherence metric with simulation evidence and cross-domain plausibility; empirical instrument validation is treated as a single-domain next step.
+\end{abstract}
+
+\begin{IEEEkeywords}
+governance systems, safety engineering, invariants, drift detection, bootstrap confidence intervals, finite-state machines
+\end{IEEEkeywords}
+
+% ============================================================
+\section{Problem Definition}
+Early-stage safety-technology organizations face a recurrent governance failure mode: constraints erode silently under investor urgency, operational load, or regulatory ambiguity.
+Traditional governance artifacts (policies, committees, memos) are not state-aware and do not bind execution to invariants deterministically.
+The result is escalation latency, authority instability, and un-audited exception-making.
+
+This paper proposes an execution-oriented governance architecture: a small set of measurable invariants, a coherence metric (SSI), statistically gated escalation triggers, a deterministic FSM, and an invariant registry with drift detection.
+
+% ============================================================
+\section{Structural Integrity Index (SSI)}
+\subsection{Definition}
+Let $e_i \in [0,1]$ be the alignment score of event $i$ to its governing invariant(s), with $1$ meaning full compliance.
+Let $w_i > 0$ be a criticality weight and $\Delta t_i \ge 0$ the age of the event.
+Let $\kappa > 0$ be a recency decay constant.
+Define $Z = \sum_{i=1}^{n} w_i$ and $\sigma(x) = \frac{1}{1+e^{-x}}$.
+
+We define SSI at time $t$ as
+\begin{equation}
+\label{eq:ssi}
+SSI_t \;=\; 10 \cdot \sigma\!\left(\frac{1}{Z}\sum_{i=1}^{n} w_i\, e_i\, e^{-\kappa \Delta t_i}\right).
+\end{equation}
+
+The logistic bound maps the normalized weighted alignment into $[0,10]$, enabling stable thresholding behavior and preventing unbounded amplification.
+
+\subsection{Bootstrap CI Gating}
+To avoid action on fragile estimates, we compute a nonparametric bootstrap CI for $SSI_t$.
+For $B$ resamples (sampling with replacement), compute $SSI^{(b)}$ and define:
+\begin{align}
+CI_{\mathrm{lower}} &= \mathrm{percentile}(SSI^{(b)}, 2.5), \\
+CI_{\mathrm{upper}} &= \mathrm{percentile}(SSI^{(b)}, 97.5).
+\end{align}
+
+\textbf{Gating rule (fail-closed):} a state transition that depends on SSI is permitted only if the conservative condition $CI_{\mathrm{lower}} < \tau$ is satisfied for an escalation threshold $\tau$ (e.g., $\tau=7.5$), i.e., we treat uncertainty as risk, not permission.
+
+\subsection{Assumptions and Robustness Notes}
+SSI is a coherence metric, not an empirical instrument by default.
+The architecture assumes:
+\begin{itemize}
+\item \textbf{Windowing over stationarity:} SSI is computed over a rolling window of recent events rather than assuming global stationarity.
+\item \textbf{Correlation awareness:} if event autocorrelation is detected, weights are penalized (e.g., $w'_i = w_i(1-\rho)$ for autocorrelation $\rho$ above a policy threshold).
+\item \textbf{Auditability:} all event scores $e_i$, weight assignments $w_i$, and invariant versions are logged.
+\end{itemize}
+
+% ============================================================
+\section{Escalation Finite-State Machine (FSM)}
+We define a deterministic FSM with states:
+\[
+\texttt{IDLE} \rightarrow \texttt{ACTIVE} \rightarrow \texttt{STRESS} \rightarrow \texttt{FAULT} \rightarrow \texttt{RECOVERY}.
+\]
+A representative threshold policy is:
+\begin{itemize}
+\item $\texttt{ACTIVE} \rightarrow \texttt{STRESS}$ if $SSI_t < 7.5$.
+\item $\texttt{STRESS} \rightarrow \texttt{FAULT}$ if $SSI_t < 5.0$ or quorum $M < 3$.
+\item $\texttt{FAULT} \rightarrow \texttt{RECOVERY}$ only after invariant revalidation succeeds.
+\end{itemize}
+
+\textbf{Fail-closed default:} under invariant breach, unresolved drift, or insufficient validation confidence (e.g., CI ambiguity), execution is suspended or routed into protected states.
+
+% ============================================================
+\section{Regime Stability Result (Quorum Bound)}
+We model witness quorum $M$ (independent validators) for escalation triggers.
+Let $p_f \in (0,1)$ be the probability that a witness produces a spurious confirmation (false spike).
+
+\textbf{Lemma 1 (False escalation bound).} Assuming independent witnesses,
+\begin{equation}
+\label{eq:pfm}
+P(\text{false escalation}) = p_f^M.
+\end{equation}
+
+\textit{Sketch.} A false escalation requires all $M$ witnesses to fail simultaneously; independence implies multiplicative probability $p_f^M$.
+Thus, increasing $M$ reduces false escalations exponentially.
+
+This lemma supports conservative gating policies: quorum can be increased in high-stakes regimes to reduce false triggers without changing SSI itself.
+
+% ============================================================
+\section{Invariant Registry and Drift Detection}
+SSI depends on the existence of a measurable invariant set.
+To prevent SSI from collapsing into a subjective scoring function, invariants must be specified as structured, versioned objects with explicit tests and change control.
+
+\subsection{Invariant Record}
+Each invariant is stored as a signed versioned record:
+\begin{itemize}
+\item \textbf{Statement:} normative constraint (what must remain true).
+\item \textbf{Scope:} systems/actions governed.
+\item \textbf{Measurement:} function mapping logs/artifacts $\rightarrow e_i \in [0,1]$.
+\item \textbf{Evidence policy:} required artifacts and provenance.
+\item \textbf{Change control:} signatures, quorum, and veto policy.
+\item \textbf{Review cadence / expiry:} scheduled revalidation triggers.
+\end{itemize}
+
+\subsection{Drift Detection}
+Drift detection monitors (i) rolling alignment distribution shifts, (ii) weight instability, (iii) autocorrelation spikes, and (iv) unauthorized changes.
+A breach triggers a deterministic FSM transition into \texttt{STRESS}.
+Drift detection is conceptually distinct from low alignment: drift indicates the \emph{meaning} or \emph{measurement} of compliance is changing, which must be fail-closed by default.
+
+% ============================================================
+\section{Simulation Summary (Positioned as Plausibility Evidence)}
+A controlled Monte Carlo evaluation (10,000 iterations) across multiple governance environments indicates $\sim$29--30\% reduction in failure metrics under conservative parameterization.
+We emphasize: such outcomes demonstrate portability in simulation, not multi-domain empirical validation.
+
+\begin{table}[t]
+\caption{Illustrative Monte Carlo Summary (10,000 iterations)}
+\label{tab:mc}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Domain & Burnout Red. & Drift Red. & Custody Gain \\
+\midrule
+AI Governance & 29.9\% & 30.1\% & 29.8\% \\
+Biotech Governance & 30.0\% & 29.7\% & 30.2\% \\
+Blockchain Governance & 29.8\% & 30.0\% & 29.9\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Figures}
+Fig.~\ref{fig:ssi} illustrates the logistic bounding curve used in Eq.~\ref{eq:ssi}.
+Fig.~\ref{fig:fsm} shows threshold regions for the representative FSM policy.
+Fig.~\ref{fig:drift} provides an illustrative drift visualization.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/ssi_curve.pdf}
+\caption{SSI logistic bounding function.}
+\label{fig:ssi}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fsm_thresholds.pdf}
+\caption{FSM threshold regions (representative).}
+\label{fig:fsm}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/invariant_drift.pdf}
+\caption{Invariant drift illustration via rolling alignment distributions (illustrative).}
+\label{fig:drift}
+\end{figure}
+
+% ============================================================
+\section{Conclusion}
+We presented an execution-oriented governance architecture integrating SSI, bootstrap CI gating, a drift-aware invariant registry, and deterministic FSM enforcement.
+SSI is framed as a coherence metric with simulation support; the publication-critical next step is anchored empirical validation in a single domain (e.g., AI governance firms), with cross-domain results treated as controlled transfer demonstrations.
+
+% ============================================================
+\appendices
+\section{SSI and Bootstrap Pseudocode (Reference)}
+\begin{verbatim}
+logistic(x):
+  return 1 / (1 + exp(-x))
+
+calculate_ssi(events e, weights w, kappa, delta_t):
+  Z = sum(w)
+  S = sum_i w_i * e_i * exp(-kappa * delta_t_i)
+  return 10 * logistic(S / Z)
+
+bootstrap_ci_ssi(e, w, kappa, delta_t, B=1000):
+  for b in 1..B:
+    sample indices with replacement
+    SSI^(b) = calculate_ssi(sample)
+  CI_lower = percentile(2.5)
+  CI_upper = percentile(97.5)
+\end{verbatim}
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
