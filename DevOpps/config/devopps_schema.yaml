@@ -1,0 +1,23 @@
+version: 1
+name: devopps
+layers:
+  - intake
+  - qualification
+  - deployment
+entities:
+  - opportunity
+  - source
+  - deadline
+  - channel
+  - offer
+required_fields:
+  - name
+  - type
+  - source_url
+  - deadline
+  - immediate_income_impact
+  - long_term_positioning
+  - leverage_multiplier
+  - time_cost
+  - deployment_class
+  - notes
