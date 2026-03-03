@@ -1,0 +1,14 @@
+version: 1
+weights:
+  immediate_income_impact: 0.35
+  long_term_positioning: 0.25
+  leverage_multiplier: 0.25
+  time_cost: 0.15
+time_cost_penalty:
+  low: 0
+  med: 1
+  high: 2
+thresholds:
+  deploy_now: 4.2
+  queue_next: 3.5
+  archive: 0.0

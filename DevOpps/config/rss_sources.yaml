@@ -1,0 +1,14 @@
+version: 1
+sources:
+  - name: aws-ai-ml-scholars
+    type: education
+    feed: https://aws.amazon.com/about-aws/our-impact/scholars/
+  - name: microsoft-for-startups
+    type: credits
+    feed: https://startups.microsoft.com/
+  - name: openai-startups
+    type: credits
+    feed: https://openai.com/startups/
+  - name: ibm-skillsbuild
+    type: education
+    feed: https://skillsbuild.org/
