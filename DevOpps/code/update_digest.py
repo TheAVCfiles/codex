@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SPINE = ROOT / "spine" / "opportunities.csv"
-EXPORTS = ROOT / "exports"
+EXPORTS = ROOT / "docs" / "exports"
 DOCS = ROOT / "docs"
 
 
