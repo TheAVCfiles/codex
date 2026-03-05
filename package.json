@@ -33,7 +33,7 @@
     "lint-staged": "^15.5.1",
     "openapi-to-postmanv2": "^5.8.0",
     "prettier": "^3.5.3",
-    "turbo": "^2.1.3"
+    "turbo": "^2.3.3"
   },
   "resolutions": {
     "braces": "^3.0.3",
