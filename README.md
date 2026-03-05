@@ -83,3 +83,24 @@ The web dashboard includes a rhythm-machine panel driven by market tempo project
 - API endpoint: `GET /api/forecast-tempo` (or compatibility alias `/forecast-tempo`)
 - Model: SARIMA when available (`statsmodels` + CoinGecko), with deterministic fallback tempo logic when offline
 - UI: rhythm presets, 16-step drum grid, and tempo slider seeded from forecast tempo
+
+---
+
+## Upstream PR readiness checklist
+
+Use this quick pass before opening a PR from a fork back to an upstream project:
+
+1. **Run from scratch**
+   - Verify a fresh clone can install dependencies and start (`npm install`, `docker compose up`, etc.).
+2. **Remove experiment debris**
+   - Keep scratch files, temporary scripts, and half-built modules out of the PR.
+3. **Keep scope surgical**
+   - Submit one clear idea per PR. Split docs fixes, CLI fixes, and API changes into separate proposals.
+4. **Check license + ownership hygiene**
+   - Confirm dependency compatibility and avoid committing proprietary code, secrets, `.env` values, or credentials.
+5. **Write a maintainable PR description**
+   - State problem, why it matters, implementation summary, and exact test/repro steps.
+6. **Run quality gates first**
+   - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
+
+When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
