@@ -1,0 +1,55 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # MUST be named exactly this
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # Use Node 20 to satisfy ">=18.18.0" and match modern tooling
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      # Pin pnpm exactly to your repo's packageManager
+      - name: Enable Corepack and pin pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.12.3 --activate
+          pnpm --version
+          node --version
+
+      # Optional but helpful for pnpm caching and determinism
+      - name: Configure pnpm store
+        run: |
+          pnpm config set store-dir ~/.pnpm-store
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      # Optional sanity: validate turbo graph quickly (fast, catches obvious breakage)
+      - name: Turbo dry checks
+        run: |
+          pnpm -s turbo --version
+          pnpm -s turbo run lint --dry-run
+          pnpm -s turbo run build --dry-run
