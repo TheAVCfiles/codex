@@ -1,7 +1,8 @@
 packages:
-  - codex-cli
-  - docs
-  - packages/*
+  - "apps/*"
+  - "packages/*"
+  - "codex-cli"
+  - "docs"
 
 ignoredBuiltDependencies:
   - esbuild

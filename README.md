@@ -70,6 +70,18 @@ This repository now includes comprehensive infrastructure for the **DecryptTheGi
 
 For detailed DTG project documentation, see the [project wiki](../../wiki) or explore the `public/` directory for interactive demos.
 
+## Vercel Multi-Project Setup (Turborepo)
+
+Use **three separate Vercel projects** pointing at this monorepo. Do not use a root-level `vercel.json` for single-app routing.
+
+| Vercel Project | Root Directory | Install Command                  | Build Command                           | Output  |
+| -------------- | -------------- | -------------------------------- | --------------------------------------- | ------- |
+| Portal         | `apps/portal`  | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@avc/portal` | `.next` |
+| API            | `apps/api`     | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@avc/api`    | `.next` |
+| Docs           | `apps/docs`    | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@avc/docs`   | `.next` |
+
+Each app is a Next.js app with its own `next.config.mjs` and standard `dev/build/lint/start` scripts for Turborepo task execution.
+
 <!-- ![Codex demo GIF using: codex "explain this codebase to me"](./.github/demo.gif) -->
 
 ---
