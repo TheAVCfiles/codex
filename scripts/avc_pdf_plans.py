@@ -16,7 +16,7 @@ from reportlab.lib.units import inch
 from reportlab.platypus import ListFlowable, ListItem, PageBreak, Paragraph, SimpleDocTemplate, Spacer
 
 
-def _bullets(items: list[str], style):
+def _bullets(items: list[str], style: "ParagraphStyle"):
     return ListFlowable([ListItem(Paragraph(item, style)) for item in items], bulletType="bullet")
 
 
