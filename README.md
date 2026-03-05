@@ -651,3 +651,15 @@ A workflow is available at `.github/workflows/smallwallets-toolbox.yml`. It runs
 1. Lints `smallwallets-openapi.json` with `@redocly/cli`.
 2. Exports `postman/SmallWallets.postman_collection.json` from OpenAPI and checks it in.
 3. Verifies `postman.collection.json` is up to date with `python scripts/generate_postman_collection.py --check`.
+
+## Vercel multi-project setup (Turborepo)
+
+Use **three separate Vercel projects** (recommended), each pointing to a specific app directory.
+
+| Vercel Project | Root Directory | Install Command | Build Command |
+| --- | --- | --- | --- |
+| Portal | `apps/portal` | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@apps/portal` |
+| API | `apps/api` | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@apps/api` |
+| Docs | `apps/docs` | `pnpm install --frozen-lockfile` | `pnpm turbo build --filter=@apps/docs` |
+
+Recommended per-project Node.js version: `18.18+`.
