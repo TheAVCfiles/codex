@@ -1,0 +1,17 @@
+{
+  "name": "@studioos/portal",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo 'portal dev placeholder'",
+    "build": "echo 'portal build placeholder'",
+    "lint": "echo 'portal lint placeholder'",
+    "typecheck": "echo 'portal typecheck placeholder'",
+    "format": "echo 'portal format placeholder'"
+  },
+  "dependencies": {
+    "@studioos/ui": "workspace:*",
+    "@studioos/auth": "workspace:*",
+    "@studioos/governance": "workspace:*"
+  }
+}

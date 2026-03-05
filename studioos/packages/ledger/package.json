@@ -1,0 +1,13 @@
+{
+  "name": "@studioos/ledger",
+  "private": true,
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "echo 'ledger build placeholder'",
+    "lint": "echo 'ledger lint placeholder'",
+    "typecheck": "echo 'ledger typecheck placeholder'",
+    "format": "echo 'ledger format placeholder'"
+  }
+}

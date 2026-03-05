@@ -1,0 +1,13 @@
+{
+  "name": "@studioos/governance",
+  "private": true,
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "echo 'governance build placeholder'",
+    "lint": "echo 'governance lint placeholder'",
+    "typecheck": "echo 'governance typecheck placeholder'",
+    "format": "echo 'governance format placeholder'"
+  }
+}
