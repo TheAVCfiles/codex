@@ -1,4 +1,34 @@
-# PRIMA Fortress — ETH Weather Forecaster Scaffold
+# StagePort Research Lab — Choreographic Intelligence Infrastructure
+
+StagePort is a research platform for choreographic intelligence and creative labor attribution.
+It combines narrative systems, movement-aware computation, and governance tooling into one executable lab.
+
+## Front door
+
+### 1) Problem this system solves
+
+Creative labor is often captured, remixed, and monetized without durable attribution.
+This repository prototypes a pipeline where movement artifacts, operator decisions, and governance evidence can be tracked as first-class system records.
+
+### 2) What makes it unusual
+
+Most projects stop at one layer (UI, analytics, or smart contracts).
+This one intentionally spans multiple layers:
+
+- **Movement analytics engine** (Py.rouette style compute loops)
+- **Creative rights + value rails** (StageCoin / ledger-oriented primitives)
+- **Institutional confidence dashboards** (evidence, governance, and operator visibility)
+
+### 3) What already works
+
+- FastAPI service with ingestion, evaluation, and online training loops
+- Runnable React + TypeScript dashboard with tempo-aware modules
+- Single-file fallback runtime for resilient demo recovery
+- Dockerized local stack for end-to-end execution
+
+---
+
+## PRIMA Fortress — ETH Weather Forecaster Scaffold
 
 This repository includes a GitHub-ready scaffold for a self-improving ETH "weather" loop:
 
@@ -45,7 +75,6 @@ python single_file_fortress.py
 ```
 
 This serves a self-contained FastAPI + inline React/Babel UI with forecast, signal, learn loop, sparkline, and WebAudio rhythm controls.
-
 
 ## Atmospheric Sentience Orchestrator
 
