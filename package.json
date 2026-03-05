@@ -6,23 +6,25 @@
     "release": "pnpm --filter @openai/codex run release",
     "format": "prettier --check *.json *.md .github/workflows/*.yml",
     "format:fix": "prettier --write *.json *.md .github/workflows/*.yml",
-    "build": "pnpm --filter @openai/codex run build",
+    "build": "turbo build",
     "test": "pnpm --filter @openai/codex run test",
-    "lint": "pnpm --filter @openai/codex run lint",
+    "lint": "turbo lint",
     "lint:fix": "pnpm --filter @openai/codex run lint:fix",
     "lint:openapi": "npx --yes @redocly/cli@latest lint smallwallets-openapi.json",
     "typecheck": "pnpm --filter @openai/codex run typecheck",
     "export:postman": "node scripts/export-postman.mjs",
     "changelog": "git-cliff --config cliff.toml --output CHANGELOG.ignore.md $LAST_RELEASE_TAG..HEAD",
     "prepare": "husky",
-    "husky:add": "husky add"
+    "husky:add": "husky add",
+    "dev": "turbo dev"
   },
   "devDependencies": {
     "git-cliff": "^2.8.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "openapi-to-postmanv2": "^5.8.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "turbo": "^2.3.3"
   },
   "resolutions": {
     "braces": "^3.0.3",
@@ -38,7 +40,7 @@
     }
   },
   "engines": {
-    "node": ">=22",
+    "node": ">=18.18.0",
     "pnpm": ">=9.0.0"
   },
   "lint-staged": {
@@ -51,5 +53,9 @@
       "cd codex-cli && pnpm run typecheck"
     ]
   },
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@9.12.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
