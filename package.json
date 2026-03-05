@@ -1,55 +1,25 @@
 {
-  "name": "codex-monorepo",
+  "name": "dancer-roster-app",
+  "version": "0.1.0",
   "private": true,
-  "description": "Tools for repo-wide maintenance.",
   "scripts": {
-    "release": "pnpm --filter @openai/codex run release",
-    "format": "prettier --check *.json *.md .github/workflows/*.yml",
-    "format:fix": "prettier --write *.json *.md .github/workflows/*.yml",
-    "build": "pnpm --filter @openai/codex run build",
-    "test": "pnpm --filter @openai/codex run test",
-    "lint": "pnpm --filter @openai/codex run lint",
-    "lint:fix": "pnpm --filter @openai/codex run lint:fix",
-    "lint:openapi": "npx --yes @redocly/cli@latest lint smallwallets-openapi.json",
-    "typecheck": "pnpm --filter @openai/codex run typecheck",
-    "export:postman": "node scripts/export-postman.mjs",
-    "changelog": "git-cliff --config cliff.toml --output CHANGELOG.ignore.md $LAST_RELEASE_TAG..HEAD",
-    "prepare": "husky",
-    "husky:add": "husky add"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "git-cliff": "^2.8.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.1",
-    "openapi-to-postmanv2": "^5.8.0",
-    "prettier": "^3.5.3"
-  },
-  "resolutions": {
-    "braces": "^3.0.3",
-    "micromatch": "^4.0.8",
-    "semver": "^7.7.1"
-  },
-  "overrides": {
-    "punycode": "^2.3.1"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "marked-terminal@7.3.0": "patches/marked-terminal@7.3.0.patch"
-    }
-  },
-  "engines": {
-    "node": ">=22",
-    "pnpm": ">=9.0.0"
-  },
-  "lint-staged": {
-    "*.json": "prettier --write",
-    "*.md": "prettier --write",
-    ".github/workflows/*.yml": "prettier --write",
-    "**/*.{js,ts,tsx}": [
-      "prettier --write",
-      "pnpm --filter @openai/codex run lint",
-      "cd codex-cli && pnpm run typecheck"
-    ]
+    "typescript": "^5",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "15.2.4"
   },
   "packageManager": "pnpm@10.8.1"
 }
