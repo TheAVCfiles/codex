@@ -137,7 +137,7 @@
           </div>
         </div>
         <p class="mt-4 text-stone-300 text-sm leading-relaxed">
-          A living countdown to Samhain: midnight on October 31, 2025 in your chosen timezone. The portal remains awake even while modals are open.
+          A living countdown to Samhain: midnight on October 31 in your chosen timezone. The portal remains awake even while modals are open.
         </p>
         <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-4">Unlock the Guide</button>
@@ -289,13 +289,13 @@
     const countdownEl = document.getElementById('countdown');
     const timezoneSelect = document.getElementById('timezone');
     const footerNote = document.getElementById('footerNote');
-    const baseDate = { year: 2025, month: 10, day: 31, hour: 0, minute: 0, second: 0 };
+    const baseDate = { month: 10, day: 31, hour: 0, minute: 0, second: 0 };
     let countdownTimer = null;
     let countdownTarget = null;
 
     // Derive the timezone offset (in minutes) for a specific instant by
     // formatting the same UTC timestamp in the requested zone. This keeps
-    // daylight saving adjustments accurate for the 2025-10-31 target.
+    // daylight saving adjustments accurate for the selected Samhain target.
     const getTimeZoneOffsetMinutes = (date, timeZone) => {
       const parts = new Intl.DateTimeFormat('en-US', {
         timeZone,
@@ -316,10 +316,18 @@
     // the timer can reset to the correct wall-clock midnight when the user
     // switches zones from the header selector.
     const buildZonedTargetDate = (timeZone) => {
-      const utcDate = Date.UTC(baseDate.year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
-      const reference = new Date(utcDate);
-      const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
-      return new Date(utcDate - offsetMinutes * 60000);
+      const now = new Date();
+      const currentYear = now.getUTCFullYear();
+
+      const buildForYear = (year) => {
+        const utcDate = Date.UTC(year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
+        const reference = new Date(utcDate);
+        const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
+        return new Date(utcDate - offsetMinutes * 60000);
+      };
+
+      const thisYearTarget = buildForYear(currentYear);
+      return thisYearTarget > now ? thisYearTarget : buildForYear(currentYear + 1);
     };
 
     const formatDuration = (ms) => {
