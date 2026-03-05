@@ -1,0 +1,12 @@
+{
+  "name": "@studioos/docs",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo 'docs dev placeholder'",
+    "build": "echo 'docs build placeholder'",
+    "lint": "echo 'docs lint placeholder'",
+    "typecheck": "echo 'docs typecheck placeholder'",
+    "format": "echo 'docs format placeholder'"
+  }
+}
