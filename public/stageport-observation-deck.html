@@ -4,322 +4,295 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StagePort — Observation Deck</title>
-  <meta name="description" content="StagePort infrastructure preview: safe rooms, leadership credentials, and institutional integration." />
+  <meta name="description" content="StagePort Observation Deck: infrastructure for safe rooms and leadership credentials." />
   <style>
     :root {
-      --bg: #0b0b0c;
-      --card: #121214;
-      --line: #232329;
-      --fg: #f2f2f3;
-      --muted: #a0a4ad;
-      --accent: #8cf0ff;
+      --bg: #0a0a0c;
+      --panel: #121218;
+      --line: #252532;
+      --text: #f5f7fa;
+      --muted: #a8b0bd;
+      --accent: #95ecff;
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      background: radial-gradient(circle at top right, rgba(140, 240, 255, 0.08), transparent 42%), var(--bg);
-      color: var(--fg);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at 85% 5%, rgba(149, 236, 255, 0.11), transparent 40%), var(--bg);
+      color: var(--text);
+      font-family: Inter, "SF Pro Display", system-ui, -apple-system, Segoe UI, sans-serif;
       line-height: 1.55;
     }
 
     .wrap {
-      max-width: 1080px;
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 28px 20px 56px;
+      padding: 1.5rem 1.1rem 4rem;
     }
 
     .nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 0.7rem;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
     }
 
-    .brand { font-weight: 800; letter-spacing: 0.03em; }
-
-    .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .btn {
-      display: inline-block;
-      border: 1px solid var(--accent);
-      color: var(--fg);
-      border-radius: 10px;
-      padding: 8px 14px;
-      text-decoration: none;
+    .brand {
       font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #d7e3f5;
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-      align-items: center;
-      margin-bottom: 34px;
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.36rem 0.8rem;
+      font-size: 0.82rem;
+    }
+
+    header {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #13131a, #0e0e13);
+      border-radius: 1rem;
+      padding: 1.4rem;
+      margin-bottom: 1.2rem;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4.8vw, 2.9rem);
-      line-height: 1.06;
-    }
-
-    h2 {
-      margin: 0 0 12px;
-      font-size: clamp(1.3rem, 2.8vw, 1.7rem);
-    }
-
-    .lead {
-      margin: 0 0 14px;
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 66ch;
-    }
-
-    .inline-tags {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      padding: 0;
       margin: 0;
-      gap: 8px;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      line-height: 1.1;
+      max-width: 18ch;
     }
 
-    .tag {
-      border: 1px solid var(--line);
-      color: #d3d6db;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.8rem;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(18, 18, 20, 1), rgba(11, 11, 12, 1));
-      border-radius: 14px;
-      padding: 16px;
-    }
-
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 12px 0;
-    }
-
-    .kpi {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px;
-      background: #101015;
-    }
-
-    .kpi-label { font-size: 0.8rem; color: var(--muted); }
-    .kpi-value { font-size: 1.25rem; font-weight: 700; }
-
-    .log {
-      background: #0f1117;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.8rem;
-      min-height: 112px;
-      max-height: 180px;
-      overflow: auto;
-      white-space: pre-line;
-      color: #d6e6ea;
+    .subtitle {
+      margin-top: 0.8rem;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.03rem;
     }
 
     section {
-      margin: 34px 0;
-      scroll-margin-top: 24px;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 14px;
-    }
-
-    .small { color: var(--muted); font-size: 0.92rem; }
-
-    pre {
       border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #0f1117;
-      padding: 12px;
-      overflow-x: auto;
+      background: var(--panel);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    h2 {
+      margin: 0 0 0.2rem;
+      font-size: 1.25rem;
+    }
+
+    .kicker {
+      margin: 0 0 0.8rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d9e7fb;
+    }
+
+    section p, section li { color: var(--muted); }
+
+    .single-line {
+      color: var(--accent);
+      margin-top: 0.7rem;
+      font-weight: 600;
+    }
+
+    .flow {
+      margin: 0.7rem 0;
+      padding: 0.9rem;
+      border-radius: 0.7rem;
+      border: 1px solid #313140;
+      background: #0d0f16;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      color: #dff6ff;
+      white-space: pre-line;
       font-size: 0.92rem;
     }
 
-    .footer {
-      margin-top: 42px;
-      border-top: 1px solid var(--line);
-      padding-top: 18px;
-      font-size: 0.84rem;
-      color: var(--muted);
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.8rem;
     }
 
-    @media (max-width: 880px) {
-      .hero { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: 1fr; }
+    .card {
+      border: 1px solid #30303e;
+      border-radius: 0.75rem;
+      background: #10121b;
+      padding: 0.85rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.3rem;
+      font-size: 1rem;
+      color: #ebf1ff;
+    }
+
+    footer {
+      margin-top: 1.4rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+      color: var(--muted);
+      font-size: 0.88rem;
     }
   </style>
 </head>
 <body>
   <main class="wrap">
-    <nav class="nav" aria-label="Observation deck navigation">
+    <nav class="nav" aria-label="Observation deck links">
       <div class="brand">StagePort Observation Deck</div>
-      <div class="nav-links">
-        <a class="btn" href="#problem">Problem</a>
-        <a class="btn" href="#system">System</a>
-        <a class="btn" href="#proof">Proof</a>
-        <a class="btn" href="#partner">Partner</a>
+      <div>
+        <a href="#system-reveal">System</a>
+        <a href="#proof">Proof</a>
+        <a href="#final">Final</a>
       </div>
     </nav>
 
-    <section class="hero" id="room">
-      <div>
-        <h1>Safe Rooms. Verified Leadership. Institutional Bridge.</h1>
-        <p class="lead">StagePort is a safety and credential infrastructure connecting studio leadership training with university safety environments.</p>
-        <ul class="inline-tags" aria-label="Core tags">
-          <li class="tag">University Safety Install</li>
-          <li class="tag">Leadership Credentials</li>
-          <li class="tag">Environmental Signaling</li>
-        </ul>
-      </div>
-      <aside class="card" aria-label="Live signal demo">
-        <h2 style="margin-top: 0;">Live Signal Demo</h2>
-        <p class="small">Simulated pipeline: room event → witness window → credential routing.</p>
-        <div class="kpi-grid">
-          <div class="kpi"><div class="kpi-label">Room Events</div><div class="kpi-value" id="events">0</div></div>
-          <div class="kpi"><div class="kpi-label">Witness Entries</div><div class="kpi-value" id="witness">0</div></div>
-          <div class="kpi"><div class="kpi-label">Credentials Routed</div><div class="kpi-value" id="credentials">0</div></div>
-        </div>
-        <div class="log" id="signal-log">boot: stageport mesh online</div>
-      </aside>
+    <header>
+      <h1>Infrastructure for Safe Rooms and Leadership Credentials</h1>
+      <p class="subtitle">A single corridor artifact for institutional partners: from room reality to credential infrastructure.</p>
+    </header>
+
+    <section id="the-room">
+      <p class="kicker">Section 1 — The Room</p>
+      <h2>Ground in reality before introducing technology.</h2>
+      <p>Dance studios, university rehearsal spaces, and training rooms all carry duty-of-care responsibilities. Mentorship and leadership are active labor in these spaces, yet most rooms still run without systems that recognize that stewardship.</p>
+      <p class="single-line">StagePort is infrastructure for rooms like these.</p>
     </section>
 
-    <section id="problem">
-      <h2>ACT II — The Problem</h2>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Invisible Leadership</h3>
-          <p class="small">Studio assistants and student leaders carry duty-of-care responsibilities without recognized credentials.</p>
-        </article>
-        <article class="card">
-          <h3>Safety Blind Spots</h3>
-          <p class="small">Training environments often rely on informal awareness rather than measurable, reviewable infrastructure.</p>
-        </article>
-        <article class="card">
-          <h3>Transmission Gaps</h3>
-          <p class="small">Mentorship, lineage, and stewardship rarely enter institutional records, reducing trust and continuity.</p>
-        </article>
-      </div>
+    <section id="fracture">
+      <p class="kicker">Section 2 — The Fracture</p>
+      <h2>Show the institutional cost of missing infrastructure.</h2>
+      <ul>
+        <li>Leadership roles exist but produce no credentials.</li>
+        <li>Mentorship labor remains invisible to institutional systems.</li>
+        <li>Safety awareness relies on informal culture instead of measurable infrastructure.</li>
+        <li>When rooms fail, institutions discover there is no record of stewardship.</li>
+      </ul>
     </section>
 
-    <section id="system">
-      <h2>ACT III — The Machine</h2>
-      <pre>Studios / Training Rooms
-    ↓
-Leadership + Stewardship Signals
-    ↓
-StagePort Mesh Layer (Witness + Ledger + Routing)
-    ↓
+    <section id="system-reveal">
+      <p class="kicker">Section 3 — The System Reveal</p>
+      <h2>Make the architecture legible in one pass.</h2>
+      <div class="flow">Training Room
+↓
+Witness Window
+↓
+StagePort Ledger
+↓
 Institutional Integration
-    ↓
-University Safety + Verified Credentials</pre>
-      <p class="small">This architecture turns behavioral stewardship into auditable participation metrics for institutional systems.</p>
+↓
+Credentials + Safety Signals</div>
+      <p>StagePort captures leadership and stewardship signals inside training environments and translates them into institutional participation metrics across studios, universities, and community programs.</p>
+    </section>
+
+    <section id="pearl">
+      <p class="kicker">Section 4 — The Pearl Mechanism</p>
+      <h2>Operationalize the metaphor.</h2>
+      <div class="flow">Room Event
+↓
+Witness Entry
+↓
+Pearl Ledger
+↓
+Credential Routing</div>
+      <p>When leadership is witnessed in the room, the event becomes a ledger entry. These entries accumulate as pearls: documented stewardship signals that route into credential systems institutions already understand.</p>
+    </section>
+
+    <section id="mesh-layer">
+      <p class="kicker">Section 5 — The Mesh Layer</p>
+      <h2>Three layers, one governed substrate.</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Physical Layer</h3>
+          <p>Environment sensors and signal infrastructure.</p>
+        </article>
+        <article class="card">
+          <h3>Social Layer</h3>
+          <p>Mentorship pathways and leadership roles in active rooms.</p>
+        </article>
+        <article class="card">
+          <h3>Reputation Layer</h3>
+          <p>Credentials and institutional recognition.</p>
+        </article>
+      </div>
+      <p class="single-line">Together: StagePort Mesh Layer.</p>
     </section>
 
     <section id="proof">
-      <h2>ACT IV — Proof</h2>
-      <div class="card-grid">
+      <p class="kicker">Section 6 — Proof</p>
+      <h2>Traction without hype.</h2>
+      <ul>
+        <li>Pilot deployment in development.</li>
+        <li>University safety infrastructure install underway.</li>
+        <li>Prototype environmental signaling layer in progress.</li>
+        <li>60-day prototype cycle underway.</li>
+      </ul>
+    </section>
+
+    <section id="governance">
+      <p class="kicker">Section 7 — Governance</p>
+      <h2>Governed as infrastructure, not as a consumer app.</h2>
+      <ul>
+        <li>Stewardship Charter</li>
+        <li>Founder Custody Framework</li>
+        <li>Artifact Licensing Structure</li>
+      </ul>
+      <p class="single-line">StagePort is governed as infrastructure, not a consumer platform.</p>
+    </section>
+
+    <section id="bridge">
+      <p class="kicker">Section 8 — The Bridge</p>
+      <h2>Translate training leadership into institutional pathways.</h2>
+      <div class="flow">Studio Leadership Training
+↓
+StagePort Credential System
+↓
+University Recognition
+↓
+Community Leadership Infrastructure</div>
+    </section>
+
+    <section id="partnership-paths">
+      <p class="kicker">Section 9 — Partnership Paths</p>
+      <h2>Three clear entry points.</h2>
+      <div class="grid">
         <article class="card">
-          <h3>Phase I Pilot</h3>
-          <ul class="small">
-            <li>University safety technology installation</li>
-            <li>Initial funding secured ($2,500)</li>
-            <li>Behavioral credential bridge in deployment prep</li>
-          </ul>
+          <h3>Pilot Host</h3>
+          <p>University or training program.</p>
         </article>
         <article class="card">
-          <h3>Phase II (60 Days)</h3>
-          <ul class="small">
-            <li>Servo-based environmental signaling prototype</li>
-            <li>Expansion target ($7,500)</li>
-            <li>Institutional credential routing integration</li>
-          </ul>
+          <h3>Infrastructure Partner</h3>
+          <p>Safety technology collaboration.</p>
+        </article>
+        <article class="card">
+          <h3>Early Infrastructure Investor</h3>
+          <p>Support deployment expansion.</p>
         </article>
       </div>
     </section>
 
-    <section id="partner">
-      <h2>ACT V — Invitation</h2>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Pilot Sites</h3>
-          <p class="small">Universities and training environments evaluating room stability and leadership accountability infrastructure.</p>
-        </article>
-        <article class="card">
-          <h3>Institutional Partners</h3>
-          <p class="small">Programs in student life, safety, and mentorship interested in measurable stewardship systems.</p>
-        </article>
-        <article class="card">
-          <h3>Early Infrastructure Backers</h3>
-          <p class="small">Partners supporting governance-first deployment of StagePort’s safe-room credential model.</p>
-        </article>
-      </div>
-      <p><a class="btn" href="mailto:contact@stageport.systems">Request Briefing</a></p>
+    <section id="final">
+      <p class="kicker">Section 10 — Final Slide</p>
+      <h2>StagePort</h2>
+      <p class="single-line">Infrastructure for Safe Rooms and Leadership Credentials</p>
+      <p>Observation Deck available for institutional partners.</p>
     </section>
 
-    <p class="footer">StagePort • Observation Deck • v1</p>
+    <footer>
+      <p>Observation Deck → Lane-A Visuals → Pilot Documentation → Governance Pack → Technical Architecture</p>
+    </footer>
   </main>
-
-  <script>
-    (() => {
-      const eventsEl = document.getElementById('events');
-      const witnessEl = document.getElementById('witness');
-      const credentialsEl = document.getElementById('credentials');
-      const logEl = document.getElementById('signal-log');
-
-      let events = 0;
-      let witness = 0;
-      let credentials = 0;
-
-      const eventTypes = [
-        'mentor check-in recorded',
-        'assistant handoff confirmed',
-        'room stabilization action logged',
-        'environment cue acknowledged',
-        'peer support event routed'
-      ];
-
-      const appendLog = (line) => {
-        const ts = new Date().toLocaleTimeString();
-        logEl.textContent += `\n${ts} • ${line}`;
-        logEl.scrollTop = logEl.scrollHeight;
-      };
-
-      const tick = () => {
-        events += 1;
-        if (Math.random() < 0.75) witness += 1;
-        if (Math.random() < 0.56) credentials += 1;
-
-        eventsEl.textContent = String(events);
-        witnessEl.textContent = String(witness);
-        credentialsEl.textContent = String(credentials);
-
-        const randomEvent = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-        appendLog(`signal: ${randomEvent} → routed`);
-      };
-
-      appendLog('init: witness window armed');
-      setInterval(tick, 1650);
-    })();
-  </script>
 </body>
 </html>
