@@ -1,0 +1,7 @@
+flag_id,flag_code,question,primary_agency,required_records,status,priority,as_of_timestamp
+FL-001,TIMELINE_GAP,What licensing/waiver authority covered post-2019 professional services?,NYSED,"Waiver renewals,successor approvals,service setting records",open,high,2026-03-06T14:15:00-05:00
+FL-002,PROGRAM_SCOPE,Did funded services align with authorized state/federal program scope?,NYSED|OCFS|OMH|DOH|ACF,"Program descriptions,licenses/certifications,award scope documents",open,high,2026-03-06T14:15:00-05:00
+FL-003,CLAIM_SUPPORT,Do clinical service claims reconcile with staffing/licensure/service logs?,OMH|ACF,"Clinical service logs,staff license roster,staffing-by-program snapshots",open,high,2026-03-06T14:15:00-05:00
+FL-004,BENEFICIARY_COUNT,Did served population align with licensed capacity and staffing levels?,OCFS|OMH,"Capacity approvals,census reports,staffing rosters by program",open,medium,2026-03-06T14:15:00-05:00
+FL-005,NEG_ADJUSTMENT,What explains negative or corrective federal award actions?,ACF,"Award amendments,de-obligation notices,financial reconciliation records",open,medium,2026-03-06T14:15:00-05:00
+FL-006,VERIFY,Which DOH approvals were active by location and service line?,DOH,"License/certification detail reports,effective date records",open,medium,2026-03-06T14:15:00-05:00
