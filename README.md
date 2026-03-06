@@ -3,6 +3,10 @@
 StagePort is a research platform for choreographic intelligence and creative labor attribution.
 It combines narrative systems, movement-aware computation, and governance tooling into one executable lab.
 
+## Technical specification
+
+- System-level technical specification: `docs/TECH_SPECS.md`
+
 ## Front door
 
 ### 1) Problem this system solves
