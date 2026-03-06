@@ -59,6 +59,7 @@ This `project/` directory also includes related artifacts and prototypes:
 - `index.html`: single-page dark-themed portal experience.
 - `studio-portal.jsx`: StudioOS operator interface extension.
 - `ecosystem_map.md`: compact architecture + integration map artifact.
+- `pilot-leverage-playbook.md`: framework for converting fixed-scope pilots into reusable governance infrastructure artifacts.
 - `prima-first-dreamm.html`: standalone publishing page.
 - `founderos/`: FounderOS v0 scaffold.
 - `paygait-local.html`: local PayGait prototype.
