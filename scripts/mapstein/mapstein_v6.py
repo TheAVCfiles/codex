@@ -13,6 +13,7 @@ import csv
 import hashlib
 import json
 import re
+import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -211,6 +212,198 @@ def cmd_bridge(args: argparse.Namespace) -> int:
     return 0
 
 
+VERB_TO_CORRIDOR = {
+    "EMAILS": "communications",
+    "FORWARDS": "communications",
+    "PUBLISHES": "communications",
+    "TRAVELS_TO": "transport",
+    "PILOTS": "transport",
+    "PAYS": "finance",
+    "FILES": "legal",
+    "MANAGES_PROPERTY": "estate",
+    "SUPERVISES": "estate",
+}
+
+
+def infer_corridor(verb: str) -> str:
+    return VERB_TO_CORRIDOR.get((verb or "").strip().upper(), "unknown")
+
+
+def parse_year(value: str | None) -> int | None:
+    if not value:
+        return None
+    match = re.search(r"\b(19|20)\d{2}\b", value)
+    if not match:
+        return None
+    return int(match.group(0))
+
+
+def write_corridor_gexf(
+    output_path: Path,
+    nodes: set[str],
+    edges: list[dict[str, str]],
+    node_top_corridor: dict[str, str],
+) -> None:
+    gexf = ET.Element("gexf", xmlns="http://www.gexf.net/1.3", version="1.3")
+    graph = ET.SubElement(gexf, "graph", mode="static", defaultedgetype="directed")
+
+    attributes = ET.SubElement(graph, "attributes", {"class": "node"})
+    ET.SubElement(
+        attributes,
+        "attribute",
+        {"id": "corridor", "title": "corridor", "type": "string"},
+    )
+
+    node_root = ET.SubElement(graph, "nodes")
+    for node in sorted(nodes):
+        node_el = ET.SubElement(node_root, "node", id=node, label=node)
+        attvalues = ET.SubElement(node_el, "attvalues")
+        ET.SubElement(
+            attvalues,
+            "attvalue",
+            {"for": "corridor", "value": node_top_corridor.get(node, "unknown")},
+        )
+
+    edge_root = ET.SubElement(graph, "edges")
+    for idx, edge in enumerate(edges):
+        ET.SubElement(
+            edge_root,
+            "edge",
+            {
+                "id": str(idx),
+                "source": edge["subject"],
+                "target": edge["object"],
+                "label": edge["verb"],
+            },
+        )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    ET.indent(gexf)
+    ET.ElementTree(gexf).write(output_path, encoding="utf-8", xml_declaration=True)
+
+
+def cmd_distort(args: argparse.Namespace) -> int:
+    input_path = Path(args.relationships_csv)
+    out_dir = Path(args.output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    with input_path.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        required = {"subject", "verb", "object"}
+        missing = required - set(reader.fieldnames or [])
+        if missing:
+            raise ValueError(f"relationships csv is missing required columns: {sorted(missing)}")
+        rows = [row for row in reader if row.get("subject") and row.get("object")]
+
+    in_neighbors: dict[str, set[str]] = defaultdict(set)
+    out_neighbors: dict[str, set[str]] = defaultdict(set)
+    node_corridors: dict[str, set[str]] = defaultdict(set)
+    node_years: dict[str, set[int]] = defaultdict(set)
+    node_degree: Counter[str] = Counter()
+    timeline_counter: Counter[tuple[str, str]] = Counter()
+    corridor_counter_by_node: dict[str, Counter[str]] = defaultdict(Counter)
+
+    for row in rows:
+        subject = row["subject"].strip()
+        obj = row["object"].strip()
+        verb = (row.get("verb") or "").strip().upper()
+        corridor = infer_corridor(verb)
+
+        out_neighbors[subject].add(obj)
+        in_neighbors[obj].add(subject)
+        node_degree[subject] += 1
+        node_degree[obj] += 1
+
+        for node in (subject, obj):
+            node_corridors[node].add(corridor)
+            corridor_counter_by_node[node][corridor] += 1
+
+        year = parse_year(row.get("date") or row.get("event_date") or row.get("doc"))
+        if year is not None:
+            node_years[subject].add(year)
+            node_years[obj].add(year)
+            timeline_counter[(str(year), corridor)] += 1
+
+    all_nodes = set(node_degree)
+    total_nodes = max(1, len(all_nodes) - 1)
+    score_rows: list[dict[str, float | int | str]] = []
+
+    for node in sorted(all_nodes):
+        bridge_proxy = (len(in_neighbors[node]) * len(out_neighbors[node])) / (total_nodes * total_nodes)
+        channels_touched = len(node_corridors[node])
+        years = sorted(node_years[node])
+        temporal_span = (years[-1] - years[0] + 1) if years else 1
+        distortion = channels_touched * bridge_proxy * temporal_span
+
+        score_rows.append(
+            {
+                "node": node,
+                "degree": node_degree[node],
+                "channels_touched": channels_touched,
+                "betweenness_proxy": round(bridge_proxy, 6),
+                "temporal_span": temporal_span,
+                "distortion_score": round(distortion, 6),
+            }
+        )
+
+    score_rows.sort(
+        key=lambda item: (
+            -float(item["distortion_score"]),
+            -int(item["channels_touched"]),
+            str(item["node"]),
+        )
+    )
+
+    score_path = out_dir / "bridge_distortion_scores.csv"
+    with score_path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(
+            fh,
+            fieldnames=[
+                "node",
+                "degree",
+                "channels_touched",
+                "betweenness_proxy",
+                "temporal_span",
+                "distortion_score",
+            ],
+        )
+        writer.writeheader()
+        writer.writerows(score_rows)
+
+    top_corridor = {
+        node: counts.most_common(1)[0][0] if counts else "unknown"
+        for node, counts in corridor_counter_by_node.items()
+    }
+    gexf_path = out_dir / "corridor_layer_graph.gexf"
+    write_corridor_gexf(gexf_path, all_nodes, rows, top_corridor)
+
+    timeline = [
+        {"year": year, "corridor": corridor, "edge_count": count}
+        for (year, corridor), count in sorted(timeline_counter.items())
+    ]
+    overlay_payload = {
+        "generated_at": datetime.now(UTC).isoformat(),
+        "source_relationships": str(input_path),
+        "timeline_contagion": timeline,
+        "notes": "timeline derived from date/event_date/doc columns when present",
+    }
+    overlay_path = out_dir / "timeline_contagion_overlay.json"
+    overlay_path.write_text(json.dumps(overlay_payload, indent=2), encoding="utf-8")
+
+    summary = {
+        "nodes": len(all_nodes),
+        "edges": len(rows),
+        "output_dir": str(out_dir),
+        "artifacts": [
+            score_path.name,
+            gexf_path.name,
+            overlay_path.name,
+        ],
+    }
+    print(json.dumps(summary, indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Mapstein v6 pilot tooling")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -225,6 +418,18 @@ def build_parser() -> argparse.ArgumentParser:
     bridge.add_argument("--entities-csv", required=True, help="CSV with doc_id,entity columns")
     bridge.add_argument("--output", default="output/mapstein/bridge_report.json")
     bridge.set_defaults(func=cmd_bridge)
+
+    distort = sub.add_parser(
+        "distort",
+        help="Compute bridge distortion scores + corridor layer artifacts from relationships",
+    )
+    distort.add_argument(
+        "--relationships-csv",
+        required=True,
+        help="CSV with subject,verb,object and optional date/event_date/doc columns",
+    )
+    distort.add_argument("--output-dir", default="output/mapstein/pass11")
+    distort.set_defaults(func=cmd_distort)
 
     return parser
 
