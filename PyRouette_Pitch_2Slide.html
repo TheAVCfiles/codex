@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Py.rouette — 2-Slide COO Brief</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --accent: #7c3aed;
+      --bg: #e2e8f0;
+      --slide: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 16px;
+    }
+    .deck {
+      display: grid;
+      gap: 16px;
+      justify-content: center;
+    }
+    .slide {
+      width: 11in;
+      min-height: 6.18in;
+      background: var(--slide);
+      padding: 0.55in;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    }
+    h1 { margin: 0; font-size: 1.6rem; }
+    h2 {
+      margin: 0.7rem 0 0.4rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.85rem;
+    }
+    p { margin: 0.2rem 0; font-size: 1rem; }
+    ul { margin: 0.25rem 0 0.5rem 1.1rem; }
+    li { margin: 0.18rem 0; }
+    .meta { color: var(--muted); font-size: 0.95rem; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 0.6rem; }
+    @media print {
+      body { background: white; padding: 0; }
+      .slide {
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <section class="slide">
+      <h1>Py.rouette — Problem / Solution / Value</h1>
+      <p class="meta">Founder: Allison Van Cura · Ask: 20–30m review meeting</p>
+
+      <h2>Problem</h2>
+      <ul>
+        <li>Noisy input streams trigger unstable control decisions.</li>
+        <li>Non-auditable decision primitives cause false triggers and oscillation.</li>
+        <li>Latency and reliability degrade under stress.</li>
+      </ul>
+
+      <h2>Solution</h2>
+      <ul>
+        <li>FSM + scoring layer from expert embodied training.</li>
+        <li>States, guards, permission gates, risk-decay, and hysteresis controls.</li>
+        <li>Receipt-first event packets for auditable governance.</li>
+      </ul>
+
+      <h2>Value to Aegeri Capital</h2>
+      <div class="cols">
+        <div class="card">
+          <p><strong>Operational Stability</strong></p>
+          <p class="meta">Reduce flip-flop behavior in noisy market conditions.</p>
+        </div>
+        <div class="card">
+          <p><strong>Compliance + Forensics</strong></p>
+          <p class="meta">Per-decision logs for post-event audit and review.</p>
+        </div>
+        <div class="card">
+          <p><strong>Latency Reliability</strong></p>
+          <p class="meta">Validated for IMU 200–400Hz / video 30–60fps ingestion.</p>
+        </div>
+        <div class="card">
+          <p><strong>Transferable IP</strong></p>
+          <p class="meta">Module portability across robotics and algorithmic control.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h1>Py.rouette — Pilot / Budget / KPIs</h1>
+      <p class="meta">Recommended pilot: Standard tier (8 weeks · $75k)</p>
+
+      <h2>Pilot Scope</h2>
+      <ul>
+        <li>Cohort: 1–4 trained participants (Mika as Founding Pilot Participant, paid).</li>
+        <li>Inputs: IMU at 200–400Hz + synchronized video at 30–60fps.</li>
+        <li>Outputs: labeled dataset, scoring model, audit report, receipts log, demo.</li>
+      </ul>
+
+      <h2>KPIs</h2>
+      <ul>
+        <li>Decision latency (ms)</li>
+        <li>Gate precision / recall</li>
+        <li>Stability index under noise</li>
+        <li>False-trigger rate + receipt stream integrity</li>
+      </ul>
+
+      <h2>Budget Ladder</h2>
+      <div class="cols">
+        <div class="card">
+          <p><strong>Basic — $25k</strong></p>
+          <p class="meta">4 weeks · dataset + executive report</p>
+        </div>
+        <div class="card">
+          <p><strong>Standard — $75k</strong></p>
+          <p class="meta">8 weeks · model + audit + receipts + demo</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:0.7rem;">
+        <p><strong>Full — $200k</strong></p>
+        <p class="meta">12 weeks · production sensor transfer tests + commercial licensing option</p>
+      </div>
+
+      <h2>Ask</h2>
+      <p>Book a 20–30 minute review of technical spec, pilot plan, and agreement template.</p>
+    </section>
+  </div>
+</body>
+</html>

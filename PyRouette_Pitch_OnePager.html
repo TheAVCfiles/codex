@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Py.rouette — One-Page Pilot Pitch</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #4b5563;
+      --line: #d1d5db;
+      --accent: #7c3aed;
+      --paper: #ffffff;
+      --bg: #f3f4f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 1rem auto;
+      background: var(--paper);
+      padding: 0.6in;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    h1 { margin: 0; font-size: 1.5rem; }
+    h2 {
+      margin: 1.1rem 0 0.4rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+    p { margin: 0.25rem 0; font-size: 0.9rem; }
+    ul { margin: 0.35rem 0 0.5rem 1.1rem; padding: 0; }
+    li { margin: 0.2rem 0; font-size: 0.88rem; }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    .rule {
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin: 0.75rem 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.55rem;
+    }
+    .tiny { font-size: 0.78rem; color: var(--muted); }
+    @media print {
+      body { background: white; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        width: auto;
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Py.rouette — Finite-State Decision Primitives from Embodied Training</h1>
+    <p class="meta">Founder: Allison Van Cura — Py.rouette / StagePort</p>
+    <p class="meta">Ask: 20–30m to review an 8-week fund-grade pilot (Standard: $75k)</p>
+
+    <div class="rule"></div>
+
+    <h2>30-Second Elevator</h2>
+    <p>Py.rouette compiles elite embodied decision logic into auditable finite-state decision primitives for AI, robotics, and live decision systems. We formalized an FSM governance protocol (Administrative Execution Protocol v1.0) and deliver scoring modules that improve gating, hysteresis, and risk-decay behavior in production loops.</p>
+
+    <h2>Problem</h2>
+    <p>Operational decision systems break under noisy inputs because “when to act / when not to act” primitives are often non-auditable, fragile, and not engineered for hysteresis/decay. This causes false triggers, oscillation, and inconsistent stress latency.</p>
+
+    <h2>Solution</h2>
+    <ul>
+      <li><strong>Explicit States:</strong> named action and state nodes.</li>
+      <li><strong>Guards &amp; Permission Gates:</strong> sensor thresholds and decision envelopes.</li>
+      <li><strong>Risk-Decay Primitives:</strong> timed exits + hysteresis to prevent flip-flop.</li>
+      <li><strong>Receipts:</strong> per-decision audit packets (timestamp, sensor snapshot, rationale).</li>
+    </ul>
+
+    <div class="grid">
+      <section class="box">
+        <h2 style="margin-top:0">Why This Matters to Aegeri Capital</h2>
+        <ul>
+          <li>Operational stability under noisy market signals.</li>
+          <li>Low-ms scoring design for high-sampling streams.</li>
+          <li>Forensic governance via receipt-first audit trails.</li>
+          <li>Transferable IP across robotics and algorithmic control.</li>
+        </ul>
+      </section>
+      <section class="box">
+        <h2 style="margin-top:0">Technical Differentiators</h2>
+        <ul>
+          <li>Human-validated FSMs from live expert training.</li>
+          <li>Receipt-first architecture for governance + RL feedback.</li>
+          <li>Sampling validation: IMU 200–400Hz + video 30–60fps.</li>
+        </ul>
+      </section>
+    </div>
+
+    <h2>Pilot (Recommended: 8 Weeks — Standard: $75k)</h2>
+    <p><strong>Goal:</strong> Deliver a transferable scoring model + audit report validating gating, latency, and stability.</p>
+    <p><strong>Cohort:</strong> 1–4 trained participants (Mika = Founding Pilot Participant, paid).</p>
+    <p><strong>Deliverables:</strong> labeled dataset, scoring model, audit report, receipts log, demo.</p>
+    <p><strong>KPIs:</strong> latency (ms), gate precision/recall, stability index under noise, false-trigger rate, receipt integrity.</p>
+
+    <div class="grid">
+      <section class="box">
+        <p><strong>Basic — $25k</strong><br><span class="tiny">4 weeks · dataset + executive report</span></p>
+      </section>
+      <section class="box">
+        <p><strong>Standard — $75k (recommended)</strong><br><span class="tiny">8 weeks · model + audit + receipts + demo</span></p>
+      </section>
+    </div>
+    <section class="box" style="margin-top:0.7rem;">
+      <p><strong>Full — $200k</strong><br><span class="tiny">12 weeks · production sensors + transfer tests + commercial licensing option</span></p>
+    </section>
+
+    <h2>Closing Ask</h2>
+    <p>20–30 minutes to review the technical spec + 2-slide pilot plan + pilot agreement template, with a short live demo of receipts and the FSM governance model.</p>
+    <p class="meta" style="margin-top:0.7rem;">Warmly, Allison Van Cura — Founder, Py.rouette / StagePort</p>
+  </main>
+</body>
+</html>
