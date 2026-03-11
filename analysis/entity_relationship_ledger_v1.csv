@@ -1,0 +1,11 @@
+entity_id,entity,type,corridors,relationship,target,target_type,doc_ref,evidence_status,notes
+E1,Jeffrey Epstein,PERSON,"finance|transport|legal|estate",bridge_node,Multi-corridor network,ABSTRACT,EFTA_CENTRALITY_REPORT,VERIFIED,"Highest centrality and degree in current graph state"
+E2,jeevacation@gmail.com,EMAIL,"communications|diplomacy|transport|finance|philanthropy|media",cross_channel_pivot,UN goodwill ambassador list,EVENT,EFTA00774846,VERIFIED,"Appears in diplomatic context"
+E2,jeevacation@gmail.com,EMAIL,"communications|diplomacy|transport|finance|philanthropy|media",cross_channel_pivot,Flight training coordination,EVENT,EFTA02428195,VERIFIED,"Appears in transport/logistics context"
+E2,jeevacation@gmail.com,EMAIL,"communications|diplomacy|transport|finance|philanthropy|media",cross_channel_pivot,Bard bond downgrade monitoring,EVENT,EFTA00819759,VERIFIED,"Appears in finance context"
+E3,JEGE Inc,ORGANIZATION,aviation,owns_or_billed_for,Gulfstream GIV N423TT,AIRCRAFT,EFTA00609734,VERIFIED,"Bill-to entity on maintenance work order"
+E4,N423TT,AIRCRAFT,transport,serviced_by,Gulfstream Aerospace,ORGANIZATION,EFTA00609734,VERIFIED,"Tail number in maintenance records"
+E5,Bell 430 Helicopter,AIRCRAFT,transport,listed_as,VIP configuration,ASSET_DESCRIPTOR,EFTA00578308,VERIFIED,"1999 listing with VIP interior"
+E6,SDNY,ORGANIZATION,legal_pressure,legal_corridor_node,Jeffrey Epstein,PERSON,EFTA_CENTRALITY_REPORT,VERIFIED,"Legal-pressure corridor bridge"
+E7,St. Croix,LOCATION,transport,transport_corridor_node,Jeffrey Epstein,PERSON,EFTA_CENTRALITY_REPORT,VERIFIED,"Frequent transport location node"
+E8,Bard College / Bonds,ORGANIZATION,finance,finance_corridor_node,Jeffrey Epstein,PERSON,EFTA_CENTRALITY_REPORT,VERIFIED,"Finance-linked institutional node"
