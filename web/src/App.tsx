@@ -1,139 +1,273 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import {
-  Activity,
-  Binary,
+  ArrowRight,
   CheckCircle2,
-  Database,
-  Gauge,
-  Hash,
-  Network,
-  ShieldCheck,
+  Clock3,
+  Lock,
+  ShieldAlert,
   Sparkles,
+  TrendingUp,
 } from 'lucide-react';
 
-const pipelineSteps = [
-  {
-    title: 'Capture',
-    description: 'Movement enters as video, sensor streams, or routine specs.',
-    bullets: ['Pose tracking telemetry', 'Motion sensors', 'Routine JSON / .rou input'],
-    icon: Activity,
-  },
-  {
-    title: 'Compile',
-    description: 'ChoreoCode parses movement into symbolic primitives.',
-    bullets: ['FIFTH()', 'PASSE(side)', 'SOUTENU(angle)'],
-    icon: Binary,
-  },
-  {
-    title: 'Score',
-    description: 'PyRouette evaluates technical and artistic performance.',
-    bullets: ['TES / PCS / GOE', 'Transparent ontology', 'Deterministic outputs'],
-    icon: Gauge,
-  },
-  {
-    title: 'Verify',
-    description: 'Governance checks transitions and provenance integrity.',
-    bullets: ['FSM transition validation', 'Author + timestamp', 'Hash generation'],
-    icon: ShieldCheck,
-  },
-  {
-    title: 'Mint',
-    description: 'A performance receipt is archived as a permanent record.',
-    bullets: ['Ledger entry created', 'Archive searchable', 'Audit-ready output'],
-    icon: Database,
-  },
+type Verdict = {
+  label: 'VALID' | 'INVALID' | 'UNSTABLE';
+  confidence: number;
+  reason: string;
+  signals: string[];
+  score: number;
+};
+
+const starterExamples = [
+  'They said they want a serious relationship, but they only call after midnight and disappear for days.',
+  'The client says they are ready to sign this week, but they still will not define scope, owner, or payment date.',
+  'My manager says this is a growth opportunity, but the responsibility increased and the authority did not.',
 ];
 
-const demoEvents = [
-  'GLISSADE detected',
-  'JETÉ detected',
-  'FERMATA detected',
-  'TES: 14.500  PCS: 51.001  TOTAL: 73.873',
-  'HASH GENERATED: 0x94f3ab…',
-  'LEDGER ENTRY CREATED',
+const paidSignals = [
+  'Unlimited receipts',
+  'Pattern tracking across moments',
+  'History, trend shifts, and repeat contradictions',
+  'Weekly structure summaries',
 ];
+
+function analyzeMoment(input: string): Verdict {
+  const text = input.toLowerCase();
+
+  const contradictionTerms = ['but', 'however', 'except', 'instead', 'still', 'yet', 'although'];
+  const avoidanceTerms = ['disappear', 'ghost', 'delay', 'later', 'someday', 'eventually', 'avoid', 'stall'];
+  const powerTerms = ['manager', 'boss', 'authority', 'control', 'permission', 'approval', 'scope'];
+  const commitmentTerms = ['sign', 'payment', 'serious', 'commitment', 'exclusive', 'contract', 'timeline'];
+  const evidenceTerms = ['showed up', 'paid', 'signed', 'defined', 'consistent', 'clear', 'documented'];
+
+  const countMatches = (terms: string[]) => terms.reduce((sum, term) => sum + (text.includes(term) ? 1 : 0), 0);
+
+  const contradictionScore = countMatches(contradictionTerms);
+  const avoidanceScore = countMatches(avoidanceTerms);
+  const powerScore = countMatches(powerTerms);
+  const commitmentScore = countMatches(commitmentTerms);
+  const evidenceScore = countMatches(evidenceTerms);
+
+  let score = 50;
+  score += contradictionScore * 14;
+  score += avoidanceScore * 13;
+  score += powerScore * 9;
+  score += commitmentScore * 8;
+  score -= evidenceScore * 12;
+
+  const normalizedScore = Math.max(5, Math.min(98, score));
+  const confidence = Math.max(58, Math.min(97, 54 + contradictionScore * 11 + avoidanceScore * 9 + powerScore * 5));
+
+  const signals = [
+    contradictionScore > 0 ? 'Behavior conflicts with stated intent.' : 'Intent and behavior need more contrast data.',
+    avoidanceScore > 0 ? 'Delay or distance pattern detected.' : 'No strong delay pattern detected.',
+    powerScore > 0 ? 'Power imbalance raises enforcement risk.' : 'Power relationship appears less central.',
+  ];
+
+  if (normalizedScore >= 76) {
+    return {
+      label: 'INVALID',
+      confidence,
+      reason: 'Behavior does not match the promise closely enough to treat this as structurally reliable.',
+      signals,
+      score: normalizedScore,
+    };
+  }
+
+  if (normalizedScore >= 55) {
+    return {
+      label: 'UNSTABLE',
+      confidence: Math.max(55, confidence - 6),
+      reason: 'Some structure exists, but the moment is carrying contradiction or drift that could reverse the outcome.',
+      signals,
+      score: normalizedScore,
+    };
+  }
+
+  return {
+    label: 'VALID',
+    confidence: Math.max(51, 82 - normalizedScore / 2),
+    reason: 'The stated intent and observed behavior appear materially aligned enough to proceed with caution, not fear.',
+    signals,
+    score: normalizedScore,
+  };
+}
 
 const App = (): JSX.Element => {
+  const [moment, setMoment] = useState(starterExamples[0]);
+  const verdict = useMemo(() => analyzeMoment(moment), [moment]);
+
+  const verdictTone = {
+    VALID: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
+    INVALID: 'border-rose-400/30 bg-rose-400/10 text-rose-200',
+    UNSTABLE: 'border-amber-300/30 bg-amber-300/10 text-amber-100',
+  }[verdict.label];
+
+  const badgeTone = {
+    VALID: 'bg-emerald-400/15 text-emerald-300',
+    INVALID: 'bg-rose-400/15 text-rose-300',
+    UNSTABLE: 'bg-amber-300/15 text-amber-200',
+  }[verdict.label];
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-[#0a0a0c] text-stone-100">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(244,63,94,0.16),transparent_30%),radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.12),transparent_24%)] pointer-events-none" />
+
+      <header className="relative border-b border-white/10 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="rounded bg-emerald-400/20 p-2">
-              <Sparkles className="w-5 h-5 text-emerald-300" />
+            <div className="rounded-2xl bg-white/5 p-2 ring-1 ring-white/10">
+              <Sparkles className="h-5 w-5 text-amber-300" />
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Global AVC Systems</p>
-              <h1 className="text-sm sm:text-base font-semibold">Measurement & Provenance Infrastructure</h1>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-stone-400">Decision Engine</p>
+              <h1 className="text-sm font-medium text-stone-200">Proof before action.</h1>
             </div>
           </div>
+
           <a
-            href="#demo"
-            className="text-xs uppercase tracking-wider rounded border border-emerald-400/40 px-3 py-2 text-emerald-300 hover:bg-emerald-400/10"
+            href="#ledger"
+            className="rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.2em] text-stone-300 transition hover:border-amber-300/40 hover:text-white"
           >
-            Run Demo Routine
+            Unlock Ledger
           </a>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
-        <section className="space-y-5">
-          <p className="text-xs uppercase tracking-[0.3em] text-emerald-300">The Instrument</p>
-          <h2 className="text-3xl sm:text-5xl font-semibold leading-tight">Measure Human Movement Like Data</h2>
-          <p className="max-w-3xl text-slate-300 text-lg">
-            Global AVC Systems converts choreography and physical performance into measurable signals, transparent scores,
-            and verifiable digital records.
-          </p>
-          <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Movement → Analysis → Score → Provenance</p>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {pipelineSteps.map(({ title, description, bullets, icon: Icon }) => (
-            <article key={title} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-3">
-              <Icon className="w-5 h-5 text-emerald-300" />
-              <h3 className="font-semibold text-lg">{title}</h3>
-              <p className="text-sm text-slate-300">{description}</p>
-              <ul className="text-xs text-slate-400 space-y-1">
-                {bullets.map((bullet) => (
-                  <li key={bullet}>• {bullet}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </section>
-
-        <section id="demo" className="grid lg:grid-cols-2 gap-6">
-          <article className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Live Console Preview</p>
-            <h3 className="text-2xl font-semibold">90-Second System Loop</h3>
-            <div className="rounded-xl border border-slate-700 bg-slate-950 p-4 font-mono text-xs space-y-2">
-              <p className="text-slate-500">SESSION: SES_MMEO7CG9_950K</p>
-              {demoEvents.map((event) => (
-                <p key={event} className="text-emerald-300">&gt; {event}</p>
-              ))}
+      <main className="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 py-10 sm:py-16">
+        <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-amber-200">
+              <Clock3 className="h-4 w-4" />
+              First outcome in under 10 seconds
             </div>
-          </article>
 
-          <article className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Core Diagram</p>
-            <h3 className="text-2xl font-semibold">Movement → Measurement → Evaluation → Verification → Record</h3>
-            <ol className="space-y-3 text-sm">
-              <li className="flex items-start gap-2"><Network className="w-4 h-4 mt-0.5 text-emerald-300" /> Signal Capture Layer</li>
-              <li className="flex items-start gap-2"><Binary className="w-4 h-4 mt-0.5 text-emerald-300" /> Kinematic Normalization + ChoreoCode Compiler</li>
-              <li className="flex items-start gap-2"><Gauge className="w-4 h-4 mt-0.5 text-emerald-300" /> PyRouette Scoring (TES / PCS / GOE)</li>
-              <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-300" /> Governance Validation (FSM transitions)</li>
-              <li className="flex items-start gap-2"><Hash className="w-4 h-4 mt-0.5 text-emerald-300" /> Cryptographic Hash + Ledger Archive</li>
-            </ol>
-          </article>
+            <div className="space-y-4">
+              <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-stone-50 sm:text-6xl">
+                You don&apos;t need advice. You need proof.
+              </h2>
+              <p className="max-w-2xl text-lg text-stone-300 sm:text-xl">
+                Check whether a moment actually holds structure before you act on it. One receipt is free. The pattern is what you pay to keep.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/30 backdrop-blur-sm sm:p-6">
+              <label htmlFor="moment" className="mb-3 block text-sm font-medium text-stone-200">
+                Describe what happened…
+              </label>
+              <textarea
+                id="moment"
+                value={moment}
+                onChange={(event) => setMoment(event.target.value)}
+                className="min-h-52 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-base text-stone-100 outline-none transition placeholder:text-stone-500 focus:border-amber-300/40 focus:ring-2 focus:ring-amber-300/20"
+                placeholder="They said one thing. Their behavior showed another. What happened?"
+              />
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                {starterExamples.map((example) => (
+                  <button
+                    key={example}
+                    type="button"
+                    onClick={() => setMoment(example)}
+                    className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-left text-sm text-stone-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white"
+                  >
+                    Load example
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className={`rounded-3xl border p-6 shadow-2xl shadow-black/30 ${verdictTone}`}>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-stone-300/90">Decision receipt</p>
+                  <div className={`mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] ${badgeTone}`}>
+                    {verdict.label}
+                  </div>
+                </div>
+                <ShieldAlert className="h-8 w-8 opacity-80" />
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-xs uppercase tracking-[0.22em] text-stone-400">Confidence</div>
+                  <div className="mt-2 text-4xl font-semibold text-white">{verdict.confidence}%</div>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-xs uppercase tracking-[0.22em] text-stone-400">Contradiction load</div>
+                  <div className="mt-2 text-4xl font-semibold text-white">{verdict.score}</div>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.22em] text-stone-400">Reason</div>
+                <p className="mt-2 text-base leading-7 text-stone-100">{verdict.reason}</p>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                {verdict.signals.map((signal) => (
+                  <div key={signal} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-stone-200">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-200" />
+                    <span>{signal}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div id="ledger" className="rounded-3xl border border-white/10 bg-stone-50 p-6 text-stone-950 shadow-2xl shadow-black/20">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-stone-500">
+                <Lock className="h-4 w-4" />
+                Track the pattern, not just the moment
+              </div>
+              <h3 className="mt-3 text-3xl font-semibold">Unlock the Decision Ledger — $29/month</h3>
+              <p className="mt-3 text-base leading-7 text-stone-700">
+                Save receipts, watch contradictions repeat, and stop re-deciding the same problem from zero every week.
+              </p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {paidSignals.map((item) => (
+                  <div key={item} className="rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm text-stone-700">
+                    {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="https://buy.stripe.com/test_decision_ledger"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white transition hover:bg-black"
+                >
+                  Unlock the Ledger
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 px-6 py-3 text-sm text-stone-600">
+                  1 product • 1 upgrade • no extra tiers yet
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section className="rounded-2xl border border-amber-300/30 bg-amber-300/5 p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-amber-200">Institutional Offer</p>
-          <h3 className="text-2xl font-semibold mt-1">Licensed Technical Architecture Documentation — $7,500</h3>
-          <p className="mt-3 text-slate-300 max-w-4xl">
-            Includes architecture report, governance framework, scoring ontology overview, and institutional evaluation license.
-            Source code, proprietary algorithms, and production models are explicitly excluded.
-          </p>
+        <section className="grid gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:grid-cols-3">
+          <article className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-xs uppercase tracking-[0.22em] text-stone-400">Enter through emotion</p>
+            <h3 className="mt-3 text-xl font-semibold text-white">Decision Receipt</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-300">A free first verdict for relationships, deals, and power dynamics.</p>
+          </article>
+          <article className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-xs uppercase tracking-[0.22em] text-stone-400">Stay for pattern memory</p>
+            <h3 className="mt-3 text-xl font-semibold text-white">Decision Ledger</h3>
+            <p className="mt-2 text-sm leading-6 text-stone-300">Monthly recurring layer for history, structure drift, and repeat behavior tracking.</p>
+          </article>
+          <article className="rounded-2xl border border-white/10 bg-black/20 p-5">
+            <p className="text-xs uppercase tracking-[0.22em] text-stone-400">Scale later</p>
+            <h3 className="mt-3 flex items-center gap-2 text-xl font-semibold text-white">
+              <TrendingUp className="h-5 w-5 text-amber-300" />
+              Institutional path
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-stone-300">Keep the high-ticket system behind the curtain until the front-door conversion loop is proven.</p>
+          </article>
         </section>
       </main>
     </div>
