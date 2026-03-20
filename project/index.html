@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sovereign Beta Portal</title>
+  <title>AVC Systems Studio — Governance Install™ + Receipt Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -18,6 +18,11 @@
       --accent-emerald: #10b981;
       --accent-purple: #7c3aed;
       --accent-gold: #fbbf24;
+      --accent-rose: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -32,7 +37,7 @@
     }
 
     .glass {
-      background: rgba(24, 20, 18, 0.8);
+      background: rgba(24, 20, 18, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(20px);
@@ -72,7 +77,9 @@
       pointer-events: none;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
     .glow-button {
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
@@ -80,9 +87,23 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .glow-button:hover {
+    .glow-button-secondary {
+      background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glow-button:hover,
+    .glow-button-secondary:hover {
       transform: translateY(-2px);
+    }
+
+    .glow-button:hover {
       box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
+    }
+
+    .glow-button-secondary:hover {
+      box-shadow: 0 12px 34px rgba(124, 58, 237, 0.34);
     }
 
     .modal-backdrop {
@@ -95,6 +116,16 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--text-bright);
     }
+
+    .tier-card {
+      min-height: 100%;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(251, 191, 36, 0.35);
+    }
   </style>
 </head>
 <body class="relative">
@@ -103,80 +134,181 @@
   <div class="orb orb-gold"></div>
   <div class="zodiac-wheel"></div>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
+  <main class="max-w-6xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
     <section class="glass rounded-2xl p-7 md:p-10">
-      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
-      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl leading-tight text-white mt-3">
-        Decode your karmic code — and move with precision this season.
+      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">AVC Systems Studio</p>
+      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-6xl leading-tight text-white mt-3 max-w-5xl">
+        Governance Install™ + Receipt Engine
       </h1>
-      <p class="mt-4 text-lg text-stone-200 max-w-3xl">
-        A paid download for founders and creators who want one sharp cosmic operating system: what to pursue,
-        what to pause, and what to protect over the next 30 days.
+      <p class="mt-4 text-xl text-stone-200 max-w-4xl">
+        We install decision systems that let you move fast without collapsing later.
+      </p>
+      <p class="mt-4 text-base md:text-lg text-stone-300 max-w-4xl">
+        This is not consulting. This is licensed structure for founders and operators carrying asymmetric risk,
+        hidden labor, or institutional pressure. You do not hire AVC Systems Studio to brainstorm. You engage us to
+        stabilize decisions, define direction, and make movement legible.
       </p>
       <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Transit timing</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♄ Boundary strategy</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Sovereign execution</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">Signal clarity</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">Licensed structure</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">Founder-safe governance</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">Receipt-based proof</span>
       </div>
-      <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
-          Buy the Primer → Instant Download
+      <div class="mt-7 flex flex-col lg:flex-row lg:items-center gap-3">
+        <button data-modal="accessModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
+          Enter the qualification path
         </button>
-        <p class="text-sm text-stone-300">$49 · Private PDF · No account required</p>
+        <button data-modal="accessModal" class="glow-button-secondary text-white font-semibold rounded-xl py-3 px-6 min-h-[44px]">
+          View entry offers
+        </button>
+        <p class="text-sm text-stone-300">Access is earned through movement, not interest.</p>
       </div>
     </section>
 
+    <section class="glass rounded-2xl p-7 md:p-8 grid gap-4 md:grid-cols-3">
+      <article class="border border-white/10 rounded-xl bg-white/5 p-5">
+        <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">What shifts</p>
+        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Invisible computation becomes visible.</h2>
+        <p class="mt-3 text-stone-200">Receipts and install layers reveal how the system thinks, what changed, and what happens next.</p>
+      </article>
+      <article class="border border-white/10 rounded-xl bg-white/5 p-5">
+        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Why it sells</p>
+        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Trust, precision, and movement.</h2>
+        <p class="mt-3 text-stone-200">Clients are not buying output alone. They are buying clarity under pressure and permission to move.</p>
+      </article>
+      <article class="border border-white/10 rounded-xl bg-white/5 p-5">
+        <p class="text-xs uppercase tracking-[0.35em] text-amber-200">How it is framed</p>
+        <h2 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Licensed structure, not outsourced execution.</h2>
+        <p class="mt-3 text-stone-200">Each engagement preserves IP boundaries, protects operator leverage, and creates a governed next step.</p>
+      </article>
+    </section>
+
     <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Proof</p>
-      <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Built for women navigating asymmetric risk, hidden labor extraction, and high-responsibility decisions.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Readers leave with a clear 30/60/90 rhythm to prioritize focus, money moves, and relational boundaries.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Grounded in real operator architecture: receipts, governed choices, and evidence over hype.</li>
-      </ul>
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Offer ladder</p>
+          <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">A qualification stack built for serious movement.</h2>
+        </div>
+        <p class="text-sm text-stone-300 max-w-xl">Cheap offers qualify. Core offers install. Premium offers restructure reality.</p>
+      </div>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <article class="tier-card border border-white/10 rounded-2xl bg-white/5 p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">Tier 1</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Founder-Safe Starter</h3>
+          <p class="mt-2 text-4xl text-white">$99</p>
+          <p class="mt-3 text-stone-200">A guided primer that filters noise, teaches the frame, and proves seriousness before deeper access.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Founder-safe system guide</li>
+            <li>• Core collapse patterns</li>
+            <li>• Self-assessment framework</li>
+          </ul>
+        </article>
+        <article class="tier-card border border-white/10 rounded-2xl bg-white/5 p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-purple-200">Tier 2</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Receipt Engine</h3>
+          <p class="mt-2 text-4xl text-white">$95–$150</p>
+          <p class="mt-3 text-stone-200">Kinetic Receipt™ for what to do next. Social Receipt™ for what happened, what it cost, and what now.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Structured breakdown</li>
+            <li>• Signal vs. noise</li>
+            <li>• 24-hour PDF artifact delivery</li>
+          </ul>
+        </article>
+        <article class="tier-card border border-white/10 rounded-2xl bg-white/5 p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-rose-200">Tier 3</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Qualified Entry Install</h3>
+          <p class="mt-2 text-4xl text-white">$2,500</p>
+          <p class="mt-3 text-stone-200">A bounded diagnostic install for founders with signal, local-first scope, and contained architecture needs.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Decision structure</li>
+            <li>• Initial governance framing</li>
+            <li>• Limited artifact output</li>
+          </ul>
+        </article>
+        <article class="tier-card border border-white/10 rounded-2xl bg-white/5 p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">Tier 4</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Governance Install™ — Core</h3>
+          <p class="mt-2 text-4xl text-white">$5,000</p>
+          <p class="mt-3 text-stone-200">The real floor: a 30-day engagement with a 60-day internal-use license for governance compression, proof, and baseline architecture.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Governance compression layer</li>
+            <li>• Provenance + structure</li>
+            <li>• Founder-safe system baseline</li>
+          </ul>
+        </article>
+        <article class="tier-card border border-white/10 rounded-2xl bg-white/5 p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-purple-200">Tier 5</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Governance Install™ — Architecture</h3>
+          <p class="mt-2 text-4xl text-white">$7,500</p>
+          <p class="mt-3 text-stone-200">For systems that need to last: governance spine, architecture mapping, operational choreography, and institutional framing.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Architecture map</li>
+            <li>• Artifact + proof systems</li>
+            <li>• Investor / board readiness layer</li>
+          </ul>
+        </article>
+        <article class="tier-card border border-amber-200/30 rounded-2xl bg-[rgba(124,58,237,0.12)] p-5">
+          <p class="text-xs uppercase tracking-[0.3em] text-amber-200">Tier 6</p>
+          <h3 class="font-[\"Playfair Display\",serif] text-2xl mt-3">Institutional / Stage IV</h3>
+          <p class="mt-2 text-4xl text-white">$25,000+</p>
+          <p class="mt-3 text-stone-200">Qualification-only architecture for high-stakes organizations operating at scale, under compliance pressure, or inside sensitive environments.</p>
+          <ul class="mt-4 space-y-2 text-sm text-stone-300">
+            <li>• Full system architecture</li>
+            <li>• Founder protection mechanisms</li>
+            <li>• Custom infrastructure design</li>
+          </ul>
+        </article>
+      </div>
     </section>
 
     <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
       <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Offer</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Founder-Safe Systems Primer</h2>
-        <p class="mt-3 text-stone-200">A 28–32 page PDF that maps extraction patterns, introduces the consideration framework, and helps you move from chaos to optionality without leaking power.</p>
-        <p class="mt-4 text-stone-300">Includes: core framework, plain-English licensing orientation, and a calm implementation arc for the next 90 days.</p>
+        <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Qualification process</p>
+        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Not everyone gets access.</h2>
+        <p class="mt-4 text-stone-200">This work requires active participation. Access is granted to founders who are already in motion and able to follow direction.</p>
+        <ul class="mt-5 space-y-3 text-stone-300">
+          <li>• Cross at least one paid threshold before requesting install access.</li>
+          <li>• Demonstrate responsiveness, willingness to invest, and actual movement.</li>
+          <li>• Enter architecture only when the system contact is justified by the stakes.</li>
+        </ul>
       </div>
-      <div class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6">
-        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Price anchor</p>
-        <p class="mt-2 font-[\"Playfair Display\",serif] text-5xl text-white">$49</p>
-        <p class="mt-3 text-stone-200">Lower than a strategy session. Higher leverage than random content consumption.</p>
-        <button data-modal="guideModal" class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]">Buy the Primer → Instant Download</button>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Boundary statement</p>
+        <p class="mt-3 text-lg text-stone-100">If you are looking for casual brainstorming, this is not the right fit.</p>
+        <p class="mt-4 text-stone-300">AVC Systems Studio prices transformation, structure, and long-term impact—not time. The center of the system must be resourced correctly or the entire field degrades.</p>
+        <div class="mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/10 p-4">
+          <p class="text-sm uppercase tracking-[0.2em] text-emerald-100">Positioning line</p>
+          <p class="mt-2 text-stone-100">You keep velocity. The system carries the risk.</p>
+        </div>
       </div>
     </section>
 
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Trust + boundaries</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">What this is — and what it is not</h2>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-emerald-100">This is for</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Founders carrying real responsibility</li>
-            <li>• Builders who need structural clarity, not motivation</li>
-            <li>• Operators who value evidence and constraints</li>
-          </ul>
-        </div>
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-rose-100">This is not</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Not legal, financial, or therapeutic advice</li>
-            <li>• Not a coaching subscription</li>
-            <li>• Not access to sealed operator methods</li>
-          </ul>
-        </div>
-      </div>
+    <section class="glass rounded-2xl p-7 md:p-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <article class="border border-white/10 rounded-xl bg-white/5 p-4">
+        <p class="text-xs uppercase tracking-[0.3em] text-amber-200">For founders</p>
+        <p class="mt-3 text-stone-200">Collapse confusion into movement when the team has signal but no stable decision architecture.</p>
+      </article>
+      <article class="border border-white/10 rounded-xl bg-white/5 p-4">
+        <p class="text-xs uppercase tracking-[0.3em] text-purple-200">For operators</p>
+        <p class="mt-3 text-stone-200">Translate invisible labor, authorship drift, and risk exposure into a legible protocol.</p>
+      </article>
+      <article class="border border-white/10 rounded-xl bg-white/5 p-4">
+        <p class="text-xs uppercase tracking-[0.3em] text-emerald-200">For institutions</p>
+        <p class="mt-3 text-stone-200">Create proof packets, governed choices, and defendable next steps before pressure compounds.</p>
+      </article>
+      <article class="border border-white/10 rounded-xl bg-white/5 p-4">
+        <p class="text-xs uppercase tracking-[0.3em] text-rose-200">For the record</p>
+        <p class="mt-3 text-stone-200">You are not buying vibes. You are buying clarity, bounded rights, and a system that survives scrutiny.</p>
+      </article>
     </section>
 
     <section class="glass rounded-2xl p-7 md:p-9 text-center">
-      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
-      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
+      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Current window</p>
+      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read the frame. Cross the threshold. Move with proof.</h2>
+      <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+        <button data-modal="accessModal" class="glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Open the access menu</button>
+        <button data-modal="accessModal" class="glow-button-secondary text-white font-semibold rounded-xl py-3 px-7 min-h-[44px]">Compare offers</button>
+      </div>
       <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
         <span id="countdown">--d --h --m --s</span>
         <label for="timezone" class="inline-flex items-center gap-2">
@@ -189,7 +321,7 @@
           </select>
         </label>
       </div>
-      <p id="footerNote" class="text-xs text-stone-400 mt-3">Portal closes at midnight on October 31, 2025 (Eastern).</p>
+      <p id="footerNote" class="text-xs text-stone-400 mt-3">Qualification window closes at 11:59 PM on April 30, 2026 (Eastern).</p>
     </section>
   </main>
 
@@ -200,11 +332,16 @@
     </div>
   </div>
 
-  <template id="guideModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Founder-Safe Systems Primer • $49</h3>
-      <p class="text-stone-300">Instant PDF download. Orientation only — not legal, financial, or therapeutic advice.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Primer">Buy the Primer → Instant Download</a>
+  <template id="accessModal">
+    <div class="space-y-4">
+      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Qualification Paths</h3>
+      <p class="text-stone-300">Choose the smallest threshold that matches your current seriousness. Higher-tier access follows demonstrated movement.</p>
+      <div class="grid gap-3">
+        <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Purchase the Founder-Safe Starter for ninety-nine dollars">Founder-Safe Starter → $99</a>
+        <a href="[YOUR_RECEIPT_PAYMENT_LINK]" class="glow-button-secondary inline-flex justify-center w-full rounded-xl py-3 font-semibold text-white" target="_blank" rel="noopener noreferrer" aria-label="Purchase the Receipt Engine offer">Receipt Engine → $95–$150</a>
+        <a href="mailto:hello@example.com?subject=Governance%20Install%20Inquiry" class="inline-flex justify-center w-full rounded-xl py-3 font-semibold text-stone-100 border border-white/15 bg-white/5 hover:bg-white/10 transition" aria-label="Email AVC Systems Studio about a Governance Install inquiry">Request Install Qualification → from $2,500</a>
+      </div>
+      <p class="text-xs text-stone-400">All install work is scoped separately and framed as licensed structure with bounded internal-use rights.</p>
     </div>
   </template>
 
@@ -212,7 +349,7 @@
     const countdownEl = document.getElementById('countdown');
     const timezoneSelect = document.getElementById('timezone');
     const footerNote = document.getElementById('footerNote');
-    const baseDate = { year: 2025, month: 10, day: 31, hour: 0, minute: 0, second: 0 };
+    const baseDate = { year: 2026, month: 4, day: 30, hour: 23, minute: 59, second: 0 };
     let countdownTimer = null;
     let countdownTarget = null;
 
@@ -259,57 +396,60 @@
         minute: '2-digit',
         timeZoneName: 'short'
       });
-      footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
+      footerNote.textContent = `Qualification window closes at ${formatter.format(countdownTarget)}.`;
     };
 
-    const tick = () => {
-      const now = new Date();
-      const diff = countdownTarget - now;
+    const updateCountdown = () => {
+      const diff = countdownTarget.getTime() - Date.now();
       countdownEl.textContent = formatDuration(diff);
     };
 
-    const startCountdown = () => {
-      if (countdownTimer) clearInterval(countdownTimer);
+    const resetCountdown = () => {
       countdownTarget = buildZonedTargetDate(timezoneSelect.value);
-      tick();
-      countdownTimer = setInterval(tick, 1000);
       updateFooter();
+      updateCountdown();
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = setInterval(updateCountdown, 1000);
     };
 
-    startCountdown();
-    timezoneSelect.addEventListener('change', startCountdown);
+    timezoneSelect.addEventListener('change', resetCountdown);
+    resetCountdown();
 
     const modalContainer = document.getElementById('modalContainer');
     const modalContent = document.getElementById('modalContent');
     const closeModalButton = document.getElementById('closeModal');
 
-    const openModal = (id) => {
-      const template = document.getElementById(id);
+    const openModal = (modalId) => {
+      const template = document.getElementById(modalId);
       if (!template) return;
       modalContent.innerHTML = template.innerHTML;
       modalContainer.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
     };
 
     const closeModal = () => {
       modalContainer.classList.add('hidden');
       modalContent.innerHTML = '';
+      document.body.classList.remove('overflow-hidden');
     };
 
     document.addEventListener('click', (event) => {
-      const modalTarget = event.target.closest('[data-modal]');
-      if (modalTarget) {
-        event.preventDefault();
-        openModal(modalTarget.dataset.modal);
-      }
-    });
-
-    modalContainer.addEventListener('click', (event) => {
-      if (event.target === modalContainer) {
-        closeModal();
+      const trigger = event.target.closest('[data-modal]');
+      if (trigger) {
+        openModal(trigger.dataset.modal);
       }
     });
 
     closeModalButton.addEventListener('click', closeModal);
+    modalContainer.addEventListener('click', (event) => {
+      if (event.target === modalContainer) closeModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modalContainer.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
   </script>
 </body>
 </html>
