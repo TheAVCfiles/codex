@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudioOS — Application</title>
+  <meta
+    name="description"
+    content="Apply for a StudioOS installation — a local-first operating system for serious studios."
+  />
+  <style>
+    :root {
+      --bg: #050505;
+      --card: #111114;
+      --text: #f0f0f5;
+      --muted: #888888;
+      --accent: #d4c19c;
+      --border: #222222;
+      --success: #8ba888;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(100%, 46rem);
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 5.5rem 0 3.5rem;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 7vw, 4rem);
+    }
+
+    .tag {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .intro,
+    form,
+    .success {
+      border: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    .intro {
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .intro p {
+      margin: 0 0 1rem;
+      color: #d8d8d8;
+    }
+
+    .intro p:last-child {
+      margin-bottom: 0;
+    }
+
+    .intro .warning {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    form {
+      padding: 2rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-size: 0.98rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #d8d8d8;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--border);
+      background: #18181d;
+      color: var(--text);
+      font: inherit;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      min-height: 8rem;
+      resize: vertical;
+    }
+
+    button,
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 3.5rem;
+      padding: 1rem 2rem;
+      border: 1px solid var(--text);
+      background: var(--text);
+      color: var(--bg);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.84rem;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+      cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible,
+    .back-link:hover,
+    .back-link:focus-visible {
+      background: transparent;
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .success {
+      display: none;
+      margin-top: 2rem;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .success h2 {
+      color: var(--success);
+      margin-bottom: 0.75rem;
+      font-size: 2rem;
+    }
+
+    .success p {
+      margin: 0.5rem 0;
+      color: #d8d8d8;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .back-link {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--border);
+      padding-inline: 1.25rem;
+    }
+
+    .back-link:hover,
+    .back-link:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 40rem) {
+      header {
+        padding-top: 4.5rem;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      button,
+      .back-link {
+        width: 100%;
+      }
+
+      .intro,
+      form,
+      .success {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back-link" href="index.html">← Return To Landing Page</a>
+    </div>
+
+    <header>
+      <h1>StudioOS Application</h1>
+      <div class="tag">Local-first operating system for serious studios</div>
+    </header>
+
+    <section class="intro">
+      <p>StudioOS is not a tool you browse — it is a system you qualify for.</p>
+      <p>
+        We install a sovereign, local-first control layer that turns chaos into clarity, motion
+        into proof, and operations into recurring revenue — without cloud dependency or identity
+        binding.
+      </p>
+      <p>
+        This is for studios already generating movement and ready to implement structure at scale.
+      </p>
+      <p class="warning">Applications are reviewed manually. Not everyone is accepted.</p>
+    </section>
+
+    <form id="studioApply">
+      <div>
+        <label for="full_name">Your Name</label>
+        <input id="full_name" type="text" name="full_name" required placeholder="First &amp; Last" />
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" required placeholder="Where we send access" />
+      </div>
+
+      <div>
+        <label for="studio_name">Studio / Business Name</label>
+        <input
+          id="studio_name"
+          type="text"
+          name="studio_name"
+          required
+          placeholder="Exact name as you brand it"
+        />
+      </div>
+
+      <div>
+        <label for="monthly_revenue">Current Monthly Revenue (approx)</label>
+        <select id="monthly_revenue" name="monthly_revenue" required>
+          <option value="">Select range</option>
+          <option>$0–$2K</option>
+          <option>$2K–$5K</option>
+          <option>$5K–$10K</option>
+          <option>$10K–$25K</option>
+          <option>$25K+</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="biggest_break">What is currently breaking most in your operations?</label>
+        <textarea
+          id="biggest_break"
+          name="biggest_break"
+          required
+          placeholder="Be specific — lost payments, scheduling chaos, unclear roles, revenue leaks, etc."
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="implementation_timeline">
+          Are you prepared to implement within 7–14 days of receiving the system?
+        </label>
+        <select id="implementation_timeline" name="implementation_timeline" required>
+          <option value="">Select</option>
+          <option>Yes — ready now</option>
+          <option>Within 30 days</option>
+          <option>No / exploring only</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="prior_system_spend">
+          Have you previously paid for systems, tools or consulting to run your studio?
+        </label>
+        <select id="prior_system_spend" name="prior_system_spend" required>
+          <option value="">Select</option>
+          <option>Yes — $1K+</option>
+          <option>Yes — under $1K</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="why_now">Why now? (one short paragraph)</label>
+        <textarea
+          id="why_now"
+          name="why_now"
+          required
+          placeholder="What changed that makes structure non-negotiable right now?"
+        ></textarea>
+      </div>
+
+      <button type="submit">Submit Application</button>
+    </form>
+
+    <section class="success" id="success" aria-live="polite">
+      <h2>Application Received</h2>
+      <p>Thank you. We review manually and respond within 48–72 hours if it is a fit.</p>
+      <p>Do not apply twice — duplicate submissions are auto-rejected.</p>
+      <p>If accepted, you will receive install instructions and an access link.</p>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById("studioApply").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {};
+
+      for (const [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+
+      localStorage.setItem(
+        "studioos_application_latest",
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          data,
+        })
+      );
+
+      this.style.display = "none";
+      document.getElementById("success").style.display = "block";
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
