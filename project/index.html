@@ -3,313 +3,645 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sovereign Beta Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Decision Engine — Proof Before You Act</title>
+  <meta
+    name="description"
+    content="Decision Engine helps you check whether a moment holds structure before you act on it."
+  />
   <style>
     :root {
-      --bg-primary: #1a1614;
-      --bg-secondary: #0f0d0c;
-      --text-bright: #fafaf9;
-      --text-medium: #e7e5e4;
-      --text-soft: #d6d3d1;
-      --accent-emerald: #10b981;
-      --accent-purple: #7c3aed;
-      --accent-gold: #fbbf24;
+      --bg: #0a0a0f;
+      --bg-elevated: #111118;
+      --bg-panel: #181821;
+      --text: #f5f5fa;
+      --muted: #a1a1b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #a78bfa;
+      --accent-strong: #c4b5fd;
+      --danger: #fda4af;
+      --success: #86efac;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
     }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.07), transparent 25%),
-        radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.08), transparent 30%),
-        radial-gradient(circle at 10% 90%, rgba(251, 191, 36, 0.06), transparent 25%),
-        linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
-      color: var(--text-bright);
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(167, 139, 250, 0.12), transparent 26%),
+        radial-gradient(circle at top right, rgba(134, 239, 172, 0.08), transparent 22%),
+        linear-gradient(180deg, #09090d 0%, #0a0a0f 40%, #101018 100%);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    .glass {
-      background: rgba(24, 20, 18, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(20px);
+    a { color: inherit; }
+
+    .container {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
     }
 
-    .orb {
-      position: absolute;
-      width: 340px;
-      height: 340px;
-      filter: blur(80px);
-      opacity: 0.6;
-      animation: float 8s ease-in-out infinite;
+    .hero,
+    section,
+    footer {
+      padding: 5rem 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      pointer-events: none;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent-strong);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      font-weight: 700;
     }
 
-    .orb-emerald { background: rgba(16, 185, 129, 0.24); left: 5%; top: 12%; }
-    .orb-purple { background: rgba(124, 58, 237, 0.22); right: 2%; top: 20%; animation-delay: 2s; }
-    .orb-gold { background: rgba(251, 191, 36, 0.18); left: 10%; bottom: 8%; animation-delay: 4s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); opacity: 0.6; }
-      50% { transform: translateY(-20px); opacity: 0.8; }
+    .hero {
+      padding-top: 6.5rem;
+      text-align: center;
     }
 
-    .zodiac-wheel {
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      top: -40px;
-      right: -40px;
-      opacity: 0.14;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-      background-size: 22px 22px;
-      border-radius: 999px;
-      animation: spin 60s linear infinite;
-      pointer-events: none;
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .glow-button {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    h1 {
+      margin-top: 1.5rem;
+      font-size: clamp(3rem, 8vw, 5.75rem);
+      font-weight: 700;
     }
 
-    .glow-button:hover {
+    h2 {
+      font-size: clamp(2.1rem, 4vw, 3.2rem);
+      font-weight: 650;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-copy {
+      width: min(760px, 100%);
+      margin: 1.5rem auto 0;
+      font-size: 1.2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn,
+    button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      border-radius: 0.95rem;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      min-height: 3.25rem;
+    }
+
+    .btn-primary,
+    button {
+      background: linear-gradient(135deg, var(--accent) 0%, #c084fc 100%);
+      color: #0d0d12;
+      box-shadow: 0 18px 40px rgba(167, 139, 250, 0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn:hover,
+    button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
     }
 
-    .modal-backdrop {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
+    .grid {
+      display: grid;
+      gap: 1.5rem;
     }
 
-    .field {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-bright);
+    .card {
+      background: rgba(17, 17, 24, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .demo-shell {
+      padding: 2rem;
+    }
+
+    .demo-shell p.section-copy,
+    .video-shell p.section-copy,
+    .pricing-shell p.section-copy,
+    .faq-shell p.section-copy,
+    .closing-shell p.section-copy {
+      margin-top: 1rem;
+      max-width: 42rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 10rem;
+      margin-top: 1.75rem;
+      padding: 1rem 1.1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #151520;
+      color: var(--text);
+      font: inherit;
+      resize: vertical;
+    }
+
+    .demo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .demo-hint {
+      font-size: 0.96rem;
+    }
+
+    .result {
+      margin-top: 1.5rem;
+      display: none;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      border-left: 4px solid var(--accent);
+      background: #151520;
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      color: #ebebf5;
+    }
+
+    .result[data-status="VALID"] { border-left-color: var(--success); }
+    .result[data-status="INVALID"] { border-left-color: var(--danger); }
+
+    .upgrade-cta {
+      display: none;
+      margin-top: 1.25rem;
+      width: fit-content;
+    }
+
+    .video-shell,
+    .pricing-shell,
+    .faq-shell,
+    .closing-shell {
+      padding: 2rem;
+    }
+
+    .video-frame {
+      position: relative;
+      margin-top: 1.75rem;
+      overflow: hidden;
+      border-radius: 1.2rem;
+      background: #000;
+      box-shadow: var(--shadow);
+      aspect-ratio: 16 / 9;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at center, rgba(167, 139, 250, 0.28), transparent 45%),
+        linear-gradient(rgba(5, 5, 8, 0.35), rgba(5, 5, 8, 0.58));
+      cursor: pointer;
+    }
+
+    .video-pill {
+      padding: 1rem 1.6rem;
+      border-radius: 999px;
+      background: rgba(167, 139, 250, 0.92);
+      color: #0d0d12;
+      font-size: 1.15rem;
+      font-weight: 800;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .pricing-layout {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 2rem;
+    }
+
+    .price-card,
+    .feature-card {
+      padding: 1.8rem;
+      border-radius: 1.2rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+    }
+
+    .price-value {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      margin-top: 1rem;
+      font-size: 1.15rem;
+      color: var(--muted);
+    }
+
+    .price-value strong {
+      font-size: 3.7rem;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .price-actions {
+      display: grid;
+      gap: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    .price-note {
+      font-size: 0.94rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .feature-list li {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .feature-list li:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    details {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      color: var(--text);
+      font-size: 1.08rem;
+      font-weight: 650;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    details p {
+      margin-top: 0.85rem;
+      max-width: 46rem;
+    }
+
+    .closing-shell {
+      text-align: center;
+    }
+
+    .closing-actions {
+      margin-top: 1.75rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      padding-top: 0;
+      text-align: center;
+    }
+
+    .footer-copy {
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 860px) {
+      .pricing-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero,
+      section,
+      footer {
+        padding: 4rem 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 1.25rem, 100%);
+      }
+
+      .demo-shell,
+      .video-shell,
+      .pricing-shell,
+      .faq-shell,
+      .closing-shell {
+        padding: 1.35rem;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .price-value strong {
+        font-size: 3rem;
+      }
     }
   </style>
 </head>
-<body class="relative">
-  <div class="orb orb-emerald"></div>
-  <div class="orb orb-purple"></div>
-  <div class="orb orb-gold"></div>
-  <div class="zodiac-wheel"></div>
-
-  <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
-    <section class="glass rounded-2xl p-7 md:p-10">
-      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
-      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl leading-tight text-white mt-3">
-        Decode your karmic code — and move with precision this season.
-      </h1>
-      <p class="mt-4 text-lg text-stone-200 max-w-3xl">
-        A paid download for founders and creators who want one sharp cosmic operating system: what to pursue,
-        what to pause, and what to protect over the next 30 days.
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="eyebrow">Decision Engine • Live Demo</div>
+      <h1>You don’t need advice.<br />You need proof.</h1>
+      <p class="hero-copy">
+        Check if a moment actually holds structure before you act on it. Get an instant verdict,
+        confidence, reason, and a clean path into paid pattern tracking.
       </p>
-      <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Transit timing</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♄ Boundary strategy</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Sovereign execution</span>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#demo">Try 1 Free Decision Receipt</a>
+        <a class="btn btn-secondary" href="#pricing">Unlock Full Access</a>
       </div>
-      <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
-          Buy the Primer → Instant Download
-        </button>
-        <p class="text-sm text-stone-300">$49 · Private PDF · No account required</p>
-      </div>
-    </section>
+    </div>
+  </header>
 
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Proof</p>
-      <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Built for women navigating asymmetric risk, hidden labor extraction, and high-responsibility decisions.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Readers leave with a clear 30/60/90 rhythm to prioritize focus, money moves, and relational boundaries.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Grounded in real operator architecture: receipts, governed choices, and evidence over hype.</li>
-      </ul>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
-      <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Offer</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Founder-Safe Systems Primer</h2>
-        <p class="mt-3 text-stone-200">A 28–32 page PDF that maps extraction patterns, introduces the consideration framework, and helps you move from chaos to optionality without leaking power.</p>
-        <p class="mt-4 text-stone-300">Includes: core framework, plain-English licensing orientation, and a calm implementation arc for the next 90 days.</p>
-      </div>
-      <div class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6">
-        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Price anchor</p>
-        <p class="mt-2 font-[\"Playfair Display\",serif] text-5xl text-white">$49</p>
-        <p class="mt-3 text-stone-200">Lower than a strategy session. Higher leverage than random content consumption.</p>
-        <button data-modal="guideModal" class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]">Buy the Primer → Instant Download</button>
-      </div>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Trust + boundaries</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">What this is — and what it is not</h2>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-emerald-100">This is for</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Founders carrying real responsibility</li>
-            <li>• Builders who need structural clarity, not motivation</li>
-            <li>• Operators who value evidence and constraints</li>
-          </ul>
-        </div>
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-rose-100">This is not</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Not legal, financial, or therapeutic advice</li>
-            <li>• Not a coaching subscription</li>
-            <li>• Not access to sealed operator methods</li>
-          </ul>
+  <main>
+    <section id="demo">
+      <div class="container">
+        <div class="card demo-shell">
+          <div class="eyebrow">Free receipt</div>
+          <h2 style="margin-top: 1rem;">Try It Live</h2>
+          <p class="section-copy">
+            Describe any decision, interaction, contradiction, or pressure point. The demo uses placeholder
+            logic now, so you can test the emotional flow before wiring a deeper engine later.
+          </p>
+          <label for="inputText" style="display:block; margin-top:1.5rem; font-weight:650; color:var(--text);">
+            Describe what happened
+          </label>
+          <textarea id="inputText" placeholder="They promised follow-up after the call, then vanished for six days and blamed timing."></textarea>
+          <div class="demo-actions">
+            <button type="button" onclick="generateVerdict()">Check Structure</button>
+            <span class="demo-hint">First verdict is free. Pattern tracking unlocks after upgrade.</span>
+          </div>
+          <div id="verdict" class="result" aria-live="polite"></div>
+          <a
+            id="upgradeButton"
+            class="btn btn-primary upgrade-cta"
+            href="https://buy.stripe.com/YOUR_REAL_MONTHLY_LINK_HERE"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Unlock Full Access → $29/mo
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="glass rounded-2xl p-7 md:p-9 text-center">
-      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
-      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
-      <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
-        <span id="countdown">--d --h --m --s</span>
-        <label for="timezone" class="inline-flex items-center gap-2">
-          <span>Timezone</span>
-          <select id="timezone" class="field rounded-lg px-3 py-2 text-sm min-h-[44px]">
-            <option value="America/New_York">Eastern (EST/EDT)</option>
-            <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
-            <option value="Europe/London">London (GMT/BST)</option>
-            <option value="UTC">UTC</option>
-          </select>
-        </label>
+    <section id="demo-video">
+      <div class="container">
+        <div class="card video-shell">
+          <div class="eyebrow">Video proof</div>
+          <h2 style="margin-top: 1rem;">See It Work in 30 Seconds</h2>
+          <p class="section-copy">
+            Replace the YouTube ID and poster image when your demo is ready. The structure is already set up
+            for a fast loop: contradiction in, verdict out, paywall in view.
+          </p>
+          <div class="video-frame">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&playsinline=1&loop=1&playlist=VIDEO_ID&rel=0"
+              title="Decision Engine demo"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+            <div class="video-overlay" id="videoOverlay" onclick="hideVideoOverlay()">
+              <div class="video-pill">▶ Watch Demo</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <p id="footerNote" class="text-xs text-stone-400 mt-3">Portal closes at midnight on October 31, 2025 (Eastern).</p>
+    </section>
+
+    <section id="pricing">
+      <div class="container">
+        <div class="card pricing-shell">
+          <div class="eyebrow">One product only</div>
+          <h2 style="margin-top: 1rem;">Unlock Full Access</h2>
+          <p class="section-copy">
+            Keep the front door focused: one subscription, one outcome, one clean next step.
+          </p>
+
+          <div class="pricing-layout">
+            <article class="price-card">
+              <p style="color: var(--accent-strong); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.82rem;">Decision Ledger</p>
+              <div class="price-value"><strong>$29</strong><span>/ month</span></div>
+              <p style="margin-top: 1rem;">
+                Unlimited receipts, full pattern memory, export-ready history, and a single place to track what repeats.
+              </p>
+              <div class="price-actions">
+                <a
+                  class="btn btn-primary"
+                  href="https://buy.stripe.com/YOUR_REAL_MONTHLY_LINK_HERE"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Unlock Full Access → $29/mo
+                </a>
+                <a
+                  class="btn btn-secondary"
+                  href="success.html"
+                >
+                  Preview Success Page
+                </a>
+              </div>
+              <p class="price-note" style="margin-top: 1rem;">
+                Replace the Stripe Payment Link with your real checkout URL before deployment. Test mode works with Stripe’s 4242 4242 4242 4242 card.
+              </p>
+            </article>
+
+            <aside class="feature-card">
+              <ul class="feature-list">
+                <li>
+                  <strong style="color: var(--text); display:block;">Unlimited Decision Receipts</strong>
+                  Stop rationing inputs. Run every ambiguous moment through the same system.
+                </li>
+                <li>
+                  <strong style="color: var(--text); display:block;">Pattern Tracking</strong>
+                  Move beyond isolated feelings and see whether contradictions repeat over time.
+                </li>
+                <li>
+                  <strong style="color: var(--text); display:block;">Local-first posture</strong>
+                  Clear, minimal, and private by default until you decide to add accounts later.
+                </li>
+                <li>
+                  <strong style="color: var(--text); display:block;">Upgradeable foundation</strong>
+                  This page is ready for future webhooks, saved histories, or team-level upsells.
+                </li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="card faq-shell">
+          <div class="eyebrow">Quick answers</div>
+          <h2 style="margin-top: 1rem;">Short FAQ</h2>
+          <p class="section-copy">
+            Keep it simple. This page sells one thing and answers the obvious objections.
+          </p>
+          <div style="margin-top: 1rem;">
+            <details>
+              <summary>What is this?</summary>
+              <p>A decision validation tool that checks whether a moment appears structurally valid, unstable, or invalid before you act on it.</p>
+            </details>
+            <details>
+              <summary>Who is it for?</summary>
+              <p>People dealing with ambiguity, contradiction, pressure, mixed signals, or any moment where clarity matters more than reassurance.</p>
+            </details>
+            <details>
+              <summary>What do I get?</summary>
+              <p>A verdict, confidence level, reason, and—on the paid plan—pattern tracking over time.</p>
+            </details>
+            <details>
+              <summary>Is it private?</summary>
+              <p>Yes. This version is built as a clean, local-first front door with no identity binding or unnecessary tracking baked in.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="card closing-shell">
+          <div class="eyebrow">Final CTA</div>
+          <h2 style="margin-top: 1rem;">Run the free receipt. Then decide if you want the ledger.</h2>
+          <p class="section-copy" style="margin-inline:auto;">
+            Keep the page lean, replace the three placeholders, and deploy it to Vercel or Netlify tonight.
+          </p>
+          <div class="closing-actions">
+            <a class="btn btn-primary" href="#demo">Try the Demo</a>
+            <a class="btn btn-secondary" href="apply.html">Open StudioOS Application</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <div id="modalContainer" class="hidden fixed inset-0 z-30 flex items-center justify-center modal-backdrop">
-    <div class="bg-[rgba(24,20,18,0.95)] border border-white/10 rounded-2xl shadow-2xl max-w-lg w-[92%] md:w-[560px] p-6 relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-stone-300 hover:text-white min-h-[44px] min-w-[44px]" aria-label="Close modal">✕</button>
-      <div id="modalContent"></div>
+  <footer>
+    <div class="container">
+      <p class="footer-copy">
+        Decision Engine — Structure converts motion to proof.<br />
+        Local-first. No identity. No fluff.<br />
+        © 2026 AVC Systems
+      </p>
     </div>
-  </div>
-
-  <template id="guideModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Founder-Safe Systems Primer • $49</h3>
-      <p class="text-stone-300">Instant PDF download. Orientation only — not legal, financial, or therapeutic advice.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Primer">Buy the Primer → Instant Download</a>
-    </div>
-  </template>
+  </footer>
 
   <script>
-    const countdownEl = document.getElementById('countdown');
-    const timezoneSelect = document.getElementById('timezone');
-    const footerNote = document.getElementById('footerNote');
-    const baseDate = { year: 2025, month: 10, day: 31, hour: 0, minute: 0, second: 0 };
-    let countdownTimer = null;
-    let countdownTarget = null;
+    function hideVideoOverlay() {
+      const overlay = document.getElementById('videoOverlay');
+      if (overlay) overlay.style.display = 'none';
+    }
 
-    const getTimeZoneOffsetMinutes = (date, timeZone) => {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).formatToParts(date).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
+    function generateVerdict() {
+      const input = document.getElementById('inputText').value.trim();
+      const verdictEl = document.getElementById('verdict');
+      const upgradeButton = document.getElementById('upgradeButton');
 
-      const asUTC = Date.UTC(parts.year, Number(parts.month) - 1, parts.day, parts.hour, parts.minute, parts.second);
-      return (asUTC - date.getTime()) / 60000;
-    };
-
-    const buildZonedTargetDate = (timeZone) => {
-      const utcDate = Date.UTC(baseDate.year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
-      const reference = new Date(utcDate);
-      const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
-      return new Date(utcDate - offsetMinutes * 60000);
-    };
-
-    const formatDuration = (ms) => {
-      if (ms <= 0) return '0d 0h 0m 0s';
-      const totalSeconds = Math.floor(ms / 1000);
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    };
-
-    const updateFooter = () => {
-      const formatter = new Intl.DateTimeFormat('en-US', {
-        timeZone: timezoneSelect.value,
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        timeZoneName: 'short'
-      });
-      footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
-    };
-
-    const tick = () => {
-      const now = new Date();
-      const diff = countdownTarget - now;
-      countdownEl.textContent = formatDuration(diff);
-    };
-
-    const startCountdown = () => {
-      if (countdownTimer) clearInterval(countdownTimer);
-      countdownTarget = buildZonedTargetDate(timezoneSelect.value);
-      tick();
-      countdownTimer = setInterval(tick, 1000);
-      updateFooter();
-    };
-
-    startCountdown();
-    timezoneSelect.addEventListener('change', startCountdown);
-
-    const modalContainer = document.getElementById('modalContainer');
-    const modalContent = document.getElementById('modalContent');
-    const closeModalButton = document.getElementById('closeModal');
-
-    const openModal = (id) => {
-      const template = document.getElementById(id);
-      if (!template) return;
-      modalContent.innerHTML = template.innerHTML;
-      modalContainer.classList.remove('hidden');
-    };
-
-    const closeModal = () => {
-      modalContainer.classList.add('hidden');
-      modalContent.innerHTML = '';
-    };
-
-    document.addEventListener('click', (event) => {
-      const modalTarget = event.target.closest('[data-modal]');
-      if (modalTarget) {
-        event.preventDefault();
-        openModal(modalTarget.dataset.modal);
+      if (!input) {
+        verdictEl.style.display = 'block';
+        verdictEl.dataset.status = 'INVALID';
+        verdictEl.textContent = 'Please describe a real moment before checking structure.';
+        upgradeButton.style.display = 'none';
+        return;
       }
-    });
 
-    modalContainer.addEventListener('click', (event) => {
-      if (event.target === modalContainer) {
-        closeModal();
-      }
-    });
+      const hasContradiction = /ghosted|promised|follow-up|blamed|said.*but|contradict/i.test(input);
+      const hasPressure = /pressure|stress|overwhelm|rush|panic/i.test(input);
+      const hasClarity = /clear|consistent|calm|direct|aligned/i.test(input);
 
-    closeModalButton.addEventListener('click', closeModal);
+      let integrity = 78;
+      if (hasContradiction) integrity -= 34;
+      if (hasPressure) integrity -= 15;
+      if (hasClarity) integrity += 14;
+      integrity = Math.max(18, Math.min(96, integrity));
+
+      let verdict = 'UNSTABLE';
+      if (integrity >= 76) verdict = 'VALID';
+      if (integrity <= 48) verdict = 'INVALID';
+
+      const confidence = integrity >= 86 ? 'HIGH' : integrity >= 56 ? 'MEDIUM' : 'LOW';
+      const reason = hasContradiction
+        ? 'Behavior does not match stated intent.'
+        : hasPressure
+          ? 'Pressure is distorting the structure around this moment.'
+          : hasClarity
+            ? 'Signals appear aligned and internally consistent.'
+            : 'Not enough stabilizing evidence is present yet.';
+
+      const output = `Decision Receipt SP-${Math.floor(Math.random() * 100000)}\n` +
+        `Timestamp: ${new Date().toISOString()}\n\n` +
+        `Input: ${input}\n\n` +
+        `Verdict: ${verdict}\n` +
+        `Confidence: ${confidence} (${integrity}%)\n\n` +
+        `Reason: ${reason}\n\n` +
+        `Engine: Placeholder scoring layer`; 
+
+      verdictEl.style.display = 'block';
+      verdictEl.dataset.status = verdict;
+      verdictEl.textContent = output;
+      upgradeButton.style.display = 'inline-flex';
+      verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   </script>
 </body>
 </html>
