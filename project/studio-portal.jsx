@@ -20,6 +20,7 @@ import {
   FileCheck,
   ClipboardList,
   Terminal,
+  Lock,
 } from "lucide-react";
 
 const DANCER_ROSTER = [
@@ -84,6 +85,31 @@ const COMPANY_STATS = {
   revenue: 10200,
   daysRunway: 42,
   activeInjuries: 3,
+};
+
+const WITNESS_WINDOW_CONFIG = {
+  window: "v1",
+  label: "March Access Window",
+  open: Date.parse("2026-03-20T00:00:00Z") / 1000,
+  close: Date.parse("2026-03-27T00:00:00Z") / 1000,
+  tokens: ["AURORA", "STAGEPORT"],
+};
+
+const readStoredBoolean = (key, fallback = false) => {
+  if (typeof window === "undefined") return fallback;
+  return window.localStorage.getItem(key) === "true";
+};
+
+const readStoredReceipt = () => {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem("witness_receipt");
+  if (!raw) return null;
+
+  try {
+    return JSON.parse(raw);
+  } catch (_error) {
+    return null;
+  }
 };
 
 const StatusBadge = ({ status }) => {
@@ -279,6 +305,137 @@ const ArtifactCard = ({ title, icon, value, footer }) => (
     <div className="text-[10px] text-zinc-500 italic border-t border-zinc-800 pt-2">{footer}</div>
   </div>
 );
+
+const WitnessWindow = ({
+  hasAccess,
+  setHasAccess,
+  requestedView,
+  setCurrentView,
+}) => {
+  const [token, setToken] = useState("");
+  const [status, setStatus] = useState(
+    hasAccess ? "Access already granted" : "Awaiting token",
+  );
+  const [receipt, setReceipt] = useState(() => readStoredReceipt());
+
+  const now = () => Math.floor(Date.now() / 1000);
+
+  const enter = () => {
+    if (now() < WITNESS_WINDOW_CONFIG.open) {
+      setStatus("Window not open");
+      return;
+    }
+
+    if (now() > WITNESS_WINDOW_CONFIG.close) {
+      setStatus("Window closed");
+      return;
+    }
+
+    const normalizedToken = token.trim().toUpperCase();
+
+    if (!WITNESS_WINDOW_CONFIG.tokens.includes(normalizedToken)) {
+      setStatus("Access denied");
+      return;
+    }
+
+    const nextReceipt = {
+      window: WITNESS_WINDOW_CONFIG.window,
+      token: normalizedToken,
+      opened: now(),
+      checksum: Math.random().toString(36).slice(2, 10),
+    };
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(
+        "witness_receipt",
+        JSON.stringify(nextReceipt),
+      );
+      window.localStorage.setItem("window_access", "true");
+    }
+
+    setReceipt(nextReceipt);
+    setHasAccess(true);
+    setStatus("Access granted");
+  };
+
+  return (
+    <div className="max-w-md mx-auto space-y-6 animate-in fade-in duration-500">
+      <div className="border border-zinc-800 bg-zinc-950/80 p-8 space-y-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 text-zinc-400 text-xs uppercase tracking-[0.3em]">
+            <Lock className="w-4 h-4 text-zinc-500" />
+            Witness Window
+          </div>
+          <h1 className="text-3xl font-light text-zinc-100">
+            Private session access
+          </h1>
+          <p className="text-sm text-zinc-500">
+            Local-first gate. No identity. Time-bound access for protected
+            modules inside StudioOS.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 text-xs">
+          <div className="border border-zinc-800 bg-black/30 p-3">
+            <div className="text-zinc-500 uppercase tracking-widest mb-1">
+              Opens
+            </div>
+            <div className="text-zinc-200">
+              {new Date(WITNESS_WINDOW_CONFIG.open * 1000).toLocaleString()}
+            </div>
+          </div>
+          <div className="border border-zinc-800 bg-black/30 p-3">
+            <div className="text-zinc-500 uppercase tracking-widest mb-1">
+              Closes
+            </div>
+            <div className="text-zinc-200">
+              {new Date(WITNESS_WINDOW_CONFIG.close * 1000).toLocaleString()}
+            </div>
+          </div>
+        </div>
+
+        <input
+          value={token}
+          onChange={(event) => setToken(event.target.value)}
+          placeholder="Enter token"
+          className="w-full p-3 bg-black border border-zinc-700 text-zinc-100 placeholder:text-zinc-600"
+        />
+
+        <button
+          onClick={enter}
+          className="w-full p-3 border border-zinc-600 text-zinc-100 hover:bg-zinc-900 transition-colors"
+        >
+          Enter
+        </button>
+
+        <div className="text-sm text-zinc-500">{status}</div>
+
+        {receipt && (
+          <div className="border border-emerald-900/40 bg-emerald-950/20 p-4 space-y-2 text-sm">
+            <div className="text-emerald-400 uppercase tracking-widest text-[11px]">
+              Witness Receipt
+            </div>
+            <div className="text-zinc-300 font-mono break-all">
+              checksum: {receipt.checksum}
+            </div>
+            <div className="text-zinc-500 text-xs">
+              opened {new Date(receipt.opened * 1000).toLocaleString()}
+            </div>
+          </div>
+        )}
+
+        {hasAccess && requestedView && (
+          <button
+            onClick={() => setCurrentView(requestedView)}
+            className="w-full p-3 bg-white text-black hover:bg-zinc-200 transition-colors"
+          >
+            Continue to locked module
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const PayGaitView = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -676,6 +833,22 @@ const CompanyView = () => (
 export default function StudioPortal() {
   const [currentView, setCurrentView] = useState("reception");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [windowAccess, setWindowAccess] = useState(() =>
+    readStoredBoolean("window_access"),
+  );
+  const [requestedView, setRequestedView] = useState("paygait");
+
+  const openView = (viewId) => {
+    const protectedViews = new Set(["paygait"]);
+
+    if (protectedViews.has(viewId) && !windowAccess) {
+      setRequestedView(viewId);
+      setCurrentView("window");
+      return;
+    }
+
+    setCurrentView(viewId);
+  };
 
   const navItems = [
     { id: "reception", label: "Reception", icon: Activity },
@@ -683,6 +856,7 @@ export default function StudioPortal() {
     { id: "sandbox", label: "The Floor", icon: Move },
     { id: "bank", label: "Ballet Bank", icon: Maximize2 },
     { id: "company", label: "The Ledger", icon: DollarSign },
+    { id: "window", label: "Window", icon: Lock },
     { id: "paygait", label: "PayGait Local", icon: Fingerprint },
     { id: "ecosystem", label: "Ecosystem Map", icon: Shield },
   ];
@@ -700,7 +874,7 @@ export default function StudioPortal() {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => setCurrentView(item.id)}
+              onClick={() => openView(item.id)}
               className={`flex items-center p-3 rounded-md transition-all duration-200 ${
                 currentView === item.id
                   ? "bg-zinc-800 text-white shadow-lg"
@@ -735,7 +909,7 @@ export default function StudioPortal() {
               <button
                 key={item.id}
                 onClick={() => {
-                  setCurrentView(item.id);
+                  openView(item.id);
                   setSidebarOpen(false);
                 }}
                 className={`flex items-center text-xl font-light ${currentView === item.id ? "text-white" : "text-zinc-500"}`}
@@ -758,6 +932,14 @@ export default function StudioPortal() {
             {currentView === "sandbox" && <SandboxView />}
             {currentView === "bank" && <BalletBankView />}
             {currentView === "company" && <CompanyView />}
+            {currentView === "window" && (
+              <WitnessWindow
+                hasAccess={windowAccess}
+                setHasAccess={setWindowAccess}
+                requestedView={requestedView}
+                setCurrentView={setCurrentView}
+              />
+            )}
             {currentView === "paygait" && <PayGaitView />}
             {currentView === "ecosystem" && <EcosystemMapView />}
           </div>
