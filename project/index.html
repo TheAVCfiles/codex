@@ -3,313 +3,645 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sovereign Beta Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Decision Engine — Proof Before You Act</title>
+  <meta
+    name="description"
+    content="Check if a moment holds structure before you act. Get an instant verdict, confidence level, and reason — then unlock Decision Ledger for full pattern tracking."
+  />
   <style>
     :root {
-      --bg-primary: #1a1614;
-      --bg-secondary: #0f0d0c;
-      --text-bright: #fafaf9;
-      --text-medium: #e7e5e4;
-      --text-soft: #d6d3d1;
-      --accent-emerald: #10b981;
-      --accent-purple: #7c3aed;
-      --accent-gold: #fbbf24;
+      --bg: #0a0a0f;
+      --bg-elevated: #111118;
+      --bg-soft: #171721;
+      --text: #f3f3f8;
+      --muted: #9a9aad;
+      --accent: #a78bfa;
+      --accent-strong: #c4b5fd;
+      --border: rgba(255, 255, 255, 0.1);
+      --danger: #fda4af;
+      --success: #86efac;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      --radius-lg: 1.5rem;
+      --radius-md: 1rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.07), transparent 25%),
-        radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.08), transparent 30%),
-        radial-gradient(circle at 10% 90%, rgba(251, 191, 36, 0.06), transparent 25%),
-        linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
-      color: var(--text-bright);
+      margin: 0;
       min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(167, 139, 250, 0.12), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(134, 239, 172, 0.07), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    .glass {
-      background: rgba(24, 20, 18, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(20px);
+    a {
+      color: inherit;
     }
 
-    .orb {
-      position: absolute;
-      width: 340px;
-      height: 340px;
-      filter: blur(80px);
-      opacity: 0.6;
-      animation: float 8s ease-in-out infinite;
+    .container {
+      width: min(100%, 70rem);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .section {
+      padding: 4.5rem 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+
+    .hero {
+      padding: 6rem 0 3rem;
+      text-align: center;
+    }
+
+    .hero__panel,
+    .card,
+    .faq details,
+    .pricing,
+    .final-cta,
+    .video-frame,
+    .success-card,
+    .intro,
+    .application-form {
+      background: rgba(17, 17, 24, 0.84);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero__panel {
+      padding: 3rem 1.5rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.08;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.9rem, 8vw, 5.2rem);
+      max-width: 12ch;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 1.5rem auto 0;
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    }
+
+    .button,
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      min-height: 3.25rem;
+      padding: 0.95rem 1.4rem;
+      border: 0;
+      border-radius: 0.9rem;
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+      color: #08080c;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 18px 40px rgba(167, 139, 250, 0.24);
+    }
+
+    .button:hover,
+    button:hover,
+    .button:focus-visible,
+    button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 45px rgba(167, 139, 250, 0.3);
+      outline: none;
+    }
+
+    .button--ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .hero__actions,
+    .cta-row {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .hero__meta {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .hero__meta span,
+    .pill {
+      padding: 0.55rem 0.8rem;
       border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .card {
+      padding: 1.5rem;
+    }
+
+    .demo {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .demo__header {
+      text-align: center;
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      color: var(--text);
+      font: inherit;
+      padding: 1rem 1rem;
+    }
+
+    textarea {
+      min-height: 10rem;
+      resize: vertical;
+    }
+
+    .field-note,
+    .section-copy,
+    .muted {
+      color: var(--muted);
+    }
+
+    .result {
+      min-height: 11rem;
+      padding: 1.35rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.97rem;
+    }
+
+    .result[data-state="empty"] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-align: center;
+      font-family: inherit;
+    }
+
+    .upgrade {
+      display: none;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .video-section,
+    .pricing-section,
+    .faq,
+    .final-cta {
+      text-align: center;
+    }
+
+    .video-frame {
+      position: relative;
+      overflow: hidden;
+      margin-top: 2rem;
+      padding: 1rem;
+    }
+
+    .video-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: calc(var(--radius-lg) - 0.25rem);
+      background: #000;
+      aspect-ratio: 16 / 9;
+    }
+
+    .video-shell iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background:
+        linear-gradient(180deg, rgba(8, 8, 12, 0.15), rgba(8, 8, 12, 0.78)),
+        url('YOUR_POSTER_IMAGE_URL') center/cover;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .video-overlay.is-hidden {
+      opacity: 0;
       pointer-events: none;
     }
 
-    .orb-emerald { background: rgba(16, 185, 129, 0.24); left: 5%; top: 12%; }
-    .orb-purple { background: rgba(124, 58, 237, 0.22); right: 2%; top: 20%; animation-delay: 2s; }
-    .orb-gold { background: rgba(251, 191, 36, 0.18); left: 10%; bottom: 8%; animation-delay: 4s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); opacity: 0.6; }
-      50% { transform: translateY(-20px); opacity: 0.8; }
-    }
-
-    .zodiac-wheel {
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      top: -40px;
-      right: -40px;
-      opacity: 0.14;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-      background-size: 22px 22px;
+    .video-overlay__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 1.4rem;
       border-radius: 999px;
-      animation: spin 60s linear infinite;
-      pointer-events: none;
+      background: rgba(167, 139, 250, 0.92);
+      color: #08080c;
+      font-size: clamp(1rem, 2.4vw, 1.35rem);
+      font-weight: 800;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .glow-button {
-      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .pricing {
+      max-width: 34rem;
+      margin: 2.25rem auto 0;
+      padding: 2rem;
     }
 
-    .glow-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
+    .pricing__price {
+      font-size: clamp(3rem, 8vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
     }
 
-    .modal-backdrop {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(12px);
+    .pricing__sub {
+      margin-top: 0.4rem;
+      color: var(--muted);
+      font-size: 1.1rem;
     }
 
-    .field {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-bright);
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+      text-align: left;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      color: var(--text);
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: 800;
+      margin-top: 0.05rem;
+    }
+
+    .faq {
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+
+    .faq details {
+      padding: 1.2rem 1.25rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-size: 1.08rem;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq details p {
+      margin: 0.85rem 0 0;
+      color: var(--muted);
+    }
+
+    .final-cta {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    footer {
+      padding: 2rem 0 4rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .intro,
+    .application-form,
+    .success-card {
+      padding: 2rem;
+    }
+
+    .application-form {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .success-card {
+      display: none;
+      text-align: center;
+    }
+
+    .success-card h2 {
+      color: var(--success);
+    }
+
+    @media (min-width: 48rem) {
+      .hero {
+        padding-top: 7rem;
+      }
+
+      .grid--two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 40rem) {
+      .hero__panel,
+      .card,
+      .pricing,
+      .final-cta,
+      .intro,
+      .application-form,
+      .success-card,
+      .video-frame,
+      .faq details {
+        padding-inline: 1rem;
+      }
+
+      .video-frame {
+        padding: 0.75rem;
+      }
+
+      .video-overlay__cta {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
-<body class="relative">
-  <div class="orb orb-emerald"></div>
-  <div class="orb orb-purple"></div>
-  <div class="orb orb-gold"></div>
-  <div class="zodiac-wheel"></div>
-
-  <main class="max-w-5xl mx-auto px-6 py-10 md:py-14 relative z-10 space-y-8">
-    <section class="glass rounded-2xl p-7 md:p-10">
-      <p class="text-sm uppercase tracking-[0.35em] text-amber-200/80">Sovereign astrology portal</p>
-      <h1 class="font-[\"Playfair Display\",serif] text-4xl md:text-5xl leading-tight text-white mt-3">
-        Decode your karmic code — and move with precision this season.
-      </h1>
-      <p class="mt-4 text-lg text-stone-200 max-w-3xl">
-        A paid download for founders and creators who want one sharp cosmic operating system: what to pursue,
-        what to pause, and what to protect over the next 30 days.
-      </p>
-      <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-300">
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">☉ Transit timing</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♄ Boundary strategy</span>
-        <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5">♇ Sovereign execution</span>
-      </div>
-      <div class="mt-7 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button data-modal="guideModal" class="glow-button text-black font-semibold rounded-xl py-3 px-6 min-h-[44px]">
-          Buy the Primer → Instant Download
-        </button>
-        <p class="text-sm text-stone-300">$49 · Private PDF · No account required</p>
-      </div>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-emerald-200">Proof</p>
-      <ul class="mt-4 grid gap-3 text-[1rem] text-stone-200">
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Built for women navigating asymmetric risk, hidden labor extraction, and high-responsibility decisions.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Readers leave with a clear 30/60/90 rhythm to prioritize focus, money moves, and relational boundaries.</li>
-        <li class="border border-white/10 rounded-xl bg-white/5 p-4">Grounded in real operator architecture: receipts, governed choices, and evidence over hype.</li>
-      </ul>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8 grid gap-6 lg:grid-cols-2">
-      <div>
-        <p class="text-xs uppercase tracking-[0.35em] text-purple-200">Offer</p>
-        <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">Founder-Safe Systems Primer</h2>
-        <p class="mt-3 text-stone-200">A 28–32 page PDF that maps extraction patterns, introduces the consideration framework, and helps you move from chaos to optionality without leaking power.</p>
-        <p class="mt-4 text-stone-300">Includes: core framework, plain-English licensing orientation, and a calm implementation arc for the next 90 days.</p>
-      </div>
-      <div class="rounded-2xl border border-amber-200/30 bg-[rgba(124,58,237,0.12)] p-6">
-        <p class="text-sm uppercase tracking-[0.2em] text-amber-200">Price anchor</p>
-        <p class="mt-2 font-[\"Playfair Display\",serif] text-5xl text-white">$49</p>
-        <p class="mt-3 text-stone-200">Lower than a strategy session. Higher leverage than random content consumption.</p>
-        <button data-modal="guideModal" class="mt-5 glow-button text-black font-semibold rounded-xl py-3 px-4 w-full min-h-[44px]">Buy the Primer → Instant Download</button>
-      </div>
-    </section>
-
-    <section class="glass rounded-2xl p-7 md:p-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-amber-200">Trust + boundaries</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl mt-3">What this is — and what it is not</h2>
-      <div class="mt-5 grid gap-4 md:grid-cols-2">
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-emerald-100">This is for</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Founders carrying real responsibility</li>
-            <li>• Builders who need structural clarity, not motivation</li>
-            <li>• Operators who value evidence and constraints</li>
-          </ul>
+<body>
+  <main>
+    <section class="hero container">
+      <div class="hero__panel">
+        <p class="eyebrow">Decision Engine</p>
+        <h1>You don’t need advice. You need proof.</h1>
+        <p class="lead">Run any moment through a system that tells you whether it is structurally valid before you act on it.</p>
+        <div class="hero__actions">
+          <a class="button" href="#demo">Try 1 Free Decision Receipt</a>
+          <a class="button button--ghost" href="#pricing">Unlock Full Access → $29/mo</a>
         </div>
-        <div class="border border-white/10 rounded-xl bg-white/5 p-4">
-          <h3 class="text-lg font-semibold text-rose-100">This is not</h3>
-          <ul class="mt-2 space-y-2 text-stone-200 text-sm">
-            <li>• Not legal, financial, or therapeutic advice</li>
-            <li>• Not a coaching subscription</li>
-            <li>• Not access to sealed operator methods</li>
-          </ul>
+        <div class="hero__meta" aria-label="Product highlights">
+          <span>Instant verdict</span>
+          <span>Confidence + reason</span>
+          <span>Pattern tracking after upgrade</span>
         </div>
       </div>
     </section>
 
-    <section class="glass rounded-2xl p-7 md:p-9 text-center">
-      <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
-      <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
-      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
-      <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
-        <span id="countdown">--d --h --m --s</span>
-        <label for="timezone" class="inline-flex items-center gap-2">
-          <span>Timezone</span>
-          <select id="timezone" class="field rounded-lg px-3 py-2 text-sm min-h-[44px]">
-            <option value="America/New_York">Eastern (EST/EDT)</option>
-            <option value="America/Los_Angeles">Pacific (PST/PDT)</option>
-            <option value="Europe/London">London (GMT/BST)</option>
-            <option value="UTC">UTC</option>
-          </select>
-        </label>
+    <section id="demo" class="section container demo">
+      <div class="demo__header">
+        <p class="eyebrow">Try it live</p>
+        <h2>Check one moment for free.</h2>
+        <p class="lead">Describe any decision, interaction, contradiction, or signal. You’ll get an instant structural receipt.</p>
       </div>
-      <p id="footerNote" class="text-xs text-stone-400 mt-3">Portal closes at midnight on October 31, 2025 (Eastern).</p>
+
+      <div class="card">
+        <label for="inputText">Describe what happened.</label>
+        <textarea id="inputText" placeholder="They promised follow-up after the call, then disappeared for a week."></textarea>
+        <p class="field-note">Example: mixed signals, a business deal, a pressure moment, or something that felt off but you can’t name yet.</p>
+        <button type="button" onclick="generateVerdict()">Check Structure</button>
+        <div id="verdict" class="result" data-state="empty">Your verdict, confidence, and reason will appear here.</div>
+        <button id="upgrade" class="button upgrade" type="button" onclick="goToStripe()">🔒 Track patterns over time — Unlock Decision Ledger</button>
+      </div>
+    </section>
+
+    <section id="demo-video" class="section container video-section">
+      <p class="eyebrow">Demo video</p>
+      <h2>See It Work (30 Seconds)</h2>
+      <p class="lead">Watch a real moment get analyzed — verdict, confidence, reason, and pattern insight appear instantly.</p>
+
+      <div class="video-frame">
+        <div class="video-shell">
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=VIDEO_ID&amp;rel=0"
+            title="StagePort Demo"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <button
+            id="videoOverlay"
+            class="video-overlay"
+            type="button"
+            aria-label="Hide demo poster overlay and reveal the video"
+          >
+            <span class="video-overlay__cta">▶ Watch Demo</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="section-copy">Replace <strong>VIDEO_ID</strong>, the poster image URL, and the Stripe payment link before you deploy.</p>
+    </section>
+
+    <section id="pricing" class="section container pricing-section">
+      <p class="eyebrow">One product</p>
+      <h2>Unlock Full Access</h2>
+      <p class="lead">One subscription. Unlimited receipts. Full pattern memory and history.</p>
+
+      <div class="pricing">
+        <div class="pricing__price">$29</div>
+        <div class="pricing__sub">per month</div>
+
+        <ul class="feature-list">
+          <li>Unlimited Decision Receipts</li>
+          <li>Pattern tracking and trend detection</li>
+          <li>Full history and export</li>
+          <li>Local-first flow with no identity binding</li>
+        </ul>
+
+        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="button">Unlock Full Access → $29/mo</a>
+        <p class="muted">Cancel anytime. 14-day refund if it doesn’t click.</p>
+      </div>
+    </section>
+
+    <section class="section container faq">
+      <p class="eyebrow">Quick answers</p>
+      <h2>Short answers before you decide.</h2>
+
+      <details>
+        <summary>What is this?</summary>
+        <p>A decision validation tool that checks whether a moment holds structure.</p>
+      </details>
+
+      <details>
+        <summary>Who is it for?</summary>
+        <p>People dealing with ambiguity, contradiction, pressure, or mixed signals.</p>
+      </details>
+
+      <details>
+        <summary>What do I get?</summary>
+        <p>A verdict, confidence level, reason, and pattern tracking over time after you unlock the ledger.</p>
+      </details>
+
+      <details>
+        <summary>Is it private?</summary>
+        <p>Yes. Local-first, no identity binding, no unnecessary tracking.</p>
+      </details>
+    </section>
+
+    <section class="section container">
+      <div class="final-cta">
+        <p class="eyebrow">Final CTA</p>
+        <h2>Clarity first. Upgrade only if you want the pattern memory.</h2>
+        <p class="lead">Run the free receipt. Watch the demo. Then decide whether you want the ledger tracking every recurring trap over time.</p>
+        <div class="cta-row">
+          <a class="button" href="#demo">Run the Free Receipt</a>
+          <a class="button button--ghost" href="https://buy.stripe.com/YOUR_LINK_HERE">Unlock Full Access → $29/mo</a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <div id="modalContainer" class="hidden fixed inset-0 z-30 flex items-center justify-center modal-backdrop">
-    <div class="bg-[rgba(24,20,18,0.95)] border border-white/10 rounded-2xl shadow-2xl max-w-lg w-[92%] md:w-[560px] p-6 relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-stone-300 hover:text-white min-h-[44px] min-w-[44px]" aria-label="Close modal">✕</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-
-  <template id="guideModal">
-    <div class="space-y-3">
-      <h3 class="font-[\"Playfair Display\",serif] text-3xl">Founder-Safe Systems Primer • $49</h3>
-      <p class="text-stone-300">Instant PDF download. Orientation only — not legal, financial, or therapeutic advice.</p>
-      <a href="[YOUR_GUMROAD_OR_STRIPE_LINK]" class="glow-button inline-flex justify-center w-full rounded-xl py-3 font-semibold text-black" target="_blank" rel="noopener noreferrer" aria-label="Open payment link for the Primer">Buy the Primer → Instant Download</a>
-    </div>
-  </template>
+  <footer class="container">
+    <p>Decision Engine — Structure converts motion to proof.<br />Local-first. No identity. No fluff.<br />© 2026 AVC Systems</p>
+  </footer>
 
   <script>
-    const countdownEl = document.getElementById('countdown');
-    const timezoneSelect = document.getElementById('timezone');
-    const footerNote = document.getElementById('footerNote');
-    const baseDate = { year: 2025, month: 10, day: 31, hour: 0, minute: 0, second: 0 };
-    let countdownTimer = null;
-    let countdownTarget = null;
+    function generateVerdict() {
+      const input = document.getElementById('inputText').value.trim();
+      const verdictEl = document.getElementById('verdict');
+      const upgradeButton = document.getElementById('upgrade');
 
-    const getTimeZoneOffsetMinutes = (date, timeZone) => {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        hour12: false,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).formatToParts(date).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
+      if (!input) {
+        verdictEl.dataset.state = 'empty';
+        verdictEl.textContent = 'Enter a real moment first so the receipt has something to evaluate.';
+        upgradeButton.style.display = 'none';
+        return;
+      }
 
-      const asUTC = Date.UTC(parts.year, Number(parts.month) - 1, parts.day, parts.hour, parts.minute, parts.second);
-      return (asUTC - date.getTime()) / 60000;
-    };
+      const hasContradiction = /ghosted|promised|follow-up|blamed|said.*but|contradict|mixed signal/i.test(input);
+      const hasPressure = /pressure|stress|overwhelm|urgent|rushed/i.test(input);
+      const hasClarity = /clear|consistent|calm|followed through|matched/i.test(input);
 
-    const buildZonedTargetDate = (timeZone) => {
-      const utcDate = Date.UTC(baseDate.year, baseDate.month - 1, baseDate.day, baseDate.hour, baseDate.minute, baseDate.second);
-      const reference = new Date(utcDate);
-      const offsetMinutes = getTimeZoneOffsetMinutes(reference, timeZone);
-      return new Date(utcDate - offsetMinutes * 60000);
-    };
+      let integrity = 85;
+      if (hasContradiction) integrity -= 45;
+      if (hasPressure) integrity -= 20;
+      if (hasClarity) integrity += 15;
+      integrity = Math.max(20, Math.min(98, integrity));
 
-    const formatDuration = (ms) => {
-      if (ms <= 0) return '0d 0h 0m 0s';
-      const totalSeconds = Math.floor(ms / 1000);
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    };
+      const verdict = integrity > 74 ? 'VALID' : integrity > 52 ? 'UNSTABLE' : 'INVALID';
+      const confidence = integrity > 85 ? 'HIGH' : integrity > 58 ? 'MEDIUM' : 'LOW';
 
-    const updateFooter = () => {
-      const formatter = new Intl.DateTimeFormat('en-US', {
-        timeZone: timezoneSelect.value,
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        timeZoneName: 'short'
+      const reason = hasContradiction
+        ? 'Behavior does not match stated intent.'
+        : hasPressure
+          ? 'Pressure distorted structural integrity over time.'
+          : 'Action aligns with the declared pattern.';
+
+      const output =
+        `Decision Receipt SP-${Math.floor(Math.random() * 100000)}\n` +
+        `Timestamp: ${new Date().toISOString()}\n\n` +
+        `Input: ${input}\n\n` +
+        `Verdict: ${verdict}\n` +
+        `Confidence: ${confidence} (${integrity}%)\n\n` +
+        `Scores:\n` +
+        `  Integrity:   ${integrity}\n` +
+        `  Consistency: ${Math.round(integrity * 0.92)}\n` +
+        `  Composure:   ${Math.round(integrity * 1.05)}\n\n` +
+        `Reason: ${reason}\n\n` +
+        'Upgrade path: Track repeat patterns inside Decision Ledger.';
+
+      verdictEl.dataset.state = 'filled';
+      verdictEl.textContent = output;
+      upgradeButton.style.display = 'inline-flex';
+      verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function goToStripe() {
+      window.location.href = 'https://buy.stripe.com/YOUR_LINK_HERE';
+    }
+
+    const videoOverlay = document.getElementById('videoOverlay');
+    if (videoOverlay) {
+      videoOverlay.addEventListener('click', () => {
+        videoOverlay.classList.add('is-hidden');
       });
-      footerNote.textContent = `Portal closes at ${formatter.format(countdownTarget)} in your selected timezone.`;
-    };
-
-    const tick = () => {
-      const now = new Date();
-      const diff = countdownTarget - now;
-      countdownEl.textContent = formatDuration(diff);
-    };
-
-    const startCountdown = () => {
-      if (countdownTimer) clearInterval(countdownTimer);
-      countdownTarget = buildZonedTargetDate(timezoneSelect.value);
-      tick();
-      countdownTimer = setInterval(tick, 1000);
-      updateFooter();
-    };
-
-    startCountdown();
-    timezoneSelect.addEventListener('change', startCountdown);
-
-    const modalContainer = document.getElementById('modalContainer');
-    const modalContent = document.getElementById('modalContent');
-    const closeModalButton = document.getElementById('closeModal');
-
-    const openModal = (id) => {
-      const template = document.getElementById(id);
-      if (!template) return;
-      modalContent.innerHTML = template.innerHTML;
-      modalContainer.classList.remove('hidden');
-    };
-
-    const closeModal = () => {
-      modalContainer.classList.add('hidden');
-      modalContent.innerHTML = '';
-    };
-
-    document.addEventListener('click', (event) => {
-      const modalTarget = event.target.closest('[data-modal]');
-      if (modalTarget) {
-        event.preventDefault();
-        openModal(modalTarget.dataset.modal);
-      }
-    });
-
-    modalContainer.addEventListener('click', (event) => {
-      if (event.target === modalContainer) {
-        closeModal();
-      }
-    });
-
-    closeModalButton.addEventListener('click', closeModal);
+    }
   </script>
 </body>
 </html>
