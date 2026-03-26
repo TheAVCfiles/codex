@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>{{CLIENT_NAME}} · Private Environment</title>
+  <link rel="stylesheet" href="./config/theme.css" />
+  <style>
+    body{margin:0;background:radial-gradient(circle at 50% -20%, #181820, var(--bg));color:var(--text);font-family:-apple-system,system-ui;display:grid;place-items:center;height:100vh}
+    .gate{width:min(92vw,640px);padding:28px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);text-align:center;opacity:0;transform:translateY(10px);animation:fade .9s ease forwards}
+    @keyframes fade {to{opacity:1;transform:translateY(0)}}
+    .actions{display:grid;gap:10px;margin-top:20px}
+    button{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#121218;color:var(--text)}
+    button.primary{background:var(--accent);color:#111;font-weight:700}
+    p{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <main class="gate">
+    <h1>{{CLIENT_NAME}}</h1>
+    <p>{{TAGLINE}}</p>
+    <div class="actions">
+      <button class="primary" onclick="route('01_SESSION/index.html')">ENTER SESSION</button>
+      <button onclick="route('02_INTERFACE/dashboard.html')">VIEW INTERFACE</button>
+      <button onclick="route('04_PROOF/system_brief.txt')">REVIEW SYSTEM</button>
+      <button onclick="route('05_NEXT/unlock.html')">REQUEST ACCESS</button>
+    </div>
+  </main>
+  <script>
+    function route(path){setTimeout(()=>window.location.href=path,420)}
+  </script>
+</body>
+</html>
