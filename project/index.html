@@ -85,6 +85,95 @@
       box-shadow: 0 12px 34px rgba(16, 185, 129, 0.38);
     }
 
+
+    .ghost-logo {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(6rem, 20vw, 13rem);
+      letter-spacing: 0.1em;
+      color: rgba(250, 250, 249, 0.045);
+      filter: blur(1px);
+      pointer-events: none;
+      user-select: none;
+      animation: breathe 8s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.28; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.02); }
+    }
+
+    .ritual-shell {
+      max-width: 22rem;
+      margin: 1.75rem auto 0;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 1.25rem;
+      padding: 1.25rem 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(18px);
+    }
+
+    .ritual-state { display: none; }
+    .ritual-state.active { display: block; }
+
+    .ritual-idle {
+      cursor: pointer;
+      transition: opacity 0.4s ease;
+    }
+
+    .ritual-label {
+      margin-top: 0.5rem;
+      letter-spacing: 0.28em;
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      color: var(--text-medium);
+    }
+
+    .slider-track {
+      width: 100%;
+      height: 3.5rem;
+      margin-top: 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slider-handle {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 999px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: grid;
+      place-items: center;
+      color: #111827;
+      font-weight: 700;
+      background: linear-gradient(135deg, #d6c3a3 0%, #fbbf24 100%);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.36);
+      touch-action: none;
+      transition: box-shadow 0.25s ease;
+      user-select: none;
+    }
+
+    .slider-handle.dragging {
+      box-shadow: 0 0 28px rgba(251, 191, 36, 0.5);
+    }
+
+    .slider-helper {
+      margin-top: 0.75rem;
+      font-size: 0.77rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
     .modal-backdrop {
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(12px);
@@ -98,6 +187,7 @@
   </style>
 </head>
 <body class="relative">
+  <div class="ghost-logo" aria-hidden="true">SYVAQ</div>
   <div class="orb orb-emerald"></div>
   <div class="orb orb-purple"></div>
   <div class="orb orb-gold"></div>
@@ -176,7 +266,19 @@
     <section class="glass rounded-2xl p-7 md:p-9 text-center">
       <p class="text-stone-300 text-sm uppercase tracking-[0.3em]">Final call</p>
       <h2 class="font-[\"Playfair Display\",serif] text-3xl md:text-4xl mt-3">Read once. See the pattern. Move differently.</h2>
-      <button data-modal="guideModal" class="mt-6 glow-button text-black font-semibold rounded-xl py-3 px-7 min-h-[44px]">Buy the Primer → Instant Download</button>
+      <div id="ritualShell" class="ritual-shell" aria-live="polite">
+        <div id="ritualIdle" class="ritual-state ritual-idle active" role="button" tabindex="0" aria-label="Detect signal">
+          <p class="ritual-label">SYVAQ</p>
+          <p class="text-stone-300 text-sm mt-2">Session unavailable</p>
+        </div>
+        <div id="ritualDetected" class="ritual-state">
+          <p class="text-stone-300 text-sm">Signal detected</p>
+          <div id="sliderTrack" class="slider-track" aria-label="Slide to initiate session">
+            <div id="sliderHandle" class="slider-handle" role="button" tabindex="0" aria-label="Slide to initiate session">→</div>
+          </div>
+          <p class="slider-helper">Slide to initiate session</p>
+        </div>
+      </div>
       <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-stone-300">
         <span id="countdown">--d --h --m --s</span>
         <label for="timezone" class="inline-flex items-center gap-2">
@@ -278,6 +380,86 @@
 
     startCountdown();
     timezoneSelect.addEventListener('change', startCountdown);
+
+
+    const ritualIdle = document.getElementById('ritualIdle');
+    const ritualDetected = document.getElementById('ritualDetected');
+    const sliderTrack = document.getElementById('sliderTrack');
+    const sliderHandle = document.getElementById('sliderHandle');
+
+    if (ritualIdle && ritualDetected && sliderTrack && sliderHandle) {
+      let sliderComplete = false;
+      let dragging = false;
+      let pointerId = null;
+      let startX = 0;
+
+      const activateSignal = () => {
+        if (!ritualIdle.classList.contains('active')) return;
+        ritualIdle.style.opacity = '0.6';
+        window.setTimeout(() => {
+          ritualIdle.classList.remove('active');
+          ritualDetected.classList.add('active');
+        }, 650);
+      };
+
+      ritualIdle.addEventListener('click', activateSignal);
+      ritualIdle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          activateSignal();
+        }
+      });
+
+      const resetSlider = () => {
+        if (sliderComplete) return;
+        dragging = false;
+        pointerId = null;
+        sliderHandle.classList.remove('dragging');
+        sliderHandle.style.left = '0px';
+      };
+
+      const completeSlider = () => {
+        if (sliderComplete) return;
+        sliderComplete = true;
+        const max = sliderTrack.offsetWidth - sliderHandle.offsetWidth;
+        sliderHandle.style.left = `${max}px`;
+        sliderHandle.textContent = '✓';
+        window.setTimeout(() => openModal('guideModal'), 320);
+      };
+
+      sliderHandle.addEventListener('pointerdown', (event) => {
+        if (sliderComplete) return;
+        dragging = true;
+        pointerId = event.pointerId;
+        startX = event.clientX - sliderHandle.offsetLeft;
+        sliderHandle.classList.add('dragging');
+        sliderHandle.setPointerCapture(pointerId);
+      });
+
+      sliderHandle.addEventListener('pointermove', (event) => {
+        if (!dragging || event.pointerId !== pointerId || sliderComplete) return;
+
+        const max = sliderTrack.offsetWidth - sliderHandle.offsetWidth;
+        const raw = event.clientX - startX;
+        const progress = Math.max(0, Math.min(raw / max, 1));
+        const weighted = Math.pow(progress, 1.6) * max;
+        sliderHandle.style.left = `${weighted}px`;
+
+        if (weighted >= max * 0.85) {
+          completeSlider();
+        }
+      });
+
+      sliderHandle.addEventListener('pointerup', resetSlider);
+      sliderHandle.addEventListener('pointercancel', resetSlider);
+
+      sliderHandle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          completeSlider();
+        }
+      });
+    }
 
     const modalContainer = document.getElementById('modalContainer');
     const modalContent = document.getElementById('modalContent');
