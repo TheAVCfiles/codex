@@ -1,0 +1,10 @@
+{
+  "client": "CLIENT NAME",
+  "client_key": "client_name",
+  "status": "active",
+  "last_action": "kit_initialized",
+  "notes": [
+    "Run one real client through the system today.",
+    "System becomes real when money touches it."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Decrypt The Girl",
+  "owner": "Allison Van Cura",
+  "voice": "mythic, precise, protective",
+  "palette": {
+    "bg": "#050507",
+    "panel": "#0f1014",
+    "text": "#f5f3f7",
+    "muted": "#8a8791",
+    "accent": "#d6c3a3"
+  },
+  "tagline": "No fluff. Build, ship, get paid, log it."
+}

@@ -1,0 +1,6 @@
+{
+  "product": "iPhone/iPad Operator Kit",
+  "version": "1.0.0",
+  "workflow": ["Edit config", "Run builder", "Send ZIP", "Get paid", "Log it"],
+  "deliverables": ["START_HERE.html", "demo.html", "quickcard.md", "log.csv"]
+}
