@@ -1,0 +1,9 @@
+{
+  "name": "Founder Operating Environment",
+  "short_name": "FounderOS",
+  "start_url": "./master-index.html",
+  "display": "standalone",
+  "background_color": "#0f0d0c",
+  "theme_color": "#0f0d0c",
+  "description": "Local-first founder operating environment with timeline, ledger, and import/export."
+}

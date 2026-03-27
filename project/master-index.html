@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Founder Operating Environment</title>
+  <meta name="description" content="Local-first startup operating environment with proof ledger, timeline, and import/export." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <style>
+    :root {
+      --bg: #0f0d0c;
+      --bg-2: #1a1614;
+      --panel: rgba(24, 19, 17, 0.92);
+      --panel-soft: rgba(255, 255, 255, 0.04);
+      --text: #fafaf9;
+      --text-soft: #e7e5e4;
+      --text-muted: #d6d3d1;
+      --accent: #fbbf24;
+      --line: rgba(255, 255, 255, 0.12);
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --danger: #fb7185;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
+      --fast: 180ms;
+      --slow: 520ms;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(251, 191, 36, 0.08), transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(124, 58, 237, 0.08), transparent 42%),
+        var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    .screen {
+      min-height: 100dvh;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .hidden { display: none !important; }
+
+    .gate {
+      display: grid;
+      place-items: center;
+      min-height: 100dvh;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .gate-card {
+      width: min(100%, 580px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 20px;
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--slow) ease, transform var(--slow) ease;
+    }
+
+    .gate-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    p { color: var(--text-soft); }
+
+    .status-feed {
+      margin: 16px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: left;
+      background: var(--panel-soft);
+      min-height: 86px;
+      font-size: 0.95rem;
+    }
+
+    .hold-wrap {
+      margin-top: 14px;
+    }
+
+    .hold {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #15110f;
+      height: 52px;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .hold-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, rgba(251, 191, 36, 0.3), rgba(251, 191, 36, 0.72));
+      transition: width var(--fast) linear;
+    }
+
+    .hold-label {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .shell {
+      display: grid;
+      gap: 12px;
+      padding-bottom: 68px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(16px);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .header { position: sticky; top: 10px; z-index: 10; }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .tabs {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 15;
+      padding: 10px;
+      background: rgba(12, 10, 9, 0.94);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      backdrop-filter: blur(14px);
+    }
+
+    .tab {
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #171210;
+      color: var(--text-soft);
+      font-size: 0.88rem;
+    }
+
+    .tab.active {
+      border-color: rgba(251, 191, 36, 0.65);
+      color: var(--text);
+      background: rgba(251, 191, 36, 0.12);
+    }
+
+    .grid { display: grid; gap: 10px; }
+
+    @media (min-width: 760px) {
+      .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+      .tabs { width: min(980px, calc(100% - 20px)); margin: 0 auto; border-radius: 14px 14px 0 0; }
+    }
+
+    label { display: block; margin-bottom: 6px; color: var(--text-soft); font-size: 0.92rem; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px;
+      min-height: 44px;
+    }
+
+    textarea { min-height: 110px; resize: vertical; }
+
+    .btn {
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0 14px;
+      background: #231b17;
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #d97706, var(--accent));
+      color: #120f0e;
+      border: none;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.88rem;
+      white-space: pre-wrap;
+      color: var(--text-soft);
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .meta { color: var(--text-muted); font-size: 0.8rem; }
+    .state-ok { color: var(--ok); }
+    .state-warn { color: var(--warn); }
+    .state-danger { color: var(--danger); }
+  </style>
+</head>
+<body>
+  <main id="gate" class="gate">
+    <section class="gate-card" id="gateCard" aria-live="polite">
+      <p class="eyebrow">Contained Founder Environment</p>
+      <h1>Private Operating Environment</h1>
+      <p id="gateSubtitle">System detected. Verifying local runtime…</p>
+      <div class="status-feed" id="statusFeed"></div>
+      <div class="hold-wrap">
+        <div class="hold" id="holdSurface" role="button" aria-label="Press and hold to initialize">
+          <div class="hold-fill" id="holdFill"></div>
+          <div class="hold-label" id="holdLabel">Press and hold to initialize</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="app" class="screen hidden" aria-live="polite">
+    <section class="card header">
+      <div class="header-top">
+        <div>
+          <p class="eyebrow" style="margin:0 0 6px">Operator Runtime</p>
+          <h2 id="clientTitle">Founder System</h2>
+        </div>
+        <span class="pill" id="resumeState">Rehydrated</span>
+      </div>
+      <p class="meta" id="trustLine">No data leaves this environment. Local-first memory active.</p>
+    </section>
+
+    <section class="shell" id="views">
+      <article data-view="dashboard" class="card view">
+        <h3>Dashboard</h3>
+        <p class="meta">Live posture, ledger pulse, and activity momentum.</p>
+        <div class="grid cols-2">
+          <div class="item"><strong id="metricIdeas">0</strong><div class="meta">Ideas captured</div></div>
+          <div class="item"><strong id="metricProof">0</strong><div class="meta">Proof entries</div></div>
+          <div class="item"><strong id="metricTimeline">0</strong><div class="meta">Timeline events</div></div>
+          <div class="item"><strong id="metricUpdated">—</strong><div class="meta">Last updated</div></div>
+        </div>
+        <h3 style="margin-top:14px">Activity Timeline</h3>
+        <ul id="timelineList" class="list"></ul>
+      </article>
+
+      <article data-view="intake" class="card view hidden">
+        <h3>Intake</h3>
+        <p class="meta">Capture new opportunities and operator notes.</p>
+        <div class="grid">
+          <div>
+            <label for="ideaInput">Idea capture</label>
+            <textarea id="ideaInput" placeholder="What are you building, validating, or shipping?"></textarea>
+          </div>
+          <div>
+            <label for="noteInput">Operator notes</label>
+            <textarea id="noteInput" placeholder="Risks, assumptions, and constraints."></textarea>
+          </div>
+          <button class="btn primary" id="saveIntakeBtn">Save intake snapshot</button>
+        </div>
+        <h3 style="margin-top:14px">Captured ideas</h3>
+        <ul id="ideaList" class="list"></ul>
+      </article>
+
+      <article data-view="proof" class="card view hidden">
+        <h3>Proof</h3>
+        <p class="meta">Proof ledger anchors legitimacy through timestamped evidence.</p>
+        <div class="grid cols-2">
+          <div>
+            <label for="proofType">Proof type</label>
+            <select id="proofType">
+              <option value="customer">Customer signal</option>
+              <option value="revenue">Revenue event</option>
+              <option value="execution">Execution milestone</option>
+              <option value="risk">Risk mitigation</option>
+            </select>
+          </div>
+          <div>
+            <label for="proofValue">Value / metric</label>
+            <input id="proofValue" placeholder="e.g. 12 waitlist signups" />
+          </div>
+        </div>
+        <label for="proofNote" style="margin-top:8px">Context note</label>
+        <textarea id="proofNote" placeholder="What happened, why it matters, what is next?"></textarea>
+        <button class="btn primary" id="saveProofBtn">Add to proof ledger</button>
+        <h3 style="margin-top:14px">Ledger</h3>
+        <ul id="proofList" class="list"></ul>
+      </article>
+
+      <article data-view="export" class="card view hidden">
+        <h3>Export / Import</h3>
+        <p class="meta">Bidirectional control: export full state to JSON or import to instantly rehydrate.</p>
+        <div class="grid cols-2">
+          <button class="btn primary" id="exportBtn">Export full state JSON</button>
+          <label class="btn" for="importFile" style="display:grid;place-items:center;cursor:pointer">Import + rehydrate JSON</label>
+        </div>
+        <input id="importFile" type="file" accept="application/json" class="hidden" />
+        <div class="grid cols-2" style="margin-top:10px;">
+          <button class="btn" id="activateBtn">Activation</button>
+          <button class="btn" id="resetBtn">Reset local state</button>
+        </div>
+        <p class="mono" id="exportStatus">Awaiting command.</p>
+      </article>
+    </section>
+  </main>
+
+  <nav class="tabs hidden" id="tabs" aria-label="Primary tabs">
+    <button class="tab active" data-target="dashboard">Dashboard</button>
+    <button class="tab" data-target="intake">Intake</button>
+    <button class="tab" data-target="proof">Proof</button>
+    <button class="tab" data-target="export">Export</button>
+  </nav>
+
+  <script>
+    const KEY = "founder_os_v1";
+    const HOLD_MS = 1100;
+
+    const nowISO = () => new Date().toISOString();
+    const prettyTime = (iso) => new Date(iso).toLocaleString();
+
+    const db = {
+      load() {
+        try {
+          const raw = localStorage.getItem(KEY);
+          if (!raw) return this.defaults();
+          return { ...this.defaults(), ...JSON.parse(raw) };
+        } catch (_err) {
+          return this.defaults();
+        }
+      },
+      save(state) {
+        localStorage.setItem(KEY, JSON.stringify(state));
+      },
+      defaults() {
+        return {
+          clientName: "Founder System",
+          unlocked: false,
+          activeTab: "dashboard",
+          ideas: [],
+          proof: [],
+          timeline: [],
+          notes: "",
+          lastOpen: nowISO()
+        };
+      }
+    };
+
+    let state = db.load();
+
+    const gate = document.getElementById("gate");
+    const gateCard = document.getElementById("gateCard");
+    const statusFeed = document.getElementById("statusFeed");
+    const holdSurface = document.getElementById("holdSurface");
+    const holdFill = document.getElementById("holdFill");
+    const holdLabel = document.getElementById("holdLabel");
+
+    const app = document.getElementById("app");
+    const tabs = document.getElementById("tabs");
+    const clientTitle = document.getElementById("clientTitle");
+    const resumeState = document.getElementById("resumeState");
+
+    const views = [...document.querySelectorAll(".view")];
+    const tabButtons = [...document.querySelectorAll(".tab")];
+
+    const ideaInput = document.getElementById("ideaInput");
+    const noteInput = document.getElementById("noteInput");
+    const ideaList = document.getElementById("ideaList");
+
+    const proofType = document.getElementById("proofType");
+    const proofValue = document.getElementById("proofValue");
+    const proofNote = document.getElementById("proofNote");
+    const proofList = document.getElementById("proofList");
+
+    const timelineList = document.getElementById("timelineList");
+    const exportStatus = document.getElementById("exportStatus");
+
+    function track(type, detail) {
+      state.timeline.unshift({ type, detail, ts: nowISO() });
+      state.timeline = state.timeline.slice(0, 120);
+    }
+
+    function updateMetrics() {
+      document.getElementById("metricIdeas").textContent = String(state.ideas.length);
+      document.getElementById("metricProof").textContent = String(state.proof.length);
+      document.getElementById("metricTimeline").textContent = String(state.timeline.length);
+      document.getElementById("metricUpdated").textContent = prettyTime(state.lastOpen);
+    }
+
+    function renderTimeline() {
+      timelineList.innerHTML = "";
+      const events = state.timeline.slice(0, 20);
+      if (!events.length) {
+        timelineList.innerHTML = '<li class="item meta">No events yet. Start in Intake.</li>';
+        return;
+      }
+      events.forEach((evt) => {
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `<div><strong>${evt.type}</strong></div><div>${evt.detail}</div><div class="meta">${prettyTime(evt.ts)}</div>`;
+        timelineList.appendChild(li);
+      });
+    }
+
+    function renderIdeas() {
+      ideaList.innerHTML = "";
+      if (!state.ideas.length) {
+        ideaList.innerHTML = '<li class="item meta">No ideas captured yet.</li>';
+        return;
+      }
+      state.ideas.slice(0, 30).forEach((entry) => {
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `<div>${entry.idea}</div><div class="meta">${prettyTime(entry.ts)}</div><div class="meta">${entry.note || "No note."}</div>`;
+        ideaList.appendChild(li);
+      });
+    }
+
+    function renderProof() {
+      proofList.innerHTML = "";
+      if (!state.proof.length) {
+        proofList.innerHTML = '<li class="item meta">No proof entries yet.</li>';
+        return;
+      }
+      state.proof.slice(0, 40).forEach((entry) => {
+        const li = document.createElement("li");
+        li.className = "item";
+        li.innerHTML = `<div><strong>${entry.type}</strong> · ${entry.value}</div><div>${entry.note}</div><div class="meta">${prettyTime(entry.ts)}</div>`;
+        proofList.appendChild(li);
+      });
+    }
+
+    function render() {
+      clientTitle.textContent = state.clientName;
+      resumeState.textContent = state.unlocked ? "Rehydrated" : "Activation required";
+      resumeState.className = `pill ${state.unlocked ? "state-ok" : "state-warn"}`;
+      noteInput.value = state.notes || "";
+      updateMetrics();
+      renderTimeline();
+      renderIdeas();
+      renderProof();
+      showTab(state.activeTab || "dashboard");
+      db.save(state);
+    }
+
+    function showTab(tab) {
+      state.activeTab = tab;
+      views.forEach((v) => v.classList.toggle("hidden", v.dataset.view !== tab));
+      tabButtons.forEach((b) => b.classList.toggle("active", b.dataset.target === tab));
+      db.save(state);
+    }
+
+    function launchApp() {
+      gate.classList.add("hidden");
+      app.classList.remove("hidden");
+      tabs.classList.remove("hidden");
+      state.lastOpen = nowISO();
+      track("Session", "Environment opened");
+      render();
+    }
+
+    const statusLines = [
+      "System detected.",
+      "Local environment verified.",
+      "Persistent memory online.",
+      "No external transport configured.",
+      "Awaiting operator gesture…"
+    ];
+
+    function runGate() {
+      gateCard.classList.add("visible");
+      statusFeed.innerHTML = "";
+      statusLines.forEach((line, idx) => {
+        setTimeout(() => {
+          statusFeed.innerHTML += `${line}<br>`;
+        }, idx * 450 + 180);
+      });
+    }
+
+    let holdTimer = null;
+    let holdStart = 0;
+    let holdProgressTimer = null;
+
+    function beginHold() {
+      holdStart = Date.now();
+      holdLabel.textContent = "Initializing… keep holding";
+      holdProgressTimer = setInterval(() => {
+        const elapsed = Date.now() - holdStart;
+        const pct = Math.min(100, Math.round((elapsed / HOLD_MS) * 100));
+        holdFill.style.width = pct + "%";
+      }, 30);
+      holdTimer = setTimeout(() => {
+        clearInterval(holdProgressTimer);
+        holdFill.style.width = "100%";
+        holdLabel.textContent = "Access granted";
+        state.unlocked = true;
+        track("Activation", "Operator unlocked environment");
+        db.save(state);
+        setTimeout(launchApp, 220);
+      }, HOLD_MS);
+    }
+
+    function cancelHold() {
+      if (holdTimer) clearTimeout(holdTimer);
+      if (holdProgressTimer) clearInterval(holdProgressTimer);
+      holdTimer = null;
+      holdProgressTimer = null;
+      holdFill.style.width = "0%";
+      holdLabel.textContent = "Press and hold to initialize";
+    }
+
+    ["pointerup", "pointerleave", "pointercancel"].forEach((evt) => {
+      holdSurface.addEventListener(evt, cancelHold);
+    });
+    holdSurface.addEventListener("pointerdown", beginHold);
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => showTab(btn.dataset.target));
+    });
+
+    document.getElementById("saveIntakeBtn").addEventListener("click", () => {
+      const idea = ideaInput.value.trim();
+      const note = noteInput.value.trim();
+      if (!idea) {
+        exportStatus.textContent = "Add an idea before saving.";
+        return;
+      }
+      state.ideas.unshift({ idea, note, ts: nowISO() });
+      state.notes = note;
+      track("Intake", `Idea captured: ${idea.slice(0, 64)}`);
+      ideaInput.value = "";
+      exportStatus.textContent = "Intake snapshot saved.";
+      render();
+    });
+
+    document.getElementById("saveProofBtn").addEventListener("click", () => {
+      const type = proofType.value;
+      const value = proofValue.value.trim();
+      const note = proofNote.value.trim();
+      if (!value) {
+        exportStatus.textContent = "Add proof value or metric first.";
+        return;
+      }
+      state.proof.unshift({ type, value, note, ts: nowISO() });
+      track("Proof", `${type}: ${value}`);
+      proofValue.value = "";
+      proofNote.value = "";
+      exportStatus.textContent = "Proof ledger updated.";
+      render();
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      const payload = { ...state, exportedAt: nowISO(), schema: "founder-os-v1" };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      a.href = URL.createObjectURL(blob);
+      a.download = `founder-os-export-${stamp}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      track("Export", "Full state exported to JSON");
+      exportStatus.textContent = "Export complete.";
+      render();
+    });
+
+    document.getElementById("importFile").addEventListener("change", async (evt) => {
+      const file = evt.target.files && evt.target.files[0];
+      if (!file) return;
+      try {
+        const raw = await file.text();
+        const incoming = JSON.parse(raw);
+        const merged = { ...db.defaults(), ...incoming, lastOpen: nowISO() };
+        state = merged;
+        track("Import", `Rehydrated from ${file.name}`);
+        exportStatus.textContent = `Import complete: ${file.name}`;
+        render();
+      } catch (_err) {
+        exportStatus.textContent = "Import failed: invalid JSON.";
+      }
+      evt.target.value = "";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const confirmed = window.confirm("Reset local state? This clears ideas, proof, and timeline.");
+      if (!confirmed) return;
+      state = db.defaults();
+      state.unlocked = true;
+      track("Reset", "Local state reset by operator");
+      exportStatus.textContent = "Local state reset.";
+      render();
+    });
+
+    document.getElementById("activateBtn").addEventListener("click", () => {
+      const key = window.prompt("Access requires activation. Enter activation phrase:", "");
+      if (!key) return;
+      state.unlocked = true;
+      track("Activation", "Activation phrase accepted");
+      exportStatus.textContent = "Activation accepted. Phase II pathways available.";
+      render();
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {
+        // Graceful fallback for file-based previews.
+      });
+    }
+
+    runGate();
+    if (state.unlocked) {
+      document.getElementById("gateSubtitle").textContent = "Previous session found. Hold to resume instantly.";
+    }
+  </script>
+</body>
+</html>
