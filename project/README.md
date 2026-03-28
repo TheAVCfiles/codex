@@ -63,3 +63,13 @@ This `project/` directory also includes related artifacts and prototypes:
 - `founderos/`: FounderOS v0 scaffold.
 - `paygait-local.html`: local PayGait prototype.
 - `contracts/`: ERC-20 smart contract workspace and Hardhat setup.
+
+## Offline Operator Builder (V20)
+
+A new single-file builder is available at `mobile_builder_offline.html`.
+
+- No CDN, no external dependencies.
+- Captures identity, language mirror, decision layer, and offer data.
+- Exports all `CLIENT_PRIVATE_ENV` files for manual folder assembly, then iOS Files app compression.
+
+Open it directly in a browser (including iPhone/iPad Safari), fill fields, then use **Download All Files**.
