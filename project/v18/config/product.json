@@ -1,0 +1,9 @@
+{
+  "product_name": "Private Operating Environment",
+  "phase_one_line": "Phase I proves behavior. Phase II activates infrastructure.",
+  "local_mode_line": "Session secured. Local runtime active. No data transmitted.",
+  "activation_line": "Access requires activation.",
+  "entry_offer_usd": 3000,
+  "core_offer_usd": 5800,
+  "pilot_offer_usd": 12500
+}
