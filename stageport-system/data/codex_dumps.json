@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dump-001",
+    "title": "Pilot demo packet for enterprise buyer",
+    "body": "Launch this week with a controlled public demo and operator workflow.",
+    "classification": "vision"
+  },
+  {
+    "id": "dump-002",
+    "title": "Internal authority draft",
+    "body": "Hold prompt and internal language details private until governance sign-off.",
+    "classification": "governance"
+  }
+]

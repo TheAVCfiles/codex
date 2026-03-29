@@ -1,0 +1,28 @@
+[
+  {
+    "source_id": "dump-001",
+    "title": "Pilot demo packet for enterprise buyer",
+    "content": "Launch this week with a controlled public demo and operator workflow.",
+    "classification": "vision",
+    "intensity_score": 16,
+    "clarity_score": 28,
+    "market_score": 27,
+    "timeliness_score": 12,
+    "leak_risk_score": 0,
+    "release_score": 83,
+    "release_state": "public_now"
+  },
+  {
+    "source_id": "dump-002",
+    "title": "Internal authority draft",
+    "content": "Hold prompt and internal language details private until governance sign-off.",
+    "classification": "governance",
+    "intensity_score": 0,
+    "clarity_score": 0,
+    "market_score": 0,
+    "timeliness_score": 0,
+    "leak_risk_score": 28,
+    "release_score": 0,
+    "release_state": "private_hold"
+  }
+]
