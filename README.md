@@ -104,3 +104,11 @@ Use this quick pass before opening a PR from a fork back to an upstream project:
    - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
 
 When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
+
+## Private Operator Shell
+
+A private, local-first Operator Shell is available at `operator/index.html`.
+
+- This console is **internal-only** and is intended for operator workflow control (intake, review, build control, queue, and audit notes).
+- It should be run locally (for example via `python -m http.server`) and should not be exposed as a public product surface.
+- Public Pages deployment should contain only rendered artifacts; never deploy the operator shell as the public Pages surface.

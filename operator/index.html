@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator Console</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Internal Systems Console</p>
+        <h1>Operator Console</h1>
+      </div>
+      <div class="state-pill" id="authorityState">DIRECTOR · ACTIVE · GOOD STANDING</div>
+    </header>
+
+    <section class="warning-card">
+      <h2>Before You Publish</h2>
+      <ul>
+        <li>Internal use only. Never deploy this shell as a public surface.</li>
+        <li>Public Pages should include rendered artifacts only.</li>
+        <li>Do not expose scoring logic, mappings, operator state, or queue logic.</li>
+        <li>This shell controls generation workflow. It does not control public hosting.</li>
+      </ul>
+    </section>
+
+    <main class="grid">
+      <section class="card" id="intakeSection">
+        <h2>Intake Buffer</h2>
+        <p class="meta">Codex dump intake with current classification.</p>
+        <div id="intakeList" class="list"></div>
+      </section>
+
+      <section class="card" id="reviewSection">
+        <h2>Review Panel</h2>
+        <p class="meta">Review release score, leak risk, and assign Release State.</p>
+        <div id="reviewList" class="list"></div>
+      </section>
+
+      <section class="card" id="buildSection">
+        <h2>Build Control</h2>
+        <p class="meta">Run internal generation controls and confirm output paths.</p>
+        <div class="actions" id="buildActions"></div>
+      </section>
+
+      <section class="card" id="queueSection">
+        <h2>Publication Queue</h2>
+        <p class="meta">Readiness state by bucket with block reasons.</p>
+        <div id="queueBuckets" class="queue-grid"></div>
+      </section>
+
+      <section class="card" id="authoritySection">
+        <h2>Authority / Delivery</h2>
+        <p class="meta">Institutional state only. No pricing, no public CTA language.</p>
+        <div id="authorityDetail"></div>
+      </section>
+
+      <section class="card" id="auditSection">
+        <h2>Audit Ledger</h2>
+        <p class="meta">Recent operator actions and notes.</p>
+        <div id="auditList" class="list"></div>
+        <form id="noteForm" class="note-form">
+          <label for="noteInput">Log note</label>
+          <input id="noteInput" name="note" maxlength="180" placeholder="Record operational note" required />
+          <button type="submit">Add Note</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
