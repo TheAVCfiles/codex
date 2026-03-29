@@ -1,0 +1,35 @@
+name: Deal Room Build
+
+on:
+  push:
+    paths:
+      - "data/musings.json"
+      - "data/witness_tokens.json"
+      - "scripts/build_deal_rooms.py"
+      - "scripts/build_witness.py"
+      - "src/templates/room.html"
+      - "src/templates/witness.html"
+
+permissions:
+  contents: write
+
+jobs:
+  build-rooms-witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build deal rooms and witness pages
+        run: |
+          python scripts/build_deal_rooms.py
+          python scripts/build_witness.py
+      - name: Commit site rooms and witness
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/rooms site/witness data/deal_rooms.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(site): refresh deal rooms and witness artifacts"
+          git push

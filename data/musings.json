@@ -1,0 +1,16 @@
+[
+  {
+    "id": "dump-001",
+    "title": "Operator workflow uplift",
+    "summary": "Design a governance-first workflow that delivers buyer-ready artifacts while keeping internal authority rules private.",
+    "scores": {
+      "intensity": 5,
+      "clarity": 100,
+      "market_readiness": 70,
+      "leak_risk": 40
+    },
+    "release_state": "public_now",
+    "tags": ["vision", "governance"],
+    "created_at": "2026-03-29T12:00:00Z"
+  }
+]

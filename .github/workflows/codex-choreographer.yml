@@ -1,0 +1,38 @@
+name: Codex Choreographer
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const text = `${pr.title}\n${pr.body || ""}`.toLowerCase();
+            const mapping = [
+              ["vision", ["vision", "strategy", "direction"]],
+              ["execution", ["execution", "build", "implement", "ship"]],
+              ["documentation", ["docs", "documentation", "readme"]],
+              ["governance", ["governance", "policy", "control"]],
+              ["translation", ["translation", "translate", "localization"]],
+              ["ledger", ["ledger", "audit", "record"]],
+            ];
+
+            const labels = mapping
+              .filter(([_, keywords]) => keywords.some((kw) => text.includes(kw)))
+              .map(([label]) => label);
+
+            const finalLabels = labels.length ? labels : ["vision"];
+            await github.rest.issues.setLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: finalLabels,
+            });
