@@ -1,0 +1,35 @@
+name: codex-choreographer
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Classify PR and apply labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const text = `${pr.title}\n${pr.body || ''}`.toLowerCase();
+            const rules = [
+              { label: 'execution', terms: ['ship', 'implement', 'build', 'runbook', 'deliver'] },
+              { label: 'documentation', terms: ['docs', 'readme', 'guide', 'explain'] },
+              { label: 'governance', terms: ['policy', 'compliance', 'governance', 'risk'] },
+              { label: 'translation', terms: ['translate', 'localization', 'language'] },
+              { label: 'ledger', terms: ['ledger', 'audit', 'record', 'evidence'] },
+              { label: 'vision', terms: ['vision', 'strategy', 'roadmap', 'direction'] },
+            ];
+            let selected = rules.filter(r => r.terms.some(t => text.includes(t))).map(r => r.label);
+            if (selected.length === 0) selected = ['vision'];
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: [...new Set(selected)],
+            });

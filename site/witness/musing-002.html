@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Witness preview package</title>
+<style>
+body{font-family:system-ui;max-width:760px;margin:2rem auto;user-select:none;}
+#payload{filter:blur(8px);transition:filter .2s ease;}
+.revealed #payload{filter:blur(0);}
+</style>
+</head>
+<body>
+<h1>Witness Window Lite</h1>
+<p>Soft-gated preview only. Static Pages cannot enforce secure private runtime controls.</p>
+<p id="expiry">Token expires: 2026-04-05T16:39:45.333316+00:00</p>
+<button onclick="document.body.classList.add('revealed')">Reveal preview</button>
+<div id="payload"><h2>Witness preview package</h2><p>A controlled witness preview can be released now with strict redaction and limited public narrative.</p></div>
+<script>
+const expiry = new Date('2026-04-05T16:39:45.333316+00:00');
+if (new Date() > expiry) {
+  document.getElementById('payload').innerHTML = '<p>Window closed.</p>';
+}
+</script>
+</body></html>
