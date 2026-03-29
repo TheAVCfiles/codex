@@ -1,0 +1,20 @@
+[
+  {
+    "id": "musing-001",
+    "title": "Sample Internal Musing",
+    "source_dump_id": "dump-001",
+    "release_score": 84,
+    "leak_risk": "low",
+    "release_state": "gated_preview",
+    "notes": "High signal; requires controlled preview copy."
+  },
+  {
+    "id": "musing-002",
+    "title": "Restricted Strategy Fragment",
+    "source_dump_id": "dump-001",
+    "release_score": 41,
+    "leak_risk": "high",
+    "release_state": "private_hold",
+    "notes": "Contains internal process detail."
+  }
+]

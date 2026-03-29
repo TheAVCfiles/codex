@@ -104,3 +104,13 @@ Use this quick pass before opening a PR from a fork back to an upstream project:
    - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
 
 When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
+
+## Private Operator Shell
+
+The private operator shell lives in `operator/` and is intended for **internal operations only**.
+
+- Entry point: `operator/index.html`
+- State file: `operator/state/default_state.json`
+- Internal docs: `operator/docs/`
+
+This shell should **never** be deployed as the public GitHub Pages surface. Public Pages should contain rendered artifacts only (for example `site/demos/`, `site/rooms/`, `site/witness/`).

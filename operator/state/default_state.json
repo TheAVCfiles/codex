@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "role": "DIRECTOR",
+    "credential": "ACTIVE",
+    "status": "GOOD_STANDING"
+  },
+  "queue": [],
+  "notes": [],
+  "last_build": null
+}
