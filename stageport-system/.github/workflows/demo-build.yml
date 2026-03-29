@@ -1,0 +1,28 @@
+name: Demo Build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "stageport-system/data/musings.json"
+      - "stageport-system/scripts/build_demos.py"
+
+permissions:
+  contents: write
+
+jobs:
+  build-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python stageport-system/scripts/build_demos.py
+      - name: Commit demo artifacts
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add stageport-system/site/demos
+          git diff --cached --quiet || git commit -m "Build demo artifacts"
+          git push

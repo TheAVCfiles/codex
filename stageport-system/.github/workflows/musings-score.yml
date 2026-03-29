@@ -1,0 +1,28 @@
+name: Musings Score
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "stageport-system/data/codex_dumps.json"
+      - "stageport-system/scripts/musings_score.py"
+
+permissions:
+  contents: write
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python stageport-system/scripts/musings_score.py
+      - name: Commit musings
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add stageport-system/data/musings.json
+          git diff --cached --quiet || git commit -m "Update musings scores"
+          git push
