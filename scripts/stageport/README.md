@@ -31,6 +31,21 @@ The script centers the masthead, preserves the covenant language, and builds
 bullet lists for packet contents and corridor actions. Directories for the
 output path are created automatically.
 
+## Generating the Phase II Contract PDF
+
+1. Install dependencies (if not already installed):
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Render the agreement document:
+   ```bash
+   python phase_ii_contract.py --output ./dist/StagePort_Phase_II_Contract.pdf
+   ```
+
+The script generates a send-ready Phase II agreement with scope, deliverables,
+engagement terms, fee, and signature lines. Parent output directories are
+created automatically by ReportLab if they already exist in your path.
+
 ## PAS DE CHAT VAULT helper
 
 Use `pas_de_chat_vault.py` for Airtable capture + rinse workflows aligned with the
