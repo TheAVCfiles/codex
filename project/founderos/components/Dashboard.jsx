@@ -14,6 +14,9 @@ export default function Dashboard() {
   const [apiLedger, setApiLedger] = useState([]);
   const [ledgerSource, setLedgerSource] = useState("local");
   const [message, setMessage] = useState("");
+  const [hieroglyphInput, setHieroglyphInput] = useState("");
+  const [hieroglyphResult, setHieroglyphResult] = useState(null);
+  const [showDecodeHow, setShowDecodeHow] = useState(false);
 
   const summary = useMemo(
     () => ({ entries: ledger.length, escalations: ledger.filter((entry) => entry.event === "ESCALATE").length }),
@@ -56,6 +59,67 @@ export default function Dashboard() {
   async function runEngine() {
     const result = runRegime({ velocity: Math.random() * 100 });
     await guardedEvent(result.signal, result);
+  }
+
+  function decodeHieroglyphics(text) {
+    if (!text?.trim()) {
+      return {
+        score: 0,
+        label: "Balanced Flow",
+        emojis: "🪨",
+        story: "No input provided.",
+      };
+    }
+
+    const sentences = text.match(/[^.!?]+[.!?]*/g)?.map((sentence) => sentence.trim()).filter(Boolean) || [text];
+    const tokens = text.toLowerCase().split(/\s+/).filter(Boolean);
+    const positiveSeeds = /good|great|excellent|beautiful|love|joy|success|win|clarity|flow|grace|progress|strong|clear/i;
+    const negativeSeeds = /bad|poor|fail|frustrat|stress|pain|chaos|lost|blocked|dark|delay|risk|stuck|confus/i;
+    const negationWords = /not|no|never|without|lack|fail|cannot|unable|avoid|deny|refuse|no longer|hardly|barely/i;
+
+    let weightedTotal = 0;
+
+    sentences.forEach((sentence, index) => {
+      const clean = sentence.toLowerCase();
+      const sentenceWords = clean.split(/\s+/).filter(Boolean);
+      let sentenceScore = 0;
+
+      sentenceWords.forEach((word, wordIndex) => {
+        const scope = sentenceWords.slice(Math.max(0, wordIndex - 5), wordIndex + 1).join(" ");
+        const isNegated = negationWords.test(scope);
+        const delta = positiveSeeds.test(word) ? 2 : negativeSeeds.test(word) ? -2 : 0;
+        if (delta !== 0) {
+          sentenceScore += isNegated ? -delta : delta;
+        }
+      });
+
+      const recencyWeight = (index + 1) / sentences.length;
+      weightedTotal += sentenceScore * recencyWeight;
+    });
+
+    const finalScore = Math.max(-10, Math.min(10, weightedTotal));
+    const label =
+      finalScore > 3 ? "Positive Resonance" : finalScore < -3 ? "Shadow Tension" : "Balanced Flow";
+
+    let emojis = "⚖️🪨🌿";
+    if (finalScore > 5) emojis = "🌟🔥🪶🌊";
+    else if (finalScore > 2) emojis = "🌱🌀🕊️";
+    else if (finalScore > -2) emojis = "⚖️🪨🌿";
+    else if (finalScore > -5) emojis = "🌫️🪨⛓️";
+    else emojis = "🌑🔥🪨";
+
+    const negationHits = tokens.filter((token) => negationWords.test(token)).length;
+
+    return {
+      score: finalScore,
+      label,
+      emojis,
+      story: `Sentence count: ${sentences.length} | Negation markers: ${negationHits} | Weighted score: ${finalScore.toFixed(1)}`,
+    };
+  }
+
+  function runHieroglyphics() {
+    setHieroglyphResult(decodeHieroglyphics(hieroglyphInput));
   }
 
   useEffect(() => {
@@ -148,6 +212,40 @@ export default function Dashboard() {
         <a href="/founder-studios" style={styles.link}>Open standalone route: /founder-studios</a>
         <FounderStudioOS />
       </div>
+
+      <div style={styles.logBox}>
+        <h3>🪨 Automation Capacitor — Emojitional Hieroglyphics</h3>
+        <p style={styles.muted}>
+          Decode founder notes, workflow descriptions, and reflections into sentiment tablets.
+        </p>
+        <textarea
+          value={hieroglyphInput}
+          onChange={(event) => setHieroglyphInput(event.target.value)}
+          placeholder="Paste any text for local sentiment decoding..."
+          style={styles.decodeInput}
+        />
+        <button onClick={runHieroglyphics}>Decode with Hieroglyphics 🪶</button>
+        {hieroglyphResult ? (
+          <div style={styles.decodeResult}>
+            <div>
+              <div style={styles.decodeLabel}>Sentiment Score</div>
+              <div style={styles.decodeScore}>{hieroglyphResult.score.toFixed(1)}</div>
+              <div>{hieroglyphResult.label}</div>
+            </div>
+            <div style={styles.decodeEmoji}>{hieroglyphResult.emojis}</div>
+          </div>
+        ) : null}
+        {hieroglyphResult ? <small style={styles.muted}>{hieroglyphResult.story}</small> : null}
+        <button style={styles.linkButton} onClick={() => setShowDecodeHow((value) => !value)}>
+          {showDecodeHow ? "Hide How & Why" : "How & Why does this work?"}
+        </button>
+        {showDecodeHow ? (
+          <p style={styles.muted}>
+            Multi-sentence context scoring with recency bias and short-scope negation handling. All processing is
+            local in the dashboard runtime.
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -189,5 +287,46 @@ const styles = {
   link: {
     color: "#8de2ff",
     fontSize: 14,
+  },
+  decodeInput: {
+    width: "100%",
+    minHeight: 120,
+    marginBottom: "0.75rem",
+    borderRadius: 8,
+    padding: "0.75rem",
+    background: "#0f1115",
+    color: "#fff",
+    border: "1px solid #2d3340",
+  },
+  decodeResult: {
+    marginTop: "1rem",
+    padding: "0.75rem",
+    borderRadius: 8,
+    border: "1px solid #2d3340",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  decodeLabel: {
+    fontSize: 12,
+    opacity: 0.7,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
+  decodeScore: {
+    fontSize: 36,
+    lineHeight: 1.2,
+  },
+  decodeEmoji: {
+    fontSize: 48,
+    lineHeight: 1,
+  },
+  linkButton: {
+    marginTop: "0.75rem",
+    background: "transparent",
+    border: "none",
+    color: "#8de2ff",
+    cursor: "pointer",
+    padding: 0,
   },
 };
