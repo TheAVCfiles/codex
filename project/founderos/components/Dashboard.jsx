@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { FounderStates, transition } from "../fsm/founderMachine";
-import { canTrigger, Roles } from "../lib/auth";
+import { canAccessCapability, canTrigger, Capabilities, Credentials, Roles, Statuses } from "../lib/auth";
 import { readFounderLedger, writeLedger } from "../lib/ledger";
 import { runRegime } from "../engines/regimeEngine";
 import FounderStudioOS from "./FounderStudioOS";
@@ -9,7 +9,11 @@ const FOUNDER_ID = "avc_beta";
 
 export default function Dashboard() {
   const [state, setState] = useState(FounderStates.IDLE);
-  const [role, setRole] = useState(Roles.FOUNDER);
+  const [authority, setAuthority] = useState({
+    role: Roles.FOUNDER,
+    credential: Credentials.ACTIVE,
+    status: Statuses.GOOD_STANDING,
+  });
   const [ledger, setLedger] = useState(() => readFounderLedger(FOUNDER_ID));
   const [apiLedger, setApiLedger] = useState([]);
   const [ledgerSource, setLedgerSource] = useState("local");
@@ -42,8 +46,8 @@ export default function Dashboard() {
   }
 
   async function guardedEvent(event, metadata) {
-    if (!canTrigger(role, event)) {
-      setMessage(`Role ${role} cannot trigger ${event}.`);
+    if (!canTrigger(authority.role, event, authority)) {
+      setMessage(`Authority ${authority.role}/${authority.credential}/${authority.status} cannot trigger ${event}.`);
       return;
     }
 
@@ -56,6 +60,33 @@ export default function Dashboard() {
   async function runEngine() {
     const result = runRegime({ velocity: Math.random() * 100 });
     await guardedEvent(result.signal, result);
+  }
+
+  function updateAuthority(field, value) {
+    setAuthority((current) => ({ ...current, [field]: value }));
+  }
+
+  function exportLedger() {
+    if (!canAccessCapability(authority, Capabilities.LEDGER_EXPORT)) {
+      setMessage("Access restricted: exporting ledger requires authority in good standing.");
+      return;
+    }
+
+    const payload = {
+      founderId: FOUNDER_ID,
+      authority,
+      exportedAt: new Date().toISOString(),
+      entries: ledger,
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${FOUNDER_ID}-ledger-export.json`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+    setMessage("Ledger export generated.");
   }
 
   useEffect(() => {
@@ -97,8 +128,24 @@ export default function Dashboard() {
         <div style={styles.card}><strong>Current State:</strong> {state}</div>
         <label style={styles.card}>
           <strong>Role:</strong>{" "}
-          <select value={role} onChange={(event) => setRole(event.target.value)}>
+          <select value={authority.role} onChange={(event) => updateAuthority("role", event.target.value)}>
             {Object.values(Roles).map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </label>
+        <label style={styles.card}>
+          <strong>Credential:</strong>{" "}
+          <select value={authority.credential} onChange={(event) => updateAuthority("credential", event.target.value)}>
+            {Object.values(Credentials).map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </label>
+        <label style={styles.card}>
+          <strong>Status:</strong>{" "}
+          <select value={authority.status} onChange={(event) => updateAuthority("status", event.target.value)}>
+            {Object.values(Statuses).map((option) => (
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
@@ -106,10 +153,17 @@ export default function Dashboard() {
       </div>
 
       <div style={styles.row}>
+        <div style={styles.badge}>
+          {authority.role} · {authority.credential} · {authority.status}
+        </div>
+      </div>
+
+      <div style={styles.row}>
         <button onClick={() => guardedEvent("START_BUILD")}>Start Build</button>
         <button onClick={runEngine}>Run Engine</button>
         <button onClick={() => guardedEvent("THROTTLE")}>Trigger Throttle</button>
         <button onClick={() => guardedEvent("RESET")}>Reset</button>
+        <button onClick={exportLedger}>Export Ledger</button>
       </div>
 
       {message ? <p style={styles.muted}>{message}</p> : null}
@@ -171,6 +225,14 @@ const styles = {
     padding: "0.75rem",
     borderRadius: 8,
     background: "#1c1f26",
+  },
+  badge: {
+    padding: "0.65rem 0.9rem",
+    borderRadius: 999,
+    border: "1px solid #3b4457",
+    background: "#141821",
+    fontWeight: 600,
+    letterSpacing: "0.02em",
   },
   logBox: {
     marginTop: "1.25rem",
