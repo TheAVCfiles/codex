@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Access Unlocked</title>
+  <title>Access Confirmed</title>
   <meta name="description" content="Post-checkout confirmation page for Decision Ledger unlocks." />
   <style>
     :root {
@@ -57,7 +57,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1rem;
       min-height: 3.1rem;
       padding: 0.9rem 1.4rem;
       border-radius: 0.9rem;
@@ -67,14 +66,40 @@
       color: #08080c;
       box-shadow: 0 18px 40px rgba(167, 139, 250, 0.25);
     }
+
+    .button--ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .actions {
+      margin-top: 1.2rem;
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .note {
+      margin-top: 0.4rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
   <main class="card">
-    <h1>Access Unlocked</h1>
-    <p>Thank you — your Decision Ledger is now active.</p>
-    <p>Go back to the app, refresh, and enjoy unlimited receipts plus full pattern memory.</p>
-    <a class="button" href="./index.html">Return to StagePort</a>
+    <h1>Access Confirmed — Ledger Activated</h1>
+    <p>Thank you — your Decision Ledger is now active. All validations will now be recorded and stored.</p>
+    <p class="note">Session activated at <span id="ts"></span></p>
+    <div class="actions">
+      <a class="button" href="./index.html">Return to Decision Engine</a>
+      <a class="button button--ghost" href="./apply.html">Apply for StudioOS</a>
+    </div>
   </main>
+  <script>
+    localStorage.setItem('decision_engine_access', 'active');
+    document.getElementById('ts').textContent = new Date().toLocaleString();
+  </script>
 </body>
 </html>
