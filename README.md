@@ -86,6 +86,10 @@ The web dashboard includes a rhythm-machine panel driven by market tempo project
 
 ---
 
+## GitHub automation bootstrap
+
+For automated repo creation + scaffold + Actions setup, see `docs/stageport/github_repo_bootstrap.md`.
+
 ## Upstream PR readiness checklist
 
 Use this quick pass before opening a PR from a fork back to an upstream project:
