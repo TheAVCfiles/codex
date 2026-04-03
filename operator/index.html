@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator Console (Internal)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="panel">
+      <div>
+        <p class="kicker">Operator Console · Internal Only</p>
+        <h1>Private Operator Shell</h1>
+        <p class="muted">Controls artifact generation and release-state routing. This shell is not a public surface.</p>
+      </div>
+      <div id="operatorBadge" class="badge"></div>
+    </header>
+
+    <section class="warning panel">
+      <h2>Before You Publish</h2>
+      <ul>
+        <li>Never deploy this shell publicly.</li>
+        <li>Public Pages should include rendered artifacts only.</li>
+        <li>Do not expose scoring logic, queue logic, or operator state.</li>
+        <li>Do not expose internal mapping or review notes.</li>
+      </ul>
+    </section>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Intake Buffer</h2>
+        <p class="muted">Codex dump intake with current classification and status.</p>
+        <div id="intakeList"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Review Panel</h2>
+        <p class="muted">Release scoring and controlled state assignment.</p>
+        <div id="reviewList"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Build Control</h2>
+        <p class="muted">Structured Output actions. Local operator controls only.</p>
+        <div id="buildActions" class="stack"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Publication Queue</h2>
+        <p class="muted">Queue buckets: ready, gated, hold with explicit reasons.</p>
+        <div id="queueView"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Authority / Delivery</h2>
+        <p class="muted">Credential and delivery posture for internal operation.</p>
+        <p id="authorityState" class="state-line"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Audit Ledger</h2>
+        <p class="muted">Recent operator actions stored locally.</p>
+        <ul id="auditLog" class="audit"></ul>
+      </section>
+    </main>
+
+    <footer class="panel">
+      <p class="muted">Internal only. The public artifact pipeline is controlled elsewhere.</p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "dump-001",
+    "title": "Initial Codex Intake",
+    "source": "local/import",
+    "classification": "internal_review",
+    "status": "new",
+    "created_at": "2026-03-29T00:00:00Z"
+  }
+]
