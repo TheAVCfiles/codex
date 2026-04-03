@@ -3,645 +3,166 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decision Engine — Proof Before You Act</title>
+  <title>Global AVC Systems</title>
   <meta
     name="description"
-    content="Check if a moment holds structure before you act. Get an instant verdict, confidence level, and reason — then unlock Decision Ledger for full pattern tracking."
+    content="Governance-first systems that make companies legible enough to fund, scale, and defend."
   />
   <style>
     :root {
-      --bg: #0a0a0f;
-      --bg-elevated: #111118;
-      --bg-soft: #171721;
-      --text: #f3f3f8;
-      --muted: #9a9aad;
-      --accent: #a78bfa;
-      --accent-strong: #c4b5fd;
-      --border: rgba(255, 255, 255, 0.1);
-      --danger: #fda4af;
-      --success: #86efac;
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-      --radius-lg: 1.5rem;
-      --radius-md: 1rem;
+      --bg: #0b0f14;
+      --bg-card: #121923;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #d4af37;
+      --line: rgba(148, 163, 184, 0.25);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(167, 139, 250, 0.12), transparent 35%),
-        radial-gradient(circle at bottom left, rgba(134, 239, 172, 0.07), transparent 30%),
-        var(--bg);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(circle at top, #162033 0%, var(--bg) 45%);
       color: var(--text);
-      line-height: 1.6;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
     }
 
-    a {
-      color: inherit;
-    }
-
-    .container {
-      width: min(100%, 70rem);
+    main {
+      width: min(980px, 92vw);
       margin: 0 auto;
-      padding: 0 1.25rem;
-    }
-
-    .section {
-      padding: 4.5rem 0;
-    }
-
-    .eyebrow {
-      margin: 0 0 1rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent-strong);
-    }
-
-    .hero {
-      padding: 6rem 0 3rem;
-      text-align: center;
-    }
-
-    .hero__panel,
-    .card,
-    .faq details,
-    .pricing,
-    .final-cta,
-    .video-frame,
-    .success-card,
-    .intro,
-    .application-form {
-      background: rgba(17, 17, 24, 0.84);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-    }
-
-    .hero__panel {
-      padding: 3rem 1.5rem;
-    }
-
-    h1,
-    h2,
-    h3 {
-      margin: 0;
-      line-height: 1.08;
-      font-weight: 650;
-      letter-spacing: -0.03em;
+      padding: 6rem 0 4rem;
     }
 
     h1 {
-      font-size: clamp(2.9rem, 8vw, 5.2rem);
-      max-width: 12ch;
-      margin: 0 auto;
+      font-size: clamp(2rem, 5vw, 3.75rem);
+      line-height: 1.06;
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
     }
 
-    h2 {
-      font-size: clamp(2rem, 5vw, 3.1rem);
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
     }
 
     .lead {
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      margin: 0;
+      color: #e2e8f0;
+      max-width: 42rem;
+    }
+
+    .subhead {
+      margin-top: 1.5rem;
       color: var(--muted);
       max-width: 42rem;
-      margin: 1.5rem auto 0;
-      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      font-size: 1.05rem;
+      line-height: 1.6;
     }
 
-    .button,
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.65rem;
-      min-height: 3.25rem;
-      padding: 0.95rem 1.4rem;
-      border: 0;
-      border-radius: 0.9rem;
-      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
-      color: #08080c;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 18px 40px rgba(167, 139, 250, 0.24);
-    }
-
-    .button:hover,
-    button:hover,
-    .button:focus-visible,
-    button:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 22px 45px rgba(167, 139, 250, 0.3);
-      outline: none;
-    }
-
-    .button--ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      box-shadow: none;
-    }
-
-    .hero__actions,
-    .cta-row {
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.85rem;
-    }
-
-    .hero__meta {
-      margin-top: 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .hero__meta span,
-    .pill {
-      padding: 0.55rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.03);
+    .offers {
+      margin-top: 3rem;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
     .card {
-      padding: 1.5rem;
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: 0.9rem;
     }
 
-    .demo {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .demo__header {
-      text-align: center;
-      max-width: 42rem;
-      margin: 0 auto;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.6rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    textarea,
-    input,
-    select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: var(--bg-soft);
-      color: var(--text);
-      font: inherit;
-      padding: 1rem 1rem;
-    }
-
-    textarea {
-      min-height: 10rem;
-      resize: vertical;
-    }
-
-    .field-note,
-    .section-copy,
-    .muted {
-      color: var(--muted);
-    }
-
-    .result {
-      min-height: 11rem;
-      padding: 1.35rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-      white-space: pre-wrap;
-      font-family: "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.97rem;
-    }
-
-    .result[data-state="empty"] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      text-align: center;
-      font-family: inherit;
-    }
-
-    .upgrade {
-      display: none;
-      margin-top: 1rem;
-      width: 100%;
-    }
-
-    .video-section,
-    .pricing-section,
-    .faq,
-    .final-cta {
-      text-align: center;
-    }
-
-    .video-frame {
-      position: relative;
-      overflow: hidden;
-      margin-top: 2rem;
-      padding: 1rem;
-    }
-
-    .video-shell {
-      position: relative;
-      overflow: hidden;
-      border-radius: calc(var(--radius-lg) - 0.25rem);
-      background: #000;
-      aspect-ratio: 16 / 9;
-    }
-
-    .video-shell iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      background:
-        linear-gradient(180deg, rgba(8, 8, 12, 0.15), rgba(8, 8, 12, 0.78)),
-        url('YOUR_POSTER_IMAGE_URL') center/cover;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-
-    .video-overlay.is-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .video-overlay__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 1rem 1.4rem;
-      border-radius: 999px;
-      background: rgba(167, 139, 250, 0.92);
-      color: #08080c;
-      font-size: clamp(1rem, 2.4vw, 1.35rem);
-      font-weight: 800;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
-    }
-
-    .pricing {
-      max-width: 34rem;
-      margin: 2.25rem auto 0;
-      padding: 2rem;
-    }
-
-    .pricing__price {
-      font-size: clamp(3rem, 8vw, 4rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-    }
-
-    .pricing__sub {
-      margin-top: 0.4rem;
-      color: var(--muted);
+    .card h2 {
+      margin: 0 0 0.5rem;
       font-size: 1.1rem;
     }
 
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 2rem 0;
-      text-align: left;
-      display: grid;
-      gap: 0.9rem;
-    }
-
-    .feature-list li {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      color: var(--text);
-    }
-
-    .feature-list li::before {
-      content: "✓";
-      color: var(--success);
-      font-weight: 800;
-      margin-top: 0.05rem;
-    }
-
-    .faq {
-      max-width: 48rem;
-      margin: 0 auto;
-    }
-
-    .faq details {
-      padding: 1.2rem 1.25rem;
-      margin-top: 1rem;
-      text-align: left;
-    }
-
-    .faq summary {
-      cursor: pointer;
-      font-size: 1.08rem;
-      font-weight: 700;
-      list-style: none;
-    }
-
-    .faq summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .faq details p {
-      margin: 0.85rem 0 0;
+    .card p {
+      margin: 0;
       color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    .final-cta {
-      max-width: 52rem;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+    .cta-row {
+      margin-top: 2.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.7rem;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #1e293b;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #111827;
+      border-color: transparent;
     }
 
     footer {
-      padding: 2rem 0 4rem;
-      text-align: center;
+      border-top: 1px solid var(--line);
+      padding: 1.25rem 4vw;
       color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .intro,
-    .application-form,
-    .success-card {
-      padding: 2rem;
-    }
-
-    .application-form {
-      display: grid;
-      gap: 1.25rem;
-    }
-
-    .success-card {
-      display: none;
-      text-align: center;
-    }
-
-    .success-card h2 {
-      color: var(--success);
-    }
-
-    @media (min-width: 48rem) {
-      .hero {
-        padding-top: 7rem;
-      }
-
-      .grid--two {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 40rem) {
-      .hero__panel,
-      .card,
-      .pricing,
-      .final-cta,
-      .intro,
-      .application-form,
-      .success-card,
-      .video-frame,
-      .faq details {
-        padding-inline: 1rem;
-      }
-
-      .video-frame {
-        padding: 0.75rem;
-      }
-
-      .video-overlay__cta {
-        width: 100%;
-        justify-content: center;
-      }
+      font-size: 0.92rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
   </style>
 </head>
 <body>
   <main>
-    <section class="hero container">
-      <div class="hero__panel">
-        <p class="eyebrow">Decision Engine</p>
-        <h1>You don’t need advice. You need proof.</h1>
-        <p class="lead">Run any moment through a system that tells you whether it is structurally valid before you act on it.</p>
-        <div class="hero__actions">
-          <a class="button" href="#demo">Try 1 Free Decision Receipt</a>
-          <a class="button button--ghost" href="#pricing">Unlock Full Access → $29/mo</a>
-        </div>
-        <div class="hero__meta" aria-label="Product highlights">
-          <span>Instant verdict</span>
-          <span>Confidence + reason</span>
-          <span>Pattern tracking after upgrade</span>
-        </div>
-      </div>
+    <p class="eyebrow">Global AVC Systems</p>
+    <h1>We install systems that unlock capital.</h1>
+    <p class="lead">Governance-first systems that make companies legible enough to fund, scale, and defend.</p>
+
+    <p class="subhead">Global AVC Systems deploys institutional operating corridors with clear authority, evidence-bearing workflows, and controlled execution surfaces.</p>
+
+    <section class="offers" aria-label="Offer stack">
+      <article class="card">
+        <h2>Governance Install</h2>
+        <p>Fixed Phase I system install that defines structure, authority lanes, and reporting discipline.</p>
+      </article>
+      <article class="card">
+        <h2>Private Operating Environment</h2>
+        <p>Local-first private system for controlled execution, export gates, and durable operational records.</p>
+      </article>
+      <article class="card">
+        <h2>StudioOS Capsule</h2>
+        <p>Onboarding credential infrastructure for disciplined team adoption and protected process continuity.</p>
+      </article>
     </section>
 
-    <section id="demo" class="section container demo">
-      <div class="demo__header">
-        <p class="eyebrow">Try it live</p>
-        <h2>Check one moment for free.</h2>
-        <p class="lead">Describe any decision, interaction, contradiction, or signal. You’ll get an instant structural receipt.</p>
-      </div>
-
-      <div class="card">
-        <label for="inputText">Describe what happened.</label>
-        <textarea id="inputText" placeholder="They promised follow-up after the call, then disappeared for a week."></textarea>
-        <p class="field-note">Example: mixed signals, a business deal, a pressure moment, or something that felt off but you can’t name yet.</p>
-        <button type="button" onclick="generateVerdict()">Check Structure</button>
-        <div id="verdict" class="result" data-state="empty">Your verdict, confidence, and reason will appear here.</div>
-        <button id="upgrade" class="button upgrade" type="button" onclick="goToStripe()">🔒 Track patterns over time — Unlock Decision Ledger</button>
-      </div>
-    </section>
-
-    <section id="demo-video" class="section container video-section">
-      <p class="eyebrow">Demo video</p>
-      <h2>See It Work (30 Seconds)</h2>
-      <p class="lead">Watch a real moment get analyzed — verdict, confidence, reason, and pattern insight appear instantly.</p>
-
-      <div class="video-frame">
-        <div class="video-shell">
-          <iframe
-            src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=VIDEO_ID&amp;rel=0"
-            title="StagePort Demo"
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          <button
-            id="videoOverlay"
-            class="video-overlay"
-            type="button"
-            aria-label="Hide demo poster overlay and reveal the video"
-          >
-            <span class="video-overlay__cta">▶ Watch Demo</span>
-          </button>
-        </div>
-      </div>
-
-      <p class="section-copy">Replace <strong>VIDEO_ID</strong>, the poster image URL, and the Stripe payment link before you deploy.</p>
-    </section>
-
-    <section id="pricing" class="section container pricing-section">
-      <p class="eyebrow">One product</p>
-      <h2>Unlock Full Access</h2>
-      <p class="lead">One subscription. Unlimited receipts. Full pattern memory and history.</p>
-
-      <div class="pricing">
-        <div class="pricing__price">$29</div>
-        <div class="pricing__sub">per month</div>
-
-        <ul class="feature-list">
-          <li>Unlimited Decision Receipts</li>
-          <li>Pattern tracking and trend detection</li>
-          <li>Full history and export</li>
-          <li>Local-first flow with no identity binding</li>
-        </ul>
-
-        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="button">Unlock Full Access → $29/mo</a>
-        <p class="muted">Cancel anytime. 14-day refund if it doesn’t click.</p>
-      </div>
-    </section>
-
-    <section class="section container faq">
-      <p class="eyebrow">Quick answers</p>
-      <h2>Short answers before you decide.</h2>
-
-      <details>
-        <summary>What is this?</summary>
-        <p>A decision validation tool that checks whether a moment holds structure.</p>
-      </details>
-
-      <details>
-        <summary>Who is it for?</summary>
-        <p>People dealing with ambiguity, contradiction, pressure, or mixed signals.</p>
-      </details>
-
-      <details>
-        <summary>What do I get?</summary>
-        <p>A verdict, confidence level, reason, and pattern tracking over time after you unlock the ledger.</p>
-      </details>
-
-      <details>
-        <summary>Is it private?</summary>
-        <p>Yes. Local-first, no identity binding, no unnecessary tracking.</p>
-      </details>
-    </section>
-
-    <section class="section container">
-      <div class="final-cta">
-        <p class="eyebrow">Final CTA</p>
-        <h2>Clarity first. Upgrade only if you want the pattern memory.</h2>
-        <p class="lead">Run the free receipt. Watch the demo. Then decide whether you want the ledger tracking every recurring trap over time.</p>
-        <div class="cta-row">
-          <a class="button" href="#demo">Run the Free Receipt</a>
-          <a class="button button--ghost" href="https://buy.stripe.com/YOUR_LINK_HERE">Unlock Full Access → $29/mo</a>
-        </div>
-      </div>
-    </section>
+    <nav class="cta-row" aria-label="Calls to action">
+      <a class="btn primary" href="mailto:avancura@globalavcsystems.com?subject=Request%20Install">Request Install</a>
+      <a class="btn" href="/proof/">View Proof</a>
+      <a class="btn" href="/audit/">Review Audit Surface</a>
+    </nav>
   </main>
 
-  <footer class="container">
-    <p>Decision Engine — Structure converts motion to proof.<br />Local-first. No identity. No fluff.<br />© 2026 AVC Systems</p>
+  <footer>
+    <span>Global AVC Systems</span>
+    <a href="mailto:avancura@globalavcsystems.com" style="color:inherit;">avancura@globalavcsystems.com</a>
   </footer>
-
-  <script>
-    function generateVerdict() {
-      const input = document.getElementById('inputText').value.trim();
-      const verdictEl = document.getElementById('verdict');
-      const upgradeButton = document.getElementById('upgrade');
-
-      if (!input) {
-        verdictEl.dataset.state = 'empty';
-        verdictEl.textContent = 'Enter a real moment first so the receipt has something to evaluate.';
-        upgradeButton.style.display = 'none';
-        return;
-      }
-
-      const hasContradiction = /ghosted|promised|follow-up|blamed|said.*but|contradict|mixed signal/i.test(input);
-      const hasPressure = /pressure|stress|overwhelm|urgent|rushed/i.test(input);
-      const hasClarity = /clear|consistent|calm|followed through|matched/i.test(input);
-
-      let integrity = 85;
-      if (hasContradiction) integrity -= 45;
-      if (hasPressure) integrity -= 20;
-      if (hasClarity) integrity += 15;
-      integrity = Math.max(20, Math.min(98, integrity));
-
-      const verdict = integrity > 74 ? 'VALID' : integrity > 52 ? 'UNSTABLE' : 'INVALID';
-      const confidence = integrity > 85 ? 'HIGH' : integrity > 58 ? 'MEDIUM' : 'LOW';
-
-      const reason = hasContradiction
-        ? 'Behavior does not match stated intent.'
-        : hasPressure
-          ? 'Pressure distorted structural integrity over time.'
-          : 'Action aligns with the declared pattern.';
-
-      const output =
-        `Decision Receipt SP-${Math.floor(Math.random() * 100000)}\n` +
-        `Timestamp: ${new Date().toISOString()}\n\n` +
-        `Input: ${input}\n\n` +
-        `Verdict: ${verdict}\n` +
-        `Confidence: ${confidence} (${integrity}%)\n\n` +
-        `Scores:\n` +
-        `  Integrity:   ${integrity}\n` +
-        `  Consistency: ${Math.round(integrity * 0.92)}\n` +
-        `  Composure:   ${Math.round(integrity * 1.05)}\n\n` +
-        `Reason: ${reason}\n\n` +
-        'Upgrade path: Track repeat patterns inside Decision Ledger.';
-
-      verdictEl.dataset.state = 'filled';
-      verdictEl.textContent = output;
-      upgradeButton.style.display = 'inline-flex';
-      verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function goToStripe() {
-      window.location.href = 'https://buy.stripe.com/YOUR_LINK_HERE';
-    }
-
-    const videoOverlay = document.getElementById('videoOverlay');
-    if (videoOverlay) {
-      videoOverlay.addEventListener('click', () => {
-        videoOverlay.classList.add('is-hidden');
-      });
-    }
-  </script>
 </body>
 </html>
