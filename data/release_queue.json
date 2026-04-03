@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-03-29T16:49:24.782752+00:00",
+  "ready": [
+    {
+      "id": "musing-20260329-001",
+      "title": "Structured Delivery Baseline",
+      "release_score": 84,
+      "leak_risk": "low",
+      "reason": "Clear value narrative and no sensitive internals."
+    }
+  ],
+  "gated": [
+    {
+      "id": "musing-20260329-002",
+      "title": "Partner Preview Concept",
+      "release_score": 63,
+      "leak_risk": "medium",
+      "reason": "Contains partner-specific assumptions requiring gated review."
+    }
+  ],
+  "hold": [
+    {
+      "id": "musing-20260329-003",
+      "title": "Internal Process Mapping",
+      "release_score": 42,
+      "leak_risk": "high",
+      "reason": "Contains private operational logic."
+    }
+  ]
+}

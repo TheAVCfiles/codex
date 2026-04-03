@@ -1,0 +1,8 @@
+[
+  {
+    "id": "witness-001",
+    "label": "Preview Access Token",
+    "scope": "site/witness/",
+    "status": "issued"
+  }
+]

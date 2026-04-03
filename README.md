@@ -104,3 +104,11 @@ Use this quick pass before opening a PR from a fork back to an upstream project:
    - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
 
 When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
+
+## Private Operator Shell
+
+The private Operator Shell lives in `operator/` and is intended for internal-only operations. It manages intake review, release-state decisions, build controls, queue visibility, and local audit tracking.
+
+- Internal only: do **not** deploy `operator/` as a public Pages surface.
+- Public Pages should contain rendered artifacts only.
+- Do not expose operator state, scoring logic, queue logic, or internal mappings on public outputs.

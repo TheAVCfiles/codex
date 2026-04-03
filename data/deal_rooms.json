@@ -1,0 +1,8 @@
+[
+  {
+    "id": "room-001",
+    "name": "Deal Room Placeholder",
+    "output_path": "site/rooms/",
+    "status": "gated"
+  }
+]
