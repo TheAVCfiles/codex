@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Witness Window Lite</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+  <style>
+    body { user-select: none; }
+    .blurred { filter: blur(5px); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Soft-gated preview</p>
+    <h1>Witness Window Lite</h1>
+    <p>This is a static preview layer only. It is not a secure private runtime.</p>
+    <p>Generated at: 2026-03-29T16:33:30.973021+00:00</p>
+    <p>Preview token count: 1</p>
+    <p id="expiry"></p>
+    <section id="content" class="blurred">
+      <p>Controlled preview artifact. Source logic is withheld by design.</p>
+    </section>
+    <button id="reveal">Reveal preview</button>
+  </main>
+  <script>
+    const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    if (Date.now() > expiry.getTime()) {
+      document.getElementById("expiry").innerText = "Window closed";
+    } else {
+      document.getElementById("expiry").innerText = "Window open for limited review";
+    }
+    document.getElementById("reveal").addEventListener("click", () => {
+      document.getElementById("content").classList.remove("blurred");
+    });
+  </script>
+</body>
+</html>

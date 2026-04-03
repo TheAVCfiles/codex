@@ -1,106 +1,61 @@
-# StagePort Research Lab — Choreographic Intelligence Infrastructure
+# StagePort GitHub-Only Scaffold
 
-StagePort is a research platform for choreographic intelligence and creative labor attribution.
-It combines narrative systems, movement-aware computation, and governance tooling into one executable lab.
+This repository now includes a GitHub-native scaffold that converts Codex dumps into scored musings, public-safe demos, buyer-facing deal rooms, Witness Window Lite previews, and GitHub Pages deployment output.
 
-## Front door
+## Why GitHub-only
 
-### 1) Problem this system solves
+- No Vercel usage.
+- No serverless runtime dependency.
+- No paid hosting requirement.
+- Single operational surface: this repository + GitHub Actions + GitHub Pages.
 
-Creative labor is often captured, remixed, and monetized without durable attribution.
-This repository prototypes a pipeline where movement artifacts, operator decisions, and governance evidence can be tracked as first-class system records.
+## Pipeline overview
 
-### 2) What makes it unusual
+1. Intake: `data/codex_dumps.json` stores dump entries.
+2. Scoring: `scripts/musings_score.py` computes intensity, clarity, market readiness, leak risk, and release state.
+3. Demo generation: `scripts/build_demos.py` creates redacted public demo pages.
+4. Deal room generation: `scripts/build_deal_rooms.py` creates buyer-facing static pages.
+5. Witness generation: `scripts/build_witness.py` creates Witness Window Lite soft-gated previews.
+6. Deployment: `.github/workflows/pages.yml` publishes `site/` to GitHub Pages.
 
-Most projects stop at one layer (UI, analytics, or smart contracts).
-This one intentionally spans multiple layers:
+## What gets published
 
-- **Movement analytics engine** (Py.rouette style compute loops)
-- **Creative rights + value rails** (StageCoin / ledger-oriented primitives)
-- **Institutional confidence dashboards** (evidence, governance, and operator visibility)
+Public output is limited to rendered artifacts:
 
-### 3) What already works
+- `site/index.html`
+- `site/demos/*`
+- `site/rooms/*`
+- `site/witness/*`
+- `site/assets/*`
 
-- FastAPI service with ingestion, evaluation, and online training loops
-- Runnable React + TypeScript dashboard with tempo-aware modules
-- Single-file fallback runtime for resilient demo recovery
-- Dockerized local stack for end-to-end execution
+## What must never be published
 
----
+Never publish core method internals:
 
-## PRIMA Fortress — ETH Weather Forecaster Scaffold
+- Scoring internals
+- Authority/translation logic
+- Raw prompt and operational source logic
+- Sensitive mappings/keys/tokens that imply executable system control
 
-This repository includes a GitHub-ready scaffold for a self-improving ETH "weather" loop:
-
-- FastAPI backend (`api/`) with forecast + learning endpoints
-- Live trade ingestor to rolling 1-minute bars
-- Daily evaluator + online trainer scripts
-- Paper-trading style executor with kill-switch rails
-- Vite + React + TypeScript dashboard (`web/`)
-- Docker + docker-compose + CI workflow
-
-> Disclaimer: analytic tooling only, not financial advice.
-
-## Quick start
+## Local run
 
 ```bash
-# API (local)
-python -m pip install -r api/requirements.txt
-uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
-
-# Web (local)
-cd web
-npm install
-npm run dev
-
-# Full stack
-docker compose up --build
+python scripts/musings_score.py
+python scripts/build_demos.py
+python scripts/build_deal_rooms.py
+python scripts/build_witness.py
 ```
 
-## Daily loop scripts
+## GitHub Pages deployment
 
-```bash
-python -m api.ingest_stream
-python -m api.daily_eval
-python -m api.online_train
-```
+The `pages.yml` workflow runs on `main` branch pushes affecting scripts, templates, data, or site assets. It rebuilds artifacts and deploys the `site/` directory via the official Pages actions.
 
-## Single-file fallback mode
+## First Run Checklist
 
-For a zero-build dynamic fallback dashboard, run:
-
-```bash
-python single_file_fortress.py
-# open http://127.0.0.1:8000/
-```
-
-This serves a self-contained FastAPI + inline React/Babel UI with forecast, signal, learn loop, sparkline, and WebAudio rhythm controls.
-
-## Atmospheric Sentience Orchestrator
-
-The web dashboard includes a rhythm-machine panel driven by market tempo projection.
-
-- API endpoint: `GET /api/forecast-tempo` (or compatibility alias `/forecast-tempo`)
-- Model: SARIMA when available (`statsmodels` + CoinGecko), with deterministic fallback tempo logic when offline
-- UI: rhythm presets, 16-step drum grid, and tempo slider seeded from forecast tempo
-
----
-
-## Upstream PR readiness checklist
-
-Use this quick pass before opening a PR from a fork back to an upstream project:
-
-1. **Run from scratch**
-   - Verify a fresh clone can install dependencies and start (`npm install`, `docker compose up`, etc.).
-2. **Remove experiment debris**
-   - Keep scratch files, temporary scripts, and half-built modules out of the PR.
-3. **Keep scope surgical**
-   - Submit one clear idea per PR. Split docs fixes, CLI fixes, and API changes into separate proposals.
-4. **Check license + ownership hygiene**
-   - Confirm dependency compatibility and avoid committing proprietary code, secrets, `.env` values, or credentials.
-5. **Write a maintainable PR description**
-   - State problem, why it matters, implementation summary, and exact test/repro steps.
-6. **Run quality gates first**
-   - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
-
-When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
+1. Edit `data/codex_dumps.json`
+2. Run musings scoring
+3. Build demos
+4. Build deal rooms
+5. Build witness
+6. Push to `main`
+7. Confirm Pages output

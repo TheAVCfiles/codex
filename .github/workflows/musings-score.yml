@@ -1,0 +1,30 @@
+name: Musings Score
+
+on:
+  push:
+    paths:
+      - "data/codex_dumps.json"
+      - "scripts/musings_score.py"
+      - "scripts/codex_sync.py"
+
+permissions:
+  contents: write
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Score musings
+        run: python scripts/musings_score.py
+      - name: Commit updated musings
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/musings.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(data): refresh musings scores"
+          git push
