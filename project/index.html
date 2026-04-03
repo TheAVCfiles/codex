@@ -582,6 +582,23 @@
   </footer>
 
   <script>
+    const hasLedgerAccess = localStorage.getItem('decision_engine_access') === 'active';
+
+    function updatePremiumState() {
+      const upgradeButton = document.getElementById('upgrade');
+      const verdictEl = document.getElementById('verdict');
+
+      if (!upgradeButton || !verdictEl) return;
+
+      if (hasLedgerAccess) {
+        upgradeButton.style.display = 'none';
+        verdictEl.dataset.state = 'filled';
+        verdictEl.textContent = 'Ledger access active. Unlimited validations are unlocked for this device.';
+      } else {
+        upgradeButton.style.display = 'none';
+      }
+    }
+
     function generateVerdict() {
       const input = document.getElementById('inputText').value.trim();
       const verdictEl = document.getElementById('verdict');
@@ -628,7 +645,9 @@
 
       verdictEl.dataset.state = 'filled';
       verdictEl.textContent = output;
-      upgradeButton.style.display = 'inline-flex';
+      if (!hasLedgerAccess) {
+        upgradeButton.style.display = 'inline-flex';
+      }
       verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
@@ -642,6 +661,8 @@
         videoOverlay.classList.add('is-hidden');
       });
     }
+
+    updatePremiumState();
   </script>
 </body>
 </html>
