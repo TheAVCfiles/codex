@@ -1,0 +1,23 @@
+[
+  {
+    "id": "musing-001",
+    "title": "Operational motion brief",
+    "release_score": 88,
+    "leak_risk": "low",
+    "release_state": "public_now"
+  },
+  {
+    "id": "musing-002",
+    "title": "Pilot expansion memo",
+    "release_score": 71,
+    "leak_risk": "medium",
+    "release_state": "gated_preview"
+  },
+  {
+    "id": "musing-003",
+    "title": "Internal scoring rubric notes",
+    "release_score": 42,
+    "leak_risk": "high",
+    "release_state": "private_hold"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "ready": [
+    {
+      "id": "musing-001",
+      "title": "Operational motion brief",
+      "reason": "Ready for publication pipeline based on score/state/risk."
+    }
+  ],
+  "gated": [
+    {
+      "id": "musing-002",
+      "title": "Pilot expansion memo",
+      "reason": "Gated review required before publication."
+    }
+  ],
+  "hold": [
+    {
+      "id": "musing-003",
+      "title": "Internal scoring rubric notes",
+      "reason": "Hold due to explicit private state, high leak risk, or low score."
+    }
+  ]
+}

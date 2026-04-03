@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dump-001",
+    "title": "Partner intake narrative draft",
+    "source": "codex/session/2026-03-27",
+    "classification": "review_required"
+  },
+  {
+    "id": "dump-002",
+    "title": "Release candidate synthesis",
+    "source": "codex/session/2026-03-28",
+    "classification": "scored"
+  }
+]
