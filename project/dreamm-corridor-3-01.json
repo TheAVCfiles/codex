@@ -1,0 +1,16 @@
+{
+  "dreamm_id": "DREAMM_CORRIDOR_3_01",
+  "corridor": 3,
+  "mode": ["Surface", "Cipher", "Echo"],
+  "image_ref": "ipfs://dreamm3.jpg",
+  "keywords": ["fog", "hallway", "memory", "decay"],
+  "emotional_signature": {
+    "temperature": "cool",
+    "contrast": "low",
+    "movement": "slow drift"
+  },
+  "ritual_trigger": "echo_state",
+  "oracle_weight": 0.22,
+  "value_multiplier": 1.03,
+  "narrative_string": "Memory softens but never disappears."
+}

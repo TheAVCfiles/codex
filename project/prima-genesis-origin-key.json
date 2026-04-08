@@ -1,0 +1,33 @@
+{
+  "name": "PRIMA GENESIS: ORIGIN KEY",
+  "description": "The first position. A sovereign key to the Prima Protocol for Embodied Intelligence. This artifact proves the holder was present at the Genesis Block of the kinetic economy. It grants Operator access to the Glissé Engine and the Mercy Gate.",
+  "image": "ipfs://bafybeig.../prima_genesis_origin.mp4",
+  "external_url": "https://prima.systems/genesis",
+  "attributes": [
+    {
+      "trait_type": "Role",
+      "value": "Prime Operator"
+    },
+    {
+      "trait_type": "State",
+      "value": "First Position"
+    },
+    {
+      "trait_type": "Access Level",
+      "value": "Root (0)"
+    },
+    {
+      "trait_type": "Protocol",
+      "value": "Prima v1.0"
+    },
+    {
+      "trait_type": "Kinetic Potential",
+      "value": "Infinite"
+    },
+    {
+      "trait_type": "Glitch Tolerance",
+      "value": "High (Honest)"
+    }
+  ],
+  "animation_url": "ipfs://bafybeig.../prima_genesis_spin.glb"
+}
