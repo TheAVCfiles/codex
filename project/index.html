@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decision Engine — Proof Before You Act</title>
+  <title>StudioOS — Idea to Product Pipeline</title>
   <meta
     name="description"
-    content="Check if a moment holds structure before you act. Get an instant verdict, confidence level, and reason — then unlock Decision Ledger for full pattern tracking."
+    content="StudioOS turns raw ideas into buildable outputs in one governed pipeline: One-Pager, PRD, and prototype handoff."
   />
   <style>
     :root {
@@ -247,10 +247,44 @@
       font-family: inherit;
     }
 
-    .upgrade {
+    .upgrade,
+    .gating-message {
       display: none;
       margin-top: 1rem;
       width: 100%;
+    }
+
+    .gating-message {
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: rgba(253, 164, 175, 0.12);
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .plan-switch {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.65rem;
+    }
+
+    .plan-switch button {
+      min-height: 2.5rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      box-shadow: none;
+      font-size: 0.92rem;
+    }
+
+    .plan-switch button[aria-pressed="true"] {
+      background: rgba(167, 139, 250, 0.2);
+      border-color: rgba(196, 181, 253, 0.8);
     }
 
     .video-section,
@@ -457,35 +491,41 @@
   <main>
     <section class="hero container">
       <div class="hero__panel">
-        <p class="eyebrow">Decision Engine</p>
-        <h1>You don’t need advice. You need proof.</h1>
-        <p class="lead">Run any moment through a system that tells you whether it is structurally valid before you act on it.</p>
+        <p class="eyebrow">StudioOS</p>
+        <h1>From idea to product spec to working prototype.</h1>
+        <p class="lead">One governed pipeline. No meetings. No ambiguity. Leave with a tangible output in under a minute.</p>
         <div class="hero__actions">
-          <a class="button" href="#demo">Try 1 Free Decision Receipt</a>
-          <a class="button button--ghost" href="#pricing">Unlock Full Access → $29/mo</a>
+          <a class="button" href="#demo" data-feature="one_pager">Generate your first one-pager</a>
+          <a class="button button--ghost" href="#pricing">See plans</a>
         </div>
         <div class="hero__meta" aria-label="Product highlights">
-          <span>Instant verdict</span>
-          <span>Confidence + reason</span>
-          <span>Pattern tracking after upgrade</span>
+          <span>Output in &lt; 60 seconds</span>
+          <span>Structured pipeline</span>
+          <span>Credentialed access model</span>
+        </div>
+        <div class="plan-switch" role="group" aria-label="Demo plan switcher">
+          <button type="button" data-plan="free" aria-pressed="true">Free view</button>
+          <button type="button" data-plan="core" aria-pressed="false">Core view</button>
+          <button type="button" data-plan="pro" aria-pressed="false">Pro view</button>
         </div>
       </div>
     </section>
 
     <section id="demo" class="section container demo">
       <div class="demo__header">
-        <p class="eyebrow">Try it live</p>
-        <h2>Check one moment for free.</h2>
-        <p class="lead">Describe any decision, interaction, contradiction, or signal. You’ll get an instant structural receipt.</p>
+        <p class="eyebrow">Live output</p>
+        <h2>Generate a one-pager from raw input.</h2>
+        <p class="lead">Paste rough notes. StudioOS returns a compressed product definition with scope, user, and execution lane.</p>
       </div>
 
       <div class="card">
-        <label for="inputText">Describe what happened.</label>
-        <textarea id="inputText" placeholder="They promised follow-up after the call, then disappeared for a week."></textarea>
-        <p class="field-note">Example: mixed signals, a business deal, a pressure moment, or something that felt off but you can’t name yet.</p>
-        <button type="button" onclick="generateVerdict()">Check Structure</button>
-        <div id="verdict" class="result" data-state="empty">Your verdict, confidence, and reason will appear here.</div>
-        <button id="upgrade" class="button upgrade" type="button" onclick="goToStripe()">🔒 Track patterns over time — Unlock Decision Ledger</button>
+        <label for="inputText">Describe your product idea.</label>
+        <textarea id="inputText" placeholder="I want a local-first app that turns voice notes into a launch-ready PRD for solo founders."></textarea>
+        <p class="field-note">Example: pain point, audience, constraints, or desired launch timeline.</p>
+        <button type="button" data-feature="one_pager">Generate One-Pager</button>
+        <div id="verdict" class="result" data-state="empty">Your one-pager output will appear here.</div>
+        <p id="gatingMessage" class="gating-message" aria-live="polite"></p>
+        <button id="upgrade" class="button upgrade" type="button" onclick="goToStripe()">Unlock this module</button>
       </div>
     </section>
 
@@ -519,23 +559,23 @@
     </section>
 
     <section id="pricing" class="section container pricing-section">
-      <p class="eyebrow">One product</p>
-      <h2>Unlock Full Access</h2>
-      <p class="lead">One subscription. Unlimited receipts. Full pattern memory and history.</p>
+      <p class="eyebrow">Plans</p>
+      <h2>Free, Core, Pro.</h2>
+      <p class="lead">Choose by capability layer, not by confusion.</p>
 
       <div class="pricing">
-        <div class="pricing__price">$29</div>
-        <div class="pricing__sub">per month</div>
+        <div class="pricing__price">$39</div>
+        <div class="pricing__sub">Core / month</div>
 
         <ul class="feature-list">
-          <li>Unlimited Decision Receipts</li>
-          <li>Pattern tracking and trend detection</li>
-          <li>Full history and export</li>
-          <li>Local-first flow with no identity binding</li>
+          <li>Free: one-pager generation (limited runs)</li>
+          <li>Core: Notes → One-Pager → PRD → Prototype flow</li>
+          <li>Core exports: Markdown + HTML</li>
+          <li>Pro ($149/mo): Conversion Engine, Operator Training Protocol, Parse Layer</li>
         </ul>
 
-        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="button">Unlock Full Access → $29/mo</a>
-        <p class="muted">Cancel anytime. 14-day refund if it doesn’t click.</p>
+        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="button">Start Core → $39/mo</a>
+        <p class="muted">Upgrade path is gated by active plan state.</p>
       </div>
     </section>
 
@@ -544,91 +584,110 @@
       <h2>Short answers before you decide.</h2>
 
       <details>
-        <summary>What is this?</summary>
-        <p>A decision validation tool that checks whether a moment holds structure.</p>
+        <summary>What is StudioOS?</summary>
+        <p>A product definition engine that converts unstructured input into build-ready artifacts.</p>
       </details>
 
       <details>
         <summary>Who is it for?</summary>
-        <p>People dealing with ambiguity, contradiction, pressure, or mixed signals.</p>
+        <p>Founders and operators who need execution clarity without long planning cycles.</p>
       </details>
 
       <details>
         <summary>What do I get?</summary>
-        <p>A verdict, confidence level, reason, and pattern tracking over time after you unlock the ledger.</p>
+        <p>One-pagers, PRDs, and prototype-ready structure. Higher tiers unlock advanced modules and exports.</p>
       </details>
 
       <details>
-        <summary>Is it private?</summary>
-        <p>Yes. Local-first, no identity binding, no unnecessary tracking.</p>
+        <summary>How does access work?</summary>
+        <p>Feature access is plan-gated. Free runs starter generation, Core unlocks pipeline, Pro unlocks advanced build modules.</p>
       </details>
     </section>
 
     <section class="section container">
       <div class="final-cta">
-        <p class="eyebrow">Final CTA</p>
-        <h2>Clarity first. Upgrade only if you want the pattern memory.</h2>
-        <p class="lead">Run the free receipt. Watch the demo. Then decide whether you want the ledger tracking every recurring trap over time.</p>
+        <p class="eyebrow">The Crest Network</p>
+        <h2>A credentialed founder network.</h2>
+        <p class="lead">Participation is structured, recorded, and tied to output. Access is gated. Progression is earned.</p>
         <div class="cta-row">
-          <a class="button" href="#demo">Run the Free Receipt</a>
-          <a class="button button--ghost" href="https://buy.stripe.com/YOUR_LINK_HERE">Unlock Full Access → $29/mo</a>
+          <a class="button" href="#demo">Begin Triage</a>
+          <a class="button button--ghost" href="https://buy.stripe.com/YOUR_LINK_HERE">Request Access</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="container">
-    <p>Decision Engine — Structure converts motion to proof.<br />Local-first. No identity. No fluff.<br />© 2026 AVC Systems</p>
+    <p>StudioOS — structure converts ideas to output.<br />Governed access. Recorded progression.<br />© 2026 AVC Systems</p>
   </footer>
 
   <script>
+    const PLAN_FEATURES = {
+      free: ['one_pager'],
+      core: ['one_pager', 'pipeline', 'exports'],
+      pro: ['one_pager', 'pipeline', 'exports', 'conversion_engine', 'operator_training', 'parse_layer']
+    };
+
+    const APP_USER = window.APP_USER || {
+      plan: localStorage.getItem('studioos_plan') || 'free'
+    };
+
+    function setPlan(plan) {
+      APP_USER.plan = plan;
+      localStorage.setItem('studioos_plan', plan);
+      document.querySelectorAll('[data-plan]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.plan === plan));
+      });
+    }
+
+    function canAccess(feature) {
+      return PLAN_FEATURES[APP_USER.plan]?.includes(feature) || false;
+    }
+
+    function showGate(message) {
+      const gate = document.getElementById('gatingMessage');
+      const upgradeButton = document.getElementById('upgrade');
+      gate.textContent = message;
+      gate.style.display = 'block';
+      upgradeButton.style.display = 'inline-flex';
+    }
+
+    function clearGate() {
+      const gate = document.getElementById('gatingMessage');
+      const upgradeButton = document.getElementById('upgrade');
+      gate.textContent = '';
+      gate.style.display = 'none';
+      upgradeButton.style.display = 'none';
+    }
+
     function generateVerdict() {
       const input = document.getElementById('inputText').value.trim();
       const verdictEl = document.getElementById('verdict');
-      const upgradeButton = document.getElementById('upgrade');
 
       if (!input) {
         verdictEl.dataset.state = 'empty';
-        verdictEl.textContent = 'Enter a real moment first so the receipt has something to evaluate.';
-        upgradeButton.style.display = 'none';
+        verdictEl.textContent = 'Enter your product idea first so StudioOS has source material.';
+        clearGate();
         return;
       }
 
-      const hasContradiction = /ghosted|promised|follow-up|blamed|said.*but|contradict|mixed signal/i.test(input);
-      const hasPressure = /pressure|stress|overwhelm|urgent|rushed/i.test(input);
-      const hasClarity = /clear|consistent|calm|followed through|matched/i.test(input);
-
-      let integrity = 85;
-      if (hasContradiction) integrity -= 45;
-      if (hasPressure) integrity -= 20;
-      if (hasClarity) integrity += 15;
-      integrity = Math.max(20, Math.min(98, integrity));
-
-      const verdict = integrity > 74 ? 'VALID' : integrity > 52 ? 'UNSTABLE' : 'INVALID';
-      const confidence = integrity > 85 ? 'HIGH' : integrity > 58 ? 'MEDIUM' : 'LOW';
-
-      const reason = hasContradiction
-        ? 'Behavior does not match stated intent.'
-        : hasPressure
-          ? 'Pressure distorted structural integrity over time.'
-          : 'Action aligns with the declared pattern.';
+      const hasOperator = /founder|operator|team|builder|agency/i.test(input);
+      const hasOutput = /prd|prototype|spec|requirements|scope/i.test(input);
+      const hasConstraint = /time|budget|deadline|local-first|compliance|privacy/i.test(input);
 
       const output =
-        `Decision Receipt SP-${Math.floor(Math.random() * 100000)}\n` +
+        `StudioOS One-Pager OP-${Math.floor(Math.random() * 100000)}\n` +
         `Timestamp: ${new Date().toISOString()}\n\n` +
-        `Input: ${input}\n\n` +
-        `Verdict: ${verdict}\n` +
-        `Confidence: ${confidence} (${integrity}%)\n\n` +
-        `Scores:\n` +
-        `  Integrity:   ${integrity}\n` +
-        `  Consistency: ${Math.round(integrity * 0.92)}\n` +
-        `  Composure:   ${Math.round(integrity * 1.05)}\n\n` +
-        `Reason: ${reason}\n\n` +
-        'Upgrade path: Track repeat patterns inside Decision Ledger.';
+        `Raw Input:\n${input}\n\n` +
+        `Product Positioning:\nTurn raw ideas into a buildable product in minutes.\n\n` +
+        `User Profile:\n${hasOperator ? 'Operator-led build context detected.' : 'General founder context detected.'}\n\n` +
+        `Primary Output Lane:\n${hasOutput ? 'Specification and prototype lane.' : 'One-pager and scope lane.'}\n\n` +
+        `Constraint Signal:\n${hasConstraint ? 'Constraints recognized and logged.' : 'No hard constraints specified yet.'}\n\n` +
+        'Next Step:\nUpgrade to Core to unlock Pipeline flow and exports.';
 
       verdictEl.dataset.state = 'filled';
       verdictEl.textContent = output;
-      upgradeButton.style.display = 'inline-flex';
+      clearGate();
       verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
@@ -642,6 +701,24 @@
         videoOverlay.classList.add('is-hidden');
       });
     }
+
+    document.querySelectorAll('[data-plan]').forEach((button) => {
+      button.addEventListener('click', () => setPlan(button.dataset.plan));
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target.closest('[data-feature]');
+      if (!target) return;
+      const feature = target.dataset.feature;
+      if (target.tagName === 'A') return;
+      if (canAccess(feature)) {
+        generateVerdict();
+        return;
+      }
+      showGate(`"${feature.replace('_', ' ')}" requires a higher access layer. Current plan: ${APP_USER.plan.toUpperCase()}.`);
+    });
+
+    setPlan(APP_USER.plan);
   </script>
 </body>
 </html>
