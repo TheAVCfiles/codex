@@ -1,647 +1,430 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decision Engine — Proof Before You Act</title>
-  <meta
-    name="description"
-    content="Check if a moment holds structure before you act. Get an instant verdict, confidence level, and reason — then unlock Decision Ledger for full pattern tracking."
-  />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DeCrypt the Girl — A Playable Literary Operating System</title>
+  <meta name="description" content="DeCrypt the Girl is a playable literary operating system where story, code, and mythology merge into an interactive experience." />
   <style>
-    :root {
-      --bg: #0a0a0f;
-      --bg-elevated: #111118;
-      --bg-soft: #171721;
-      --text: #f3f3f8;
-      --muted: #9a9aad;
-      --accent: #a78bfa;
-      --accent-strong: #c4b5fd;
-      --border: rgba(255, 255, 255, 0.1);
-      --danger: #fda4af;
-      --success: #86efac;
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-      --radius-lg: 1.5rem;
-      --radius-md: 1rem;
+    :root{
+      --bg:#070707;
+      --bg2:#0f0f10;
+      --fg:#f4efe7;
+      --muted:#b5aea5;
+      --line:rgba(255,255,255,.11);
+      --red:#9e1b1b;
+      --gold:#c6a25a;
+      --violet:#7f5cff;
+      --white:#f8f4ed;
+      --max:1180px;
+      --shadow:0 20px 80px rgba(0,0,0,.45);
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(167, 139, 250, 0.12), transparent 35%),
-        radial-gradient(circle at bottom left, rgba(134, 239, 172, 0.07), transparent 30%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+        radial-gradient(circle at 20% 0%, rgba(127,92,255,.12), transparent 30%),
+        radial-gradient(circle at 80% 10%, rgba(158,27,27,.12), transparent 26%),
+        linear-gradient(180deg, #080808 0%, #0c0c0d 55%, #070707 100%);
+      color:var(--fg);
+      line-height:1.5;
     }
-
-    a {
-      color: inherit;
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
+    .nav{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background:rgba(7,7,7,.62);
+      border-bottom:1px solid var(--line);
     }
-
-    .container {
-      width: min(100%, 70rem);
-      margin: 0 auto;
-      padding: 0 1.25rem;
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:72px;
     }
-
-    .section {
-      padding: 4.5rem 0;
+    .brand{display:flex; flex-direction:column; gap:4px}
+    .brand-top{
+      font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted);
     }
-
-    .eyebrow {
-      margin: 0 0 1rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent-strong);
+    .brand-name{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size:26px;
     }
-
-    .hero {
-      padding: 6rem 0 3rem;
-      text-align: center;
+    .nav-links{
+      display:flex; gap:18px; align-items:center; color:var(--muted); font-size:14px;
     }
-
-    .hero__panel,
-    .card,
-    .faq details,
-    .pricing,
-    .final-cta,
-    .video-frame,
-    .success-card,
-    .intro,
-    .application-form {
-      background: rgba(17, 17, 24, 0.84);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      min-height:48px; padding:0 18px; border-radius:999px;
+      border:1px solid var(--line);
+      transition:.18s ease;
+      cursor:pointer;
     }
-
-    .hero__panel {
-      padding: 3rem 1.5rem;
+    .btn:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.25)}
+    .btn-primary{
+      background:var(--white); color:#0b0b0c; border-color:transparent; font-weight:700;
     }
-
-    h1,
-    h2,
-    h3 {
-      margin: 0;
-      line-height: 1.08;
-      font-weight: 650;
-      letter-spacing: -0.03em;
+    .btn-secondary{
+      background:transparent; color:var(--fg);
     }
-
-    h1 {
-      font-size: clamp(2.9rem, 8vw, 5.2rem);
-      max-width: 12ch;
-      margin: 0 auto;
+    .hero{
+      padding:84px 0 56px;
+      position:relative;
+      overflow:hidden;
     }
-
-    h2 {
-      font-size: clamp(2rem, 5vw, 3.1rem);
+    .hero-grid{
+      display:grid; grid-template-columns: 1.15fr .85fr; gap:34px; align-items:center;
     }
-
-    .lead {
-      color: var(--muted);
-      max-width: 42rem;
-      margin: 1.5rem auto 0;
-      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    .eyebrow{
+      display:inline-flex; align-items:center; gap:10px;
+      font-size:12px; letter-spacing:.24em; text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:18px;
     }
-
-    .button,
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.65rem;
-      min-height: 3.25rem;
-      padding: 0.95rem 1.4rem;
-      border: 0;
-      border-radius: 0.9rem;
-      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
-      color: #08080c;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 18px 40px rgba(167, 139, 250, 0.24);
+    .eyebrow::before{
+      content:""; width:34px; height:1px; background:linear-gradient(90deg,var(--gold),transparent);
+      display:block;
     }
-
-    .button:hover,
-    button:hover,
-    .button:focus-visible,
-    button:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 22px 45px rgba(167, 139, 250, 0.3);
-      outline: none;
+    h1{
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(46px, 7vw, 92px);
+      line-height:.92;
+      margin:0 0 18px;
+      letter-spacing:-.04em;
+      text-transform:uppercase;
     }
-
-    .button--ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      box-shadow: none;
+    .hero p{
+      font-size: clamp(18px, 2.1vw, 22px);
+      color:#ddd6cd;
+      max-width:760px;
+      margin:0 0 18px;
     }
-
-    .hero__actions,
-    .cta-row {
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.85rem;
+    .cta-row{
+      display:flex; gap:14px; flex-wrap:wrap; margin:20px 0 18px;
     }
-
-    .hero__meta {
-      margin-top: 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      color: var(--muted);
-      font-size: 0.95rem;
+    .micro{color:var(--muted); font-size:14px}
+    .signal-note{
+      opacity:.72; font-size:13px; margin-top:10px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
     }
-
-    .hero__meta span,
-    .pill {
-      padding: 0.55rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.03);
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
     }
-
-    .card {
-      padding: 1.5rem;
-    }
-
-    .demo {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .demo__header {
-      text-align: center;
-      max-width: 42rem;
-      margin: 0 auto;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.6rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    textarea,
-    input,
-    select {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: var(--bg-soft);
-      color: var(--text);
-      font: inherit;
-      padding: 1rem 1rem;
-    }
-
-    textarea {
-      min-height: 10rem;
-      resize: vertical;
-    }
-
-    .field-note,
-    .section-copy,
-    .muted {
-      color: var(--muted);
-    }
-
-    .result {
-      min-height: 11rem;
-      padding: 1.35rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-      white-space: pre-wrap;
-      font-family: "SFMono-Regular", ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 0.97rem;
-    }
-
-    .result[data-state="empty"] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      text-align: center;
-      font-family: inherit;
-    }
-
-    .upgrade {
-      display: none;
-      margin-top: 1rem;
-      width: 100%;
-    }
-
-    .video-section,
-    .pricing-section,
-    .faq,
-    .final-cta {
-      text-align: center;
-    }
-
-    .video-frame {
-      position: relative;
-      overflow: hidden;
-      margin-top: 2rem;
-      padding: 1rem;
-    }
-
-    .video-shell {
-      position: relative;
-      overflow: hidden;
-      border-radius: calc(var(--radius-lg) - 0.25rem);
-      background: #000;
-      aspect-ratio: 16 / 9;
-    }
-
-    .video-shell iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
+    .hero-card{padding:22px; position:relative}
+    .screen{
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
       background:
-        linear-gradient(180deg, rgba(8, 8, 12, 0.15), rgba(8, 8, 12, 0.78)),
-        url('YOUR_POSTER_IMAGE_URL') center/cover;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
+        radial-gradient(circle at 70% 20%, rgba(127,92,255,.18), transparent 26%),
+        radial-gradient(circle at 25% 65%, rgba(158,27,27,.2), transparent 26%),
+        linear-gradient(180deg,#111 0%, #0d0d0f 100%);
+      min-height:520px;
+      position:relative;
     }
-
-    .video-overlay.is-hidden {
-      opacity: 0;
-      pointer-events: none;
+    .screen-top{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      color:var(--muted);
+      font-size:12px; letter-spacing:.18em; text-transform:uppercase;
     }
-
-    .video-overlay__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 1rem 1.4rem;
-      border-radius: 999px;
-      background: rgba(167, 139, 250, 0.92);
-      color: #08080c;
-      font-size: clamp(1rem, 2.4vw, 1.35rem);
-      font-weight: 800;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+    .dots{display:flex; gap:6px}
+    .dots span{width:7px; height:7px; border-radius:50%; background:#fff}
+    .dots span:nth-child(2){opacity:.5}
+    .dots span:nth-child(3){opacity:.25}
+    .screen-body{padding:28px 24px 26px}
+    .room-label{
+      color:var(--gold); font-size:12px; letter-spacing:.24em; text-transform:uppercase;
+      margin-bottom:14px;
     }
-
-    .pricing {
-      max-width: 34rem;
-      margin: 2.25rem auto 0;
-      padding: 2rem;
+    .screen h2{
+      margin:0 0 14px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:42px; line-height:1;
     }
-
-    .pricing__price {
-      font-size: clamp(3rem, 8vw, 4rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
+    .screen .line{
+      color:#d6d0c7; font-size:18px; margin:0 0 14px;
     }
-
-    .pricing__sub {
-      margin-top: 0.4rem;
-      color: var(--muted);
-      font-size: 1.1rem;
+    .glitch{
+      display:inline-block;
+      padding:7px 11px; border-radius:999px;
+      background:rgba(255,255,255,.08); color:#f4efe7;
+      border:1px solid rgba(255,255,255,.08); font-size:12px;
+      letter-spacing:.18em; text-transform:uppercase; margin:0 8px 8px 0;
     }
-
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 2rem 0;
-      text-align: left;
-      display: grid;
-      gap: 0.9rem;
+    .sig{
+      margin-top:18px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
     }
-
-    .feature-list li {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      color: var(--text);
+    .sig div{
+      padding:12px; border-radius:16px; border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.03); min-height:82px;
     }
-
-    .feature-list li::before {
-      content: "✓";
-      color: var(--success);
-      font-weight: 800;
-      margin-top: 0.05rem;
+    .sig strong{
+      display:block; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;
     }
-
-    .faq {
-      max-width: 48rem;
-      margin: 0 auto;
+    .section{padding:34px 0}
+    .section-tight{padding-top:8px}
+    .split{
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px;
     }
-
-    .faq details {
-      padding: 1.2rem 1.25rem;
-      margin-top: 1rem;
-      text-align: left;
+    .card{padding:28px}
+    .card h3{
+      margin:0 0 10px;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:32px;
+      line-height:1.02;
     }
-
-    .faq summary {
-      cursor: pointer;
-      font-size: 1.08rem;
-      font-weight: 700;
-      list-style: none;
+    .card p, .card li{
+      color:#d4cdc4;
+      font-size:17px;
     }
-
-    .faq summary::-webkit-details-marker {
-      display: none;
+    .card p{margin:0}
+    .stack{display:grid; gap:16px}
+    .mode{
+      display:grid; grid-template-columns:110px 1fr; gap:18px; align-items:start;
+      padding:18px 0; border-top:1px solid var(--line);
     }
-
-    .faq details p {
-      margin: 0.85rem 0 0;
-      color: var(--muted);
+    .mode:first-child{border-top:0}
+    .mode-tag{
+      font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold);
     }
-
-    .final-cta {
-      max-width: 52rem;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+    .proof{
+      display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px;
+      margin-top:8px;
     }
-
-    footer {
-      padding: 2rem 0 4rem;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.95rem;
+    .proof .mini{
+      padding:20px; border-radius:22px; border:1px solid var(--line);
+      background:rgba(255,255,255,.025);
     }
-
-    .grid {
-      display: grid;
-      gap: 1rem;
+    .proof .mini strong{
+      display:block; margin-bottom:10px; color:#fff; font-size:16px;
     }
-
-    .intro,
-    .application-form,
-    .success-card {
-      padding: 2rem;
+    .proof .mini span{
+      color:var(--muted); font-size:14px;
     }
-
-    .application-form {
-      display: grid;
-      gap: 1.25rem;
+    .authority{
+      display:grid; gap:14px; padding-left:18px; margin:0;
     }
-
-    .success-card {
-      display: none;
-      text-align: center;
+    .email{
+      display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;
     }
-
-    .success-card h2 {
-      color: var(--success);
+    input[type="email"]{
+      flex:1 1 280px;
+      min-height:54px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(255,255,255,.03); color:var(--fg); padding:0 18px; font-size:16px;
+      outline:none;
     }
-
-    @media (min-width: 48rem) {
-      .hero {
-        padding-top: 7rem;
-      }
-
-      .grid--two {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    input[type="email"]::placeholder{color:#9d968d}
+    .note{margin-top:12px; color:var(--muted); font-size:13px}
+    .footer{
+      padding:42px 0 64px;
+      color:var(--muted); font-size:14px;
     }
-
-    @media (max-width: 40rem) {
-      .hero__panel,
-      .card,
-      .pricing,
-      .final-cta,
-      .intro,
-      .application-form,
-      .success-card,
-      .video-frame,
-      .faq details {
-        padding-inline: 1rem;
-      }
-
-      .video-frame {
-        padding: 0.75rem;
-      }
-
-      .video-overlay__cta {
-        width: 100%;
-        justify-content: center;
-      }
+    .footer-row{
+      display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+      border-top:1px solid var(--line); padding-top:20px;
+    }
+    .muted-link{color:var(--muted)}
+    @media (max-width: 960px){
+      .hero-grid,.split,.proof{grid-template-columns:1fr}
+      .sig{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .hero{padding-top:58px}
+      .screen{min-height:auto}
+      .mode{grid-template-columns:1fr}
     }
   </style>
 </head>
-<body>
+<body id="top">
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand">
+        <span class="brand-top">Myth-Tech Literary System</span>
+        <span class="brand-name">DeCrypt the Girl</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#system">System</a>
+        <a href="#modes">Modes</a>
+        <a href="#room001">Room 001</a>
+        <a href="#access" class="btn btn-secondary">Get access</a>
+      </nav>
+    </div>
+  </header>
+
   <main>
-    <section class="hero container">
-      <div class="hero__panel">
-        <p class="eyebrow">Decision Engine</p>
-        <h1>You don’t need advice. You need proof.</h1>
-        <p class="lead">Run any moment through a system that tells you whether it is structurally valid before you act on it.</p>
-        <div class="hero__actions">
-          <a class="button" href="#demo">Try 1 Free Decision Receipt</a>
-          <a class="button button--ghost" href="#pricing">Unlock Full Access → $29/mo</a>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">A playable literary operating system</div>
+          <h1>This is not<br/>a book.</h1>
+          <p>It’s a system you enter, decode, and experience.</p>
+          <p>
+            DeCrypt the Girl turns narrative into a playable interface—where story, code, and memory collide.
+          </p>
+          <div class="cta-row">
+            <a href="#access" class="btn btn-primary">Enter the system</a>
+            <a href="#room001" class="btn btn-secondary">Watch it break</a>
+          </div>
+          <div class="micro">Built for readers, creators, and signal-chasers who want narrative to behave like software.</div>
+          <p class="signal-note">Signal detected. Scroll to continue.</p>
         </div>
-        <div class="hero__meta" aria-label="Product highlights">
-          <span>Instant verdict</span>
-          <span>Confidence + reason</span>
-          <span>Pattern tracking after upgrade</span>
-        </div>
-      </div>
-    </section>
 
-    <section id="demo" class="section container demo">
-      <div class="demo__header">
-        <p class="eyebrow">Try it live</p>
-        <h2>Check one moment for free.</h2>
-        <p class="lead">Describe any decision, interaction, contradiction, or signal. You’ll get an instant structural receipt.</p>
-      </div>
-
-      <div class="card">
-        <label for="inputText">Describe what happened.</label>
-        <textarea id="inputText" placeholder="They promised follow-up after the call, then disappeared for a week."></textarea>
-        <p class="field-note">Example: mixed signals, a business deal, a pressure moment, or something that felt off but you can’t name yet.</p>
-        <button type="button" onclick="generateVerdict()">Check Structure</button>
-        <div id="verdict" class="result" data-state="empty">Your verdict, confidence, and reason will appear here.</div>
-        <button id="upgrade" class="button upgrade" type="button" onclick="goToStripe()">🔒 Track patterns over time — Unlock Decision Ledger</button>
-      </div>
-    </section>
-
-    <section id="demo-video" class="section container video-section">
-      <p class="eyebrow">Demo video</p>
-      <h2>See It Work (30 Seconds)</h2>
-      <p class="lead">Watch a real moment get analyzed — verdict, confidence, reason, and pattern insight appear instantly.</p>
-
-      <div class="video-frame">
-        <div class="video-shell">
-          <iframe
-            src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=VIDEO_ID&amp;rel=0"
-            title="StagePort Demo"
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          <button
-            id="videoOverlay"
-            class="video-overlay"
-            type="button"
-            aria-label="Hide demo poster overlay and reveal the video"
-          >
-            <span class="video-overlay__cta">▶ Watch Demo</span>
-          </button>
+        <div class="panel hero-card">
+          <div class="screen">
+            <div class="screen-top">
+              <span>Room Interface / Live Signal</span>
+              <div class="dots"><span></span><span></span><span></span></div>
+            </div>
+            <div class="screen-body">
+              <div class="room-label">Room 001 — The Signal Breaks</div>
+              <h2>You called it noise.</h2>
+              <p class="line">But you danced when it hit.</p>
+              <p class="line">The loop breaks when I laugh.</p>
+              <div style="margin:22px 0 10px">
+                <span class="glitch">interactive narrative</span>
+                <span class="glitch">myth-tech</span>
+                <span class="glitch">scroll logic</span>
+                <span class="glitch">signal / static</span>
+              </div>
+              <div class="sig">
+                <div>
+                  <strong>Surface</strong>
+                  What the world sees.
+                </div>
+                <div>
+                  <strong>Cipher</strong>
+                  What the system encodes.
+                </div>
+                <div>
+                  <strong>Echo</strong>
+                  What the audience reflects.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <p class="section-copy">Replace <strong>VIDEO_ID</strong>, the poster image URL, and the Stripe payment link before you deploy.</p>
     </section>
 
-    <section id="pricing" class="section container pricing-section">
-      <p class="eyebrow">One product</p>
-      <h2>Unlock Full Access</h2>
-      <p class="lead">One subscription. Unlimited receipts. Full pattern memory and history.</p>
-
-      <div class="pricing">
-        <div class="pricing__price">$29</div>
-        <div class="pricing__sub">per month</div>
-
-        <ul class="feature-list">
-          <li>Unlimited Decision Receipts</li>
-          <li>Pattern tracking and trend detection</li>
-          <li>Full history and export</li>
-          <li>Local-first flow with no identity binding</li>
-        </ul>
-
-        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="button">Unlock Full Access → $29/mo</a>
-        <p class="muted">Cancel anytime. 14-day refund if it doesn’t click.</p>
+    <section class="section section-tight">
+      <div class="container panel card">
+        <h3>Most stories are static. This one responds.</h3>
+        <p>
+          You don’t just read DeCrypt the Girl. You move through it.
+          You trigger fragments. You decode symbols. You carry meaning forward.
+          The system changes based on how you engage with it.
+        </p>
       </div>
     </section>
 
-    <section class="section container faq">
-      <p class="eyebrow">Quick answers</p>
-      <h2>Short answers before you decide.</h2>
-
-      <details>
-        <summary>What is this?</summary>
-        <p>A decision validation tool that checks whether a moment holds structure.</p>
-      </details>
-
-      <details>
-        <summary>Who is it for?</summary>
-        <p>People dealing with ambiguity, contradiction, pressure, or mixed signals.</p>
-      </details>
-
-      <details>
-        <summary>What do I get?</summary>
-        <p>A verdict, confidence level, reason, and pattern tracking over time after you unlock the ledger.</p>
-      </details>
-
-      <details>
-        <summary>Is it private?</summary>
-        <p>Yes. Local-first, no identity binding, no unnecessary tracking.</p>
-      </details>
+    <section class="section" id="system">
+      <div class="container split">
+        <div class="panel card">
+          <h3>Why it exists</h3>
+          <p>
+            Traditional storytelling is often too flat for nonlinear memory, recursive identity, and lived experience under pressure.
+            DeCrypt the Girl turns narrative into structure instead: a scroll that behaves like a living system.
+          </p>
+        </div>
+        <div class="panel card">
+          <h3>What users do</h3>
+          <p>
+            Readers enter rooms, unlock fragments, follow glyphs, and move through staged layers of meaning.
+            The experience is part literary work, part interface, part ritualized decoding engine.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <section class="section container">
-      <div class="final-cta">
-        <p class="eyebrow">Final CTA</p>
-        <h2>Clarity first. Upgrade only if you want the pattern memory.</h2>
-        <p class="lead">Run the free receipt. Watch the demo. Then decide whether you want the ledger tracking every recurring trap over time.</p>
-        <div class="cta-row">
-          <a class="button" href="#demo">Run the Free Receipt</a>
-          <a class="button button--ghost" href="https://buy.stripe.com/YOUR_LINK_HERE">Unlock Full Access → $29/mo</a>
+    <section class="section" id="modes">
+      <div class="container panel card">
+        <h3>The three modes</h3>
+        <div class="stack">
+          <div class="mode">
+            <div class="mode-tag">Surface</div>
+            <div>The visible layer: stage, voice, image, interface, social signal.</div>
+          </div>
+          <div class="mode">
+            <div class="mode-tag">Cipher</div>
+            <div>The encoded layer: hidden structure, symbols, loops, glyphs, system logic.</div>
+          </div>
+          <div class="mode">
+            <div class="mode-tag">Echo</div>
+            <div>The reflective layer: audience response, recursion, memory, participation, return signal.</div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="room001">
+      <div class="container split">
+        <div class="panel card">
+          <h3>Room 001 is not an introduction. It’s a threshold.</h3>
+          <p>
+            The system begins where the signal breaks. The opening chamber introduces the Girl as both human and system,
+            then boots the logic of transmission, glitch, and return.
+          </p>
+          <div class="cta-row" style="margin-top:18px">
+            <a href="#access" class="btn btn-secondary">Enter Room 001</a>
+          </div>
+        </div>
+        <div class="panel card">
+          <h3>Built as a new category</h3>
+          <ul class="authority">
+            <li>Not a book → a system</li>
+            <li>Not content → an interface</li>
+            <li>Not passive → interactive narrative</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="proof">
+          <div class="mini">
+            <strong>Playable scroll</strong>
+            <span>Narrative becomes navigable, not passive.</span>
+          </div>
+          <div class="mini">
+            <strong>Literary system</strong>
+            <span>The work is the world, the interface, and the engine.</span>
+          </div>
+          <div class="mini">
+            <strong>Revenue-ready</strong>
+            <span>Built to expand into decks, PDFs, cohorts, and premium artifacts.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="access">
+      <div class="container panel card">
+        <h3>Get access before the system opens</h3>
+        <p>
+          Early access to Room 001, artifact drops, and the first playable release.
+        </p>
+        <form class="email" onsubmit="event.preventDefault(); alert('Connect this form to Buttondown, ConvertKit, MailerLite, Beehiiv, or your own endpoint.');">
+          <input type="email" placeholder="Enter your email" aria-label="Email address" required />
+          <button class="btn btn-primary" type="submit">Unlock access</button>
+        </form>
+        <div class="note">Limited release. Not everything will stay public.</div>
       </div>
     </section>
   </main>
 
-  <footer class="container">
-    <p>Decision Engine — Structure converts motion to proof.<br />Local-first. No identity. No fluff.<br />© 2026 AVC Systems</p>
+  <footer class="footer">
+    <div class="container footer-row">
+      <div>DeCrypt the Girl / myth-tech literary operating system</div>
+      <div>
+        <a class="muted-link" href="#top">Back to top</a>
+      </div>
+    </div>
   </footer>
-
-  <script>
-    function generateVerdict() {
-      const input = document.getElementById('inputText').value.trim();
-      const verdictEl = document.getElementById('verdict');
-      const upgradeButton = document.getElementById('upgrade');
-
-      if (!input) {
-        verdictEl.dataset.state = 'empty';
-        verdictEl.textContent = 'Enter a real moment first so the receipt has something to evaluate.';
-        upgradeButton.style.display = 'none';
-        return;
-      }
-
-      const hasContradiction = /ghosted|promised|follow-up|blamed|said.*but|contradict|mixed signal/i.test(input);
-      const hasPressure = /pressure|stress|overwhelm|urgent|rushed/i.test(input);
-      const hasClarity = /clear|consistent|calm|followed through|matched/i.test(input);
-
-      let integrity = 85;
-      if (hasContradiction) integrity -= 45;
-      if (hasPressure) integrity -= 20;
-      if (hasClarity) integrity += 15;
-      integrity = Math.max(20, Math.min(98, integrity));
-
-      const verdict = integrity > 74 ? 'VALID' : integrity > 52 ? 'UNSTABLE' : 'INVALID';
-      const confidence = integrity > 85 ? 'HIGH' : integrity > 58 ? 'MEDIUM' : 'LOW';
-
-      const reason = hasContradiction
-        ? 'Behavior does not match stated intent.'
-        : hasPressure
-          ? 'Pressure distorted structural integrity over time.'
-          : 'Action aligns with the declared pattern.';
-
-      const output =
-        `Decision Receipt SP-${Math.floor(Math.random() * 100000)}\n` +
-        `Timestamp: ${new Date().toISOString()}\n\n` +
-        `Input: ${input}\n\n` +
-        `Verdict: ${verdict}\n` +
-        `Confidence: ${confidence} (${integrity}%)\n\n` +
-        `Scores:\n` +
-        `  Integrity:   ${integrity}\n` +
-        `  Consistency: ${Math.round(integrity * 0.92)}\n` +
-        `  Composure:   ${Math.round(integrity * 1.05)}\n\n` +
-        `Reason: ${reason}\n\n` +
-        'Upgrade path: Track repeat patterns inside Decision Ledger.';
-
-      verdictEl.dataset.state = 'filled';
-      verdictEl.textContent = output;
-      upgradeButton.style.display = 'inline-flex';
-      verdictEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function goToStripe() {
-      window.location.href = 'https://buy.stripe.com/YOUR_LINK_HERE';
-    }
-
-    const videoOverlay = document.getElementById('videoOverlay');
-    if (videoOverlay) {
-      videoOverlay.addEventListener('click', () => {
-        videoOverlay.classList.add('is-hidden');
-      });
-    }
-  </script>
 </body>
 </html>
