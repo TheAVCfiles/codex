@@ -1,58 +1,40 @@
-# M.O.M. — My Organic Memory
+# M.O.M. (Memory. With. Governance.)
 
-**Your life, remembered. The way a mother would.**
+**M.O.M.** is a spec-first framework for building _privacy-first memory systems_ that don’t hallucinate consent, don’t silently overwrite history, and don’t “nudge” users into traps.
 
-M.O.M. is an encrypted, governed life graph that prioritizes recall by **context + emotional salience + continuity rules**, then surfaces the right memory at the right moment.
+This repo is the **spine**: invariants, rules, threat model, and a paid installation sprint for teams shipping memory + proactive behaviors.
 
-This is not notes.
-This is not search.
-This is **memory with governance**.
+## What’s inside
 
-## Why it exists
+- `specs/` — the system spec, nudge constitution, threat model, glossary
+- `glitchport/` — failure taxonomy + famous incidents mapped to preventable invariants
+- `offer/` — a 7-day governance sprint (install the spine into a real product)
+- `docs/` — roadmap + FAQ
 
-Most memory apps do retrieval.
-M.O.M. does **continuity**: no silent retcons, no creepy nudges, no shadow sharing.
+## Core principles (non-negotiable)
 
-## The Spine (IP + architecture)
-
-M.O.M. is built on four primitives:
-
-- **MemNode™** — a governed memory object (encrypted payload + metadata + consent)
-- **Corridors™** — typed relationships with traversal constraints (policy-bearing edges)
-- **Coda™** — append-only provenance + version-lock (no overwrite guarantees)
-- **StagePort™** — fail-closed policy enforcement boundary (privacy-first, keys-first)
-
-Marketing skin (“calling mom”) is optional. The spine is enforceable.
-
-## Guarantees (non-negotiable)
-
-- **End-to-end encryption** (user-held keys or user-authorized device keys)
-- **Append-only history** (every change is versioned; no silent rewrites)
-- **Per-node consent flags** (recall / link / nudge / family / export)
-- **Safe nudges only** (strict constitution; minimal disclosure; rate-limited)
-- **Cited recall** (answers cite supporting nodes)
-
-## Specs
-
-- `specs/SYSTEM_SPEC_v1.1.md` — schema + invariants (MemNode / Corridors / Coda / StagePort)
-- `specs/RULESET_NUDGE_CONSTITUTION_v1.0.md` — when M.O.M. may push
-- `specs/THREAT_MODEL_v1.0.md` — explicit refusals + mitigations
+- **Consent is a gate, not a vibe.**
+- **Continuity is append-only.** No silent rewrites.
+- **Proactive behaviors are constitutional.** Rate-limited, explainable, revocable.
+- **Fail closed at the boundary.** If policy can’t be verified, the system does nothing.
 
 ## Status
 
-Early architecture + spec staking.
-Implementation is staged as:
+- Spec v1.1 is live (2026-01-24).
+- Implementation is staged after invariants are staked. See `docs/ROADMAP.md`.
 
-- v0: capture + governed recall + calendar-conflict guardian
-- v1: integrations + associative recall + morning brief
-- v1.5: redaction masks + cross-device sync with user-held keys
+## Quick start (for teams)
 
-## Work With Me (7-day sprint)
+1. Read `specs/SYSTEM_SPEC_v1.1.md` (data model + invariants).
+2. Adopt `specs/RULESET_NUDGE_CONSTITUTION_v1.0.md` (proactive behavior rules).
+3. Implement the boundary: **StagePort Gate + Coda Log** (Issue #1).
 
-I install governed memory + nudge safety into your AI product in 7 days.
+## Contact
 
-See: `offer/SPRINT_7DAY_GOVERNED_MEMORY.md`
+Security disclosures: see `SECURITY.md`  
+Commercial install sprint: see `offer/OFFER_7_DAY_GOVERNANCE_SPRINT.md`
 
 ---
 
-© (Your legal entity). Public alias is a build signature, not ownership.
+**Pinned tagline:**  
+_M.O.M. = memory with governance. Spec v1.1 is live. I install safe nudges + continuity in 7 days._

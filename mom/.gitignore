@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+node_modules/
+__pycache__/
+.vscode/
+.idea/
+*.pem
+*.key
+*.zip
+/out/
+/tmp/
