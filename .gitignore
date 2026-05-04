@@ -85,3 +85,19 @@ CHANGELOG.ignore.md
 # nix related
 .direnv
 .envrc
+# Codespace preservation safety
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+secrets/
+credentials/
+node_modules/
+dist/
+build/
+.cache/
+.DS_Store
