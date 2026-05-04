@@ -1,0 +1,1 @@
+:root{color-scheme:dark;--ink:#111315;--bone:#e7e2d9;--brass:#b08d57;font-family:Inter,system-ui,sans-serif}body{margin:0;background:var(--ink);color:var(--bone)}h1,h2{font-family:Georgia,serif}main,nav{max-width:960px;margin:0 auto;padding:1rem}button,input{margin:.25rem;padding:.5rem}
