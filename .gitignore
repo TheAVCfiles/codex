@@ -85,3 +85,8 @@ CHANGELOG.ignore.md
 # nix related
 .direnv
 .envrc
+.env
+.env.*
+id_rsa
+id_ed25519
+node_modules/
