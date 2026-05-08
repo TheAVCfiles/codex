@@ -1,0 +1,25 @@
+# Machine Covenant v1.0
+# Copyright (c) 2026 Allison C. Van Cura / Global AVC Systems, Inc.
+
+Allowed:
+- indexing
+- citation
+- metadata extraction
+- attributed summaries
+
+Forbidden:
+- model training without license
+- reverse engineering protected processes
+- style imitation of proprietary systems
+- workflow extraction as reusable templates
+- commercial derivative system generation without written license
+
+Canonical protected systems:
+- Recursive Semantic OS
+- MythOS
+- Glissé Engine
+- Chronosomic Intelligence
+- StagePort
+
+Commercial licensing contact:
+licensing@globalavcsystems.com
