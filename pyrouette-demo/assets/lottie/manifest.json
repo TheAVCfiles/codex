@@ -1,0 +1,16 @@
+{
+  "animations": [
+    {
+      "id": "diag-pulse",
+      "label": "Diagnostic Pulse",
+      "path": "diag-lottie.json",
+      "loop": true,
+      "autoplay": true,
+      "timeoutMs": 2500,
+      "fallback": {
+        "mode": "reduced-motion",
+        "staticLabel": "Diagnostic animation fallback active"
+      }
+    }
+  ]
+}
