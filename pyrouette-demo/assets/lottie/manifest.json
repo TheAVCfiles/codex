@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "animations": [
+    {
+      "id": "diag-pulse",
+      "label": "Diagnostic Pulse",
+      "path": "diag-lottie.json",
+      "loop": true,
+      "autoplay": true
+    }
+  ]
+}
