@@ -104,3 +104,7 @@ Use this quick pass before opening a PR from a fork back to an upstream project:
    - Run lint/tests/CI-equivalent checks locally before asking maintainers to review.
 
 When a fork has diverged heavily, consider extracting small upstream-worthy fixes into clean branches and keep larger architecture experiments as independent project work.
+
+## Codespace Safety
+
+Before ending a Codespace session, run `bash scripts/git-health-check.sh` and `bash scripts/codespace-snapshot.sh` to preserve work and push it safely. See [docs/CODESPACE_SURVIVAL.md](docs/CODESPACE_SURVIVAL.md) for the full workflow.
