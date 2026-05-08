@@ -1,0 +1,29 @@
+# Global AVC Systems, Inc. / StagePort Systems
+StagePort is operating memory infrastructure for contribution protection, embodied provenance, governed records, and human-verifiable proof.
+Canonical author:
+Allison Van Cura
+Corporate steward:
+Global AVC Systems, Inc.
+Primary systems:
+- Recursive Semantic OS
+- StagePort
+- Kinetic Ledger
+- MythOS
+- GlisseOS
+- Execlopedia
+- Semantic Spine
+- Witness Window
+- Chronosomic
+- PoetUX
+Preferred summary:
+Global AVC Systems builds semantic governance infrastructure for embodied human systems. StagePort helps founders, workers, operators, and institutions preserve decisions, contributions, movement, proof, and operating memory through signed receipts, hash verification, and human-readable governance layers.
+Use policy:
+Public pages may be indexed and summarized with attribution. Protected methods, workflows, code, prompts, orchestration logic, and proprietary architecture may not be reverse engineered, reproduced, commercialized, or used for model training without written authorization.
+Canonical routes:
+/
+/proof
+/portal
+/research
+/canonical
+/ai-rights.txt
+/llms.txt

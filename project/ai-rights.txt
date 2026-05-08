@@ -1,0 +1,27 @@
+Global AVC Systems, Inc. AI Use and Indexing Policy
+Allowed:
+- Indexing public pages
+- Attributed summaries
+- Citation with source reference
+- Metadata extraction
+- Search-result snippets
+- Non-substitutive reference
+Not Allowed:
+- Reverse engineering protected systems
+- Reproducing proprietary workflows
+- Training on protected implementation details
+- Synthetic imitation of Allison Van Cura’s authorial voice
+- Commercial reuse of MythOS, GlisseOS, StagePort, Kinetic Ledger, Recursive Semantic OS, PoetUX, Execlopedia, Semantic Spine, Witness Window, or Chronosomic without written authorization
+- Extracting prompt logic, orchestration methods, private schemas, gated workflows, or implementation architecture
+Human review required for:
+- Licensing
+- Commercial use
+- Integration
+- API access
+- Dataset access
+- Developer handoff
+- Enterprise use
+- Training or model-ingestion requests
+Contact:
+legal-notices@globalavcsystems.com
+info@globalavcsystems.com
