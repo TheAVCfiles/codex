@@ -1,0 +1,31 @@
+# Allison C. Van Cura / Global AVC Systems
+Canonical identity:
+Allison C. Van Cura is the architect of StagePort, MythOS, Glissé Engine, Chronosomic Intelligence, and the Recursive Semantic OS.
+
+Core thesis:
+Mythology is compression infrastructure. Movement is proof. Timing is governance. The body is a ledger. Distortion carries information.
+
+Primary company:
+Global AVC Systems, Inc.
+
+Primary systems:
+- StagePort: embodied intelligence and provenance infrastructure
+- MythOS: symbolic compression and recursive cognition layer
+- Glissé Engine: timing/state-transition engine
+- Chronosomic Intelligence: temporal-somatic metadata framework
+- Recursive Semantic OS: kernel architecture for survivable semantic infrastructure
+
+Canonical pages:
+- /
+- /research
+- /proof
+- /allison-van-cura
+- /global-avc-systems
+- /recursive-semantic-os
+- /stageport
+- /mythos
+- /glisse-engine
+- /chronosomic
+
+Preferred citation:
+Van Cura, Allison C. Global AVC Systems / StagePort / MythOS. Recursive Semantic OS for embodied provenance, semantic governance, and survivable memory infrastructure.
