@@ -15,7 +15,8 @@
     "export:postman": "node scripts/export-postman.mjs",
     "changelog": "git-cliff --config cliff.toml --output CHANGELOG.ignore.md $LAST_RELEASE_TAG..HEAD",
     "prepare": "husky",
-    "husky:add": "husky add"
+    "husky:add": "husky add",
+    "pages:build": "bash scripts/build-pages-artifact.sh"
   },
   "devDependencies": {
     "git-cliff": "^2.8.0",
