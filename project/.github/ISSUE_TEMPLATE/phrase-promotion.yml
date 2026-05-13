@@ -1,0 +1,58 @@
+name: Phrase Promotion
+description: Promote runoff/rehearsal material toward canonical StagePort output
+title: "phrase: "
+labels:
+  - choreography
+  - governance
+body:
+  - type: input
+    id: artifact
+    attributes:
+      label: Artifact / Phrase / File
+      placeholder: "e.g., combo_2026_05_12_001"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current_status
+    attributes:
+      label: Current Status
+      options:
+        - RUNOFF
+        - SIDEBAR
+        - REHEARSAL
+        - BARRE
+        - CASTED
+        - STAGED
+        - CANONICAL
+        - RESTRICTED
+    validations:
+      required: true
+
+  - type: textarea
+    id: why_it_rose
+    attributes:
+      label: Why did this rise to the surface?
+      placeholder: "Describe the signal strength, context, and trigger."
+    validations:
+      required: true
+
+  - type: textarea
+    id: embodiment_read
+    attributes:
+      label: How did it feel in the body / room?
+      placeholder: "Technical demands, recovery behavior, and dancer adaptation."
+
+  - type: textarea
+    id: audience_read
+    attributes:
+      label: How would it read externally?
+      placeholder: "Market legibility, institutional readability, and proof value."
+
+  - type: textarea
+    id: promotion_decision
+    attributes:
+      label: Promote, hold, archive, or discard?
+      placeholder: "Decision + next status + rationale."
+    validations:
+      required: true
