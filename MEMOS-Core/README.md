@@ -17,5 +17,6 @@ No asset moves forward without:
 4. Commit or snapshot
 5. Classification
 6. Visibility level
-7. Commercial pathway
-8. Provenance note
+7. Licensing boundary
+8. Commercial pathway
+9. Provenance note
