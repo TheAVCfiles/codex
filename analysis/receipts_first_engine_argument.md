@@ -114,7 +114,7 @@ If all are present, objection is naming/branding, not architecture.
 
 ---
 
-## 10-line compact variant
+## 8) 10-line compact variant
 
 You’re mixing up “engine” with “finished platform.”
 
