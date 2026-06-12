@@ -53,10 +53,10 @@ The strongest signal is interruption: soft aesthetic language continually broken
 
 The first forty-one days did not prove scale, inevitability, or dominance. They proved conversion discipline:
 
-- abstraction into contracts,
-- narrative into operational state,
-- intention into auditable records,
-- and fragmented labor into governed infrastructure.
+- abstraction into contracts
+- narrative into operational state
+- intention into auditable records
+- fragmented labor into governed infrastructure
 
 Once a system can produce ledgers, agreements, repositories, payment states, and review-ready proof chains, it is no longer asking to be admired as myth.
 
