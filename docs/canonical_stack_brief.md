@@ -17,10 +17,10 @@ This brief captures a coherent architecture split between brand, invention, and 
 
 ### Business A: Infrastructure / Enterprise (revenue-first)
 
-- Exclopedia
-- Semantic Spine
-- Credentialing and provenance systems
-- API and governance infrastructure
+- **Semantic Spine™**
+  - Credentialing and provenance systems
+  - API and governance infrastructure
+- **Exclopedia™**
 
 ### Business B: Mythotechnical Media (gravity-first)
 
