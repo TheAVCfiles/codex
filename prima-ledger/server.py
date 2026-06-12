@@ -83,7 +83,8 @@ def execute():
     fsm = BalanchineFSM()
     fsm.next(FSMState.GLISSADE)
 
-    if action == "promote" and not mercy_gate():
+    confidence = d.get('confidence', 0.0)
+    if action == "promote" and not mercy_gate(confidence):
         fsm.next(FSMState.FAULT)
         receipt = receipt_hash("ATTEMPT_PROMOTE")
         return jsonify({"status": "HALTED", "receipt": receipt}), 403
