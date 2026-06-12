@@ -20,7 +20,7 @@ Global AVC Systems converts founder chaos into governed, fundable, cloud-ready i
 4. **Commercial Go-Live Retainer — $1,500/mo × 16 months minimum**  
    Governance, maintenance, implementation oversight.
 
-**Minimum account path:** $43,500 before licensing upside.
+**Minimum account path (Beta):** $43,500 before licensing upside.
 
 ## Access and License Logic
 
