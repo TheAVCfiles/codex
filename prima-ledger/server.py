@@ -55,10 +55,11 @@ def ingest():
     wb = load_workbook(MASTER_XLSX)
     ws = wb["Intake_Log"]
     added = 0
+    existing_ids = {r[0].value for r in ws.iter_rows(min_row=2) if r[0].value}
     for url in urls:
         h = hashlib.sha256(url.encode()).hexdigest()[:8].upper()
         doc_id = f"D-{h}"
-        if not any(doc_id == r[0].value for r in ws.iter_rows(min_row=2)):
+        if doc_id not in existing_ids:
             ws.append([
                 doc_id,
                 url.split('/')[-1],
@@ -69,6 +70,7 @@ def ingest():
                 "pending",
             ])
             added += 1
+            existing_ids.add(doc_id)
     wb.save(MASTER_XLSX)
     return jsonify({"added": added})
 
