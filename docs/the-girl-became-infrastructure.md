@@ -12,7 +12,7 @@ Global AVC Systems, Inc. was incorporated in Delaware on April 1, 2026. What fol
 
 ## The Archive Proves Continuity
 
-TheAVCFiles became the evidence spine. It held the pieces that made the mythology harder to dismiss: patent drafts, IP analysis, cloud architecture one-pagers, civic archiving frameworks, temporal signal research, corporate glossary infrastructure, GitHub pull requests, Stripe records, signed sprint agreements, treasury notes, and implementation fragments. The archive did not merely remember the work. It made the work admissible.
+TheAVCfiles became the evidence spine. It held the pieces that made the mythology harder to dismiss: patent drafts, IP analysis, cloud architecture one-pagers, civic archiving frameworks, temporal signal research, corporate glossary infrastructure, GitHub pull requests, Stripe records, signed sprint agreements, treasury notes, and implementation fragments. The archive did not merely remember the work. It made the work admissible.
 
 This is not “help.” This is infrastructure choreography.
 
