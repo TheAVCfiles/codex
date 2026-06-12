@@ -26,7 +26,7 @@ The first product was not mythology. The first product was the payment gate.
 
 Humans are becoming machine-readable faster than they are becoming self-readable.
 
-Platforms predict reaction before conscious narration arrives. The self arrives late to its own behavior. TheAVCFiles is resistance infrastructure against that flattening: provenance, signed receipts, review states, promotion gates, and hash-verifiable continuity.
+Platforms predict reaction before conscious narration arrives. The self arrives late to its own behavior. TheAVCfiles is resistance infrastructure against that flattening: provenance, signed receipts, review states, promotion gates, and hash-verifiable continuity.
 
 Movement was the perfect first vertical. Dance studios already live the ephemerality problem. StagePort turns rehearsals into credentials, ledgers, and review-ready reports. The 28-day mutation engine creates operational rhythm. Digital Rooms extends the same governed posture to the full client relationship.
 
