@@ -38,8 +38,8 @@ Publish the public map and boundaries; keep transformation internals private unt
 
 - canonical ontology routes and glossary
 - machine-readable metadata surfaces (e.g., JSON-LD)
-- crawler orientation index (`llms.txt`)
-- machine-use and rights boundaries (`ai-rights.txt`)
+- crawler orientation index (project/llms.txt)
+- machine-use and rights boundaries (project/ai-rights.txt)
 
 ### Keep private for now
 
