@@ -7,5 +7,5 @@ export default function StatusBadge({ label, tone = 'slate' }) {
     amber: 'bg-amber-500/10 border-amber-500/50 text-amber-300',
     slate: 'bg-slate-500/10 border-slate-500/50 text-slate-300',
   };
-  return <span className={`px-2 py-1 text-xs rounded border ${tones[tone]}`}>{label}</span>;
+  return <span className={'px-2 py-1 text-xs rounded border ' + (tones[tone] || tones.slate)}>{label}</span>;
 }
