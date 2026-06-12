@@ -32,7 +32,7 @@ Movement was the perfect first vertical. Dance studios already live the ephemera
 
 ## The House
 
-The Girl Became Infrastructure is no longer just a founder profile. It is literary systems journalism with evidence. The article should move through rooms: bed, notebook, archive, repo, contract, product, House.
+The Girl Became Infrastructure is no longer just a founder profile. It is literary systems journalism with evidence.
 
 The AVC House is the narrative headquarters. Global AVC Systems is the Delaware legal shell. StagePort is the productized vertical SaaS wedge. AVC Systems Studio / Intuition Labs R&D is the founder infrastructure and research layer. DeCrypt the Girl is the mythic nucleus. TheAVCFiles is the proof spine that makes all of it admissible.
 
