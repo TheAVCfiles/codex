@@ -26,8 +26,7 @@ The point is convergence.
 6. **DeCrypt the Girl** — media/mythic universe
 7. **TheAVCFiles** — proof vault / repo archive / canonical receipts
 
-**Clean sentence:** TheAVCFiles is where the mythology becomes admissible.  
-**Even cleaner:** TheAVCFiles preserves the receipts behind the House.
+TheAVCFiles preserves the receipts behind the House.
 
 ## Positioning thesis
 
