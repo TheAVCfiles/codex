@@ -78,7 +78,7 @@ StagePort does not erase messy formation. **It governs it.**
 - **StagePort** — productized governance/proof infrastructure.
 - **AVC Systems Studio / Intuition Labs R&D** — research and founder-architecture layer.
 - **DeCrypt the Girl** — mythic/narrative nucleus.
-- **TheAVCFiles** — proof spine / admissibility archive.
+- **TheAVCfiles** — proof spine / admissibility archive.
 
 Public line:
 
