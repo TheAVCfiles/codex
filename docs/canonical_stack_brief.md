@@ -24,9 +24,9 @@ This brief captures a coherent architecture split between brand, invention, and 
 
 ### Business B: Mythotechnical Media (gravity-first)
 
-- MythOS
-- GlisseOS
-- DeCrypt the Girl
+- **GlisseOS™**
+- **MythOS™**
+- **DeCrypt the Girl™**
 - Recursive symbolic narrative products
 
 ## Core Distinction to Preserve
