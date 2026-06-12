@@ -2,7 +2,7 @@
 
 _Inside the strange emergence of Global AVC Systems—where choreography, governance, beauty, memory, and machine logic began compiling into the same architecture._
 
-By Editorial Draft
+By Editorial Team
 
 ---
 
