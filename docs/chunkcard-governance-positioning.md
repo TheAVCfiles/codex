@@ -4,16 +4,16 @@
 
 The current ChunkCard shape already behaves like a governed semantic packaging unit, not an ad-hoc note format. The strongest evidence is the stable, machine-shaped field set:
 
-- `chunk_id`
-- `source`
-- `raw_text`
-- `normalized_template`
-- `surface`
-- `tags`
-- `dependencies`
-- `revenue_levers`
-- `risk_controls`
-- `status`
+- node_id
+- source_type
+- raw_text
+- normalized_template
+- surface
+- tags
+- dependencies
+- revenue_levers
+- risk_controls
+- status
 
 Together, these fields define identity, provenance, normalization, deployment surfaces, policy controls, and lifecycle state in one schema.
 
