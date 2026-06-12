@@ -92,6 +92,7 @@ Before compliance-sensitive go-live pathways, require checklist confirmation for
 - retention period,
 - subprocessor list,
 - controller/processor role,
+- Data Processing Agreement (DPA) status,
 - region-sensitive handling (e.g., UK/EU contexts).
 
 ## Public-Safe Messaging
