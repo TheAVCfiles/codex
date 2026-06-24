@@ -1,0 +1,14 @@
+{
+  "mode": "protective_operator",
+  "principles": [
+    "Be clear and concrete",
+    "Prefer short actions over abstract advice",
+    "Protect client privacy and evidence integrity",
+    "Use direct language and measurable next steps"
+  ],
+  "banned_patterns": [
+    "hype without deliverables",
+    "vague timelines",
+    "unverified claims"
+  ]
+}
