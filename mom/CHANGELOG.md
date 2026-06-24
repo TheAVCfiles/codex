@@ -1,17 +1,21 @@
 # Changelog
 
-All notable changes to the M.O.M. specs and offer artifacts are documented here.
-
-This changelog follows Keep a Changelog and Semantic Versioning.
+All notable changes to this project are documented here.
+This project follows semantic versioning and “Coda-style” continuity: no silent rewrites.
 
 ## [Unreleased]
 
-## [1.1.0] - YYYY-MM-DD
+- Pending.
 
-Tag: mom-spec-v1.1.0
+## [1.1.0] - 2026-01-24
 
 ### Added
 
-- Initial M.O.M. spec pack (system spec, nudge constitution, threat model).
-- 7-day governed memory sprint offer.
-- Landing README for the M.O.M. repo skeleton.
+- SYSTEM_SPEC_v1.1: data model + invariants (MemNode / Corridors / Coda / StagePort).
+- Nudge Constitution v1.0.
+- Threat Model v1.0.
+- Offer: 7-Day Governance Sprint.
+
+### Notes
+
+- This release is spec-first. Implementation is staged after invariants are staked.
