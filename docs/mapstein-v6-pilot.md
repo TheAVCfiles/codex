@@ -21,6 +21,12 @@ python scripts/mapstein/mapstein_v6.py bridge \
   --output output/mapstein/bridge_report.json
 ```
 
+```bash
+python scripts/mapstein/mapstein_v6.py distort \
+  --relationships-csv /path/to/relationships.csv \
+  --output-dir output/mapstein/pass11
+```
+
 ## Required CSV schema for bridge scoring
 
 `entities.csv` must contain:
@@ -29,6 +35,20 @@ python scripts/mapstein/mapstein_v6.py bridge \
 - `entity`
 
 Each row means “entity appears in document.”
+
+### `relationships.csv` schema for distortion scoring
+
+Required columns:
+
+- `subject`
+- `verb`
+- `object`
+
+Optional columns used for timeline extraction:
+
+- `date`
+- `event_date`
+- `doc` (year parsed from filename/text when present)
 
 ## Output guarantees
 
@@ -49,3 +69,9 @@ Each row means “entity appears in document.”
 - summary counts
 - weighted co-occurrence edges
 - ranked bridge candidates by a deterministic bridge score
+
+`distort` outputs:
+
+- `bridge_distortion_scores.csv`
+- `corridor_layer_graph.gexf`
+- `timeline_contagion_overlay.json`
