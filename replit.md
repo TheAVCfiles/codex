@@ -5,6 +5,9 @@ Everything important becomes a **hash + ledger entry**. No silent state changes.
 
 ## Quick Start (Replit)
 
+Implementation rule:
+Make the smallest possible code changes. Prefer adding metadata components, static files, and new routes over editing existing visual components. Do not refactor the app.
+
 - Start the application from Replit (Run).
 - Open the web preview and navigate to `/`.
 
@@ -200,3 +203,5 @@ Policy statement:
 - Preserve append-only ledger philosophy in documentation and implementation.
 - Docs must reflect shipped behavior.
 - If push fails, commits remain local; retry push later without rewriting history.
+
+Return a final checklist showing each route/file created or modified, and list any files changed.
