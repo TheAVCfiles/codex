@@ -2,11 +2,56 @@ import { useMemo, useState } from "react";
 
 const STEPS = ["Crisis", "Lab Activation", "Receipts", "StageCred", "Capital"];
 
+function decodeHieroglyphics(text) {
+  if (!text.trim()) {
+    return {
+      score: 0,
+      label: "Balanced Flow",
+      emojis: "🪨",
+      story: "No input provided.",
+    };
+  }
+
+  const sentences = text.match(/[^.!?]+[.!?]*/g)?.map((entry) => entry.trim()).filter(Boolean) || [text.trim()];
+  const positiveSignals = /good|great|excellent|beautiful|love|joy|success|win|clarity|flow|grace|steady|aligned/i;
+  const negativeSignals = /bad|poor|fail|frustrat|stress|pain|chaos|lost|blocked|dark|overwhelm|risk/i;
+  const negationWords = /\b(not|no|never|without|lack|cannot|unable|avoid|deny|refuse|no longer)\b/i;
+
+  let weightedScore = 0;
+  sentences.forEach((sentence, index) => {
+    let sentenceScore = 0;
+    if (positiveSignals.test(sentence)) sentenceScore += 2;
+    if (negativeSignals.test(sentence)) sentenceScore -= 2;
+    if (negationWords.test(sentence)) sentenceScore *= -1;
+
+    const recencyWeight = (index + 1) / sentences.length;
+    weightedScore += sentenceScore * recencyWeight;
+  });
+
+  const finalScore = Math.max(-10, Math.min(10, weightedScore * sentences.length));
+  const label = finalScore > 3 ? "Positive Resonance" : finalScore < -3 ? "Shadow Tension" : "Balanced Flow";
+
+  let emojis = "⚖️🪨🌿";
+  if (finalScore > 5) emojis = "🌟🔥🪶🌊";
+  else if (finalScore > 2) emojis = "🌱🌀🕊️";
+  else if (finalScore <= -5) emojis = "🌑🔥🪨";
+  else if (finalScore < -2) emojis = "🌫️🪨⛓️";
+
+  return {
+    score: finalScore,
+    label,
+    emojis,
+    story: `Sentence count: ${sentences.length} · Weighted score: ${finalScore.toFixed(1)}`,
+  };
+}
+
 export default function FounderStudioOS() {
   const [hash, setHash] = useState("");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [selectedName, setSelectedName] = useState("");
+  const [hieroglyphInput, setHieroglyphInput] = useState("");
+  const [hieroglyphResult, setHieroglyphResult] = useState(null);
 
   const shortHash = useMemo(() => (hash ? `${hash.slice(0, 18)}...${hash.slice(-12)}` : ""), [hash]);
 
@@ -59,6 +104,10 @@ export default function FounderStudioOS() {
     }
   }
 
+  function runHieroglyphics() {
+    setHieroglyphResult(decodeHieroglyphics(hieroglyphInput));
+  }
+
   return (
     <section style={styles.container}>
       <h2 style={styles.title}>StagePort Startup StudiOS</h2>
@@ -89,6 +138,43 @@ export default function FounderStudioOS() {
         {hash ? <div style={styles.meta}><strong>SHA-256:</strong> {shortHash}</div> : null}
         {hash ? <code style={styles.hashBlock}>{hash}</code> : null}
         {error ? <div style={styles.error}>{error}</div> : null}
+      </div>
+
+      <div style={styles.panel}>
+        <h3 style={styles.hubTitle}>Automation Capacitor · Emojitional Hieroglyphics</h3>
+        <p style={styles.subtitle}>Drop in any founder notes, workflow text, abstract draft, or metrics reflection.</p>
+        <textarea
+          value={hieroglyphInput}
+          onChange={(event) => setHieroglyphInput(event.target.value)}
+          placeholder="Paste founder text for local sentiment tablets..."
+          style={styles.textarea}
+        />
+
+        <div style={styles.actions}>
+          <button onClick={runHieroglyphics} disabled={!hieroglyphInput.trim()}>
+            Decode with Hieroglyphics 🪶
+          </button>
+        </div>
+
+        {hieroglyphResult ? (
+          <div style={styles.resultCard}>
+            <div>
+              <div style={styles.resultLabel}>Sentiment Score</div>
+              <div style={styles.resultScore}>{hieroglyphResult.score.toFixed(1)}</div>
+              <div style={styles.meta}>{hieroglyphResult.label}</div>
+            </div>
+            <div style={styles.resultEmoji}>{hieroglyphResult.emojis}</div>
+            <div style={styles.meta}>{hieroglyphResult.story}</div>
+          </div>
+        ) : null}
+
+        <details style={styles.details}>
+          <summary style={styles.summary}>How & Why does this work?</summary>
+          <p style={styles.meta}>
+            Multi-sentence context scoring with recency bias and negation-aware inversion. Output is rendered as
+            local emoji tablets for transparent sentiment narration without external calls.
+          </p>
+        </details>
       </div>
     </section>
   );
@@ -122,9 +208,14 @@ const styles = {
     border: "1px solid #2d3340",
   },
   panel: {
+    marginTop: "0.9rem",
     padding: "0.75rem",
     borderRadius: 6,
     background: "#141821",
+  },
+  hubTitle: {
+    marginTop: 0,
+    marginBottom: "0.35rem",
   },
   label: {
     display: "grid",
@@ -153,5 +244,48 @@ const styles = {
   error: {
     marginTop: "0.6rem",
     color: "#ff8d8d",
+  },
+  textarea: {
+    width: "100%",
+    minHeight: "7.5rem",
+    resize: "vertical",
+    background: "#0d1118",
+    color: "#fff",
+    border: "1px solid #2d3340",
+    borderRadius: 6,
+    padding: "0.65rem",
+    marginBottom: "0.75rem",
+    fontFamily: "inherit",
+  },
+  resultCard: {
+    border: "1px solid #2d3340",
+    borderRadius: 6,
+    padding: "0.75rem",
+    display: "grid",
+    gap: "0.35rem",
+    marginBottom: "0.75rem",
+    background: "#0f1420",
+  },
+  resultLabel: {
+    fontSize: 12,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    opacity: 0.8,
+  },
+  resultScore: {
+    fontSize: 36,
+    lineHeight: 1,
+  },
+  resultEmoji: {
+    fontSize: 42,
+  },
+  details: {
+    borderTop: "1px solid #2d3340",
+    paddingTop: "0.65rem",
+  },
+  summary: {
+    cursor: "pointer",
+    fontSize: 13,
+    marginBottom: "0.4rem",
   },
 };
