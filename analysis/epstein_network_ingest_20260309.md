@@ -154,3 +154,46 @@ AAG-STAFF-001,EFTA00366339,Misty Ferguson / John Cardenas,OPERATES,AAG corporate
 DUTCHESS-001,EFTA00366339 + Bard manifests,AAG / Hyperion Air,BASES_AT,Dutchess County Airport Wappingers Falls,2014,EFTA00366339,TRANSPORT,0.95
 FARKAS-002,public + invoices,Andrew Farkas,PROVIDES_HELI + MARINA,Epstein (Hamptons / USVI),2014-2016,TRANSPORT,0.90
 ```
+
+### Bard deep-dive additions
+
+```csv
+ingest_id,source_ref,proposed_subject,proposed_verb,proposed_object,proposed_date,proposed_doc_id,proposed_channel,proposed_confidence
+BARD-001,DOJ files + Botstein emails,Leon Botstein,SOLICITS_DONATION,Epstein (multiple visits + island trip),2011-2017,BARD_CORPUS,INSTITUTIONAL,0.95
+BARD-002,2016 itinerary,Karyna Shuliak / Epstein,LANDS_HELI,Bard campus (with others),2016-07-27,BARD_TRIP,TRANSPORT,0.95
+BARD-003,Black donation records,Epstein,INTRODUCES,Leon Black to Botstein ($250k result),2012,BARD_FINANCE,FINANCE,0.90
+BARD-004,Botstein statement,Epstein,DONATES,Bard High School Early College ($75k + laptops),2011-2016,BARD_DONATION,INSTITUTIONAL,0.95
+BARD-005,WilmerHale review,Bard College,REVIEWS,Botstein-Epstein ties,2026-02-19,BARD_REVIEW,LEGAL,0.90
+```
+
+### Black philanthropy + finance artery additions
+
+```csv
+ingest_id,source_ref,proposed_subject,proposed_verb,proposed_object,proposed_date,proposed_doc_id,proposed_channel,proposed_confidence
+BLACK-PHIL-001,DOJ files + Bard records,Leon Black,DONATES,Bard arts programs ($250k via Epstein intro),2013-2014,BARD_CORPUS,INSTITUTIONAL,0.95
+BLACK-PHIL-002,Black foundation records,Epstein,INTRODUCES,Leon Black to Bard/Botstein (island trip),2012,EPSTEIN_BLACK,FINANCE,0.95
+BLACK-PHIL-003,Dartmouth records,Leon Black,DONATES,Black Family Visual Arts Center ($48M),2012,DARTMOUTH,INSTITUTIONAL,0.90
+BLACK-PHIL-004,FFOR records,Leon & Debra Black,CO-FOUNDS,Melanoma Research Alliance + OCD research ($50M+),2007-2020,BLACK_FOUNDATION,HEALTH,0.90
+BLACK-PHIL-005,Epstein foundation records,Epstein,SERVES_AS,trustee of Black Family Foundation,1997-2007,BLACK_FOUNDATION,FINANCE,0.85
+BLACK-FIN-001,Dechert report + Senate Wyden,Leon Black,PAYS,Epstein $158M (tax/estate planning installments),2012-2017,BLACK_EPSTEIN_PAYMENTS,FINANCE,0.95
+BLACK-FIN-002,Senate Finance Committee,Epstein,STRUCTURES,Black tax-avoidance trusts (> $1B avoided),2012-2017,BLACK_TRUSTS,TAX_PLANNING,0.90
+BLACK-FIN-003,Black Foundation records,Epstein,SERVES_AS,trustee of Black Family Foundation,1997-2007,BLACK_FOUNDATION,FINANCE,0.85
+BLACK-FIN-004,2026 unsealed records,Epstein,MANAGES_FINANCES,art adviser receiving $2.5M from Black,2010s,EPSTEIN_ART_ADVISER,FINANCE,0.85
+BLACK-FIN-005,USVI settlement,Leon Black,SETTLES,US Virgin Islands $62.5M (Epstein claims release),2023,BLACK_USVI_SETTLEMENT,LEGAL,0.95
+```
+
+### Wyden / IRS / Treasury oversight rows
+
+```csv
+ingest_id,source_ref,proposed_subject,proposed_verb,proposed_object,proposed_date,proposed_doc_id,proposed_channel,proposed_confidence
+WYDEN-001,Dechert report + Wyden 2023 letter,Leon Black,PAYS,Epstein $158–170M tax/estate planning,2012-2017,BLACK_EPSTEIN_PAYMENTS,FINANCE,0.95
+WYDEN-002,Dechert + Senate review,Epstein,STRUCTURES,Black 2006 GRAT + trusts avoiding >$1B taxes,2012-2017,BLACK_TRUSTS,TAX_PLANNING,0.95
+WYDEN-003,USVI settlement 2023,Epstein,FUNDS,USVI operations via Black payments,2012-2017,USVI_SETTLEMENT,FINANCE,0.95
+WYDEN-004,Wyden IRS letter July 2025,IRS,FAILS_TO_AUDIT,Epstein-Black transactions,2012-2025,WYDEN_IRS,LEGAL,0.95
+IRS-LAPSE-001,Wyden 31 Jul 2025 letter to IRS Comm. Long,IRS,FAILS_TO_AUDIT,Epstein-Black $158–170M + GRAT trusts,2012-2025,WYDEN_IRS_LETTER,LEGAL,0.95
+IRS-LAPSE-002,Wyden letter + Black counsel memo,IRS,FAILS_TO_REVIEW,2006 GRAT & remainder trust,2012-2025,WYDEN_IRS_LETTER,LEGAL,0.95
+IRS-LAPSE-003,Wyden 2025 letter,Senate Finance,DEMANDS,IRS audit/investigation records on Epstein transactions,2025,WYDEN_IRS_LETTER,LEGAL,0.95
+TAX-SCHEME-001,Wyden/Dechert 2023-2025,Epstein,ENGINEERS,Black GRAT + step-up-basis avoidance (>$1B),2012-2017,BLACK_TAX_SCHEMES,TAX_PLANNING,0.95
+TREASURY-FAIL-001,Wyden 2024-2026,Treasury,FAILS_TO_AUDIT,Epstein-Black $158–170M + trusts,2012-2025,WYDEN_TREASURY,LEGAL,0.95
+TREASURY-FAIL-002,Wyden letters,Treasury,BLOCKS,full Produce Epstein Treasury Records Act access,2023-2026,WYDEN_TREASURY,LEGAL,0.90
+```
