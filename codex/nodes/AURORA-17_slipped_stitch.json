@@ -1,0 +1,10 @@
+{
+  "id": "surface_27_slipped_stitch",
+  "title": "The Slipped Stitch",
+  "mode": "surface",
+  "content": "A child learns to hide her questions...",
+  "links": ["cipher_27_camouflage_engine", "echo_27_encryption"],
+  "tags": ["childhood", "masking", "survival"],
+  "rooms": ["Room001_GlitchAsEntry"],
+  "status": "canon"
+}
