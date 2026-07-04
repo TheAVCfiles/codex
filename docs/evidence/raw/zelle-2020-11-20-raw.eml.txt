@@ -1,0 +1,98 @@
+Received: from VI1EUR06HT250.eop-eur06.prod.protection.outlook.com
+ (2603:10b6:207:18::25) by MN2PR14MB2672.namprd14.prod.outlook.com with HTTPS
+ via BL0PR0102CA0012.PROD.EXCHANGELABS.COM; Fri, 20 Nov 2020 05:20:17 +0000
+Received: from VI1EUR06FT055.eop-eur06.prod.protection.outlook.com
+ (2a01:111:e400:fc37::45) by
+ VI1EUR06HT250.eop-eur06.prod.protection.outlook.com (2a01:111:e400:fc37::329)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Fri, 20 Nov
+ 2020 05:20:16 +0000
+Authentication-Results: spf=pass (sender IP is 199.47.139.181)
+ smtp.mailfrom=zellepay.com; hotmail.com; dkim=pass (signature was verified)
+ header.d=zellepay.com;hotmail.com; dmarc=pass action=none
+ header.from=zellepay.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of zellepay.com designates
+ 199.47.139.181 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.47.139.181; helo=smtp2.earlywarning.com;
+Received: from smtp2.earlywarning.com (199.47.139.181) by
+ VI1EUR06FT055.mail.protection.outlook.com (10.13.6.226) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3589.20 via Frontend Transport; Fri, 20 Nov 2020 05:20:16 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:9B4DEECC3AC92BB6EC188014BCE9E711BB1D0B7E6C40C44377F6377DF953C8CA;UpperCasedChecksum:88BEE3931A3B65B19B6CCC8C05BDA95122F8446624DE420E4756838159C7D8EC;SizeAsReceived:1825;Count:14
+Received: from pps.filterd (a2280caop.earlywarning.com [127.0.0.1])
+	by a2280caop.earlywarning.com (8.16.0.42/8.16.0.42) with SMTP id 0AK5GDRV010372
+	for <alias1133@hotmail.com>; Thu, 19 Nov 2020 23:20:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zellepay.com; h=from : to : date :
+ subject : content-type : message-id; s=august2016;
+ bh=ZfQw6izes/GdYxboO5Uo77VeiN+skncJ9lXe0kvUVXQ=;
+ b=nEGGZNm3FIvHNY0tCG8iTrBt1LHzRa+mYDJYSRUD5zfn+MZX23mwDad/hqh5/EyRFtLr
+ pMtjGFGIwm/ZL6pIDNfdJ1HxiI6O9EAIAJuBRfEVyLqnd4qxrpyceXBF4sh7iNWtih+5
+ NpfdgiUtb9xWgtppRwp2v20O2dgbbFZYPys+GJar47bBdhdEmOF3VR3BdHhiZEGWLGy2
+ YCiEu+6XC5XpTJx+FiVkmSl4WRFaA+3V+PbvvrbFSnDL2/BR1FdeGA5gAr+Y15tuJlL2
+ EqlSHudzi6+30MYhMaVpYZScf+0Nl/wFb635/A9QjZEgPTvDBiPX/J7LAxFvp4u7fo7K 5Q== 
+Received: from s5927pawv.ews.int ([10.16.6.98])
+	by a2280caop.earlywarning.com with ESMTP id 34wxaybaky-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+	for <alias1133@hotmail.com>; Thu, 19 Nov 2020 23:20:14 -0600
+Received: from s6305powa.prodew.int ([10.16.6.252]) by s5927pawv.ews.int with Microsoft SMTPSVC(8.5.9600.16384);
+	 Thu, 19 Nov 2020 23:20:13 -0600
+Received: from authentify.inc ([10.214.39.107]) by s6305powa.prodew.int with Microsoft SMTPSVC(8.5.9600.16384);
+	 Thu, 19 Nov 2020 23:20:13 -0600
+From: "Zelle"<DoNotReply@zellepay.com>
+To: <alias1133@hotmail.com>
+Date: Fri, 20 Nov 2020 05:20:13 GMT
+Subject: DANCE FACTORY RIDGEFIELD LLC sent you $1325.00
+Content-Type: text/html
+Message-ID: <S6305POWAcsNPtN5G7j0002e5a6@s6305powa.prodew.int>
+X-OriginalArrivalTime: 20 Nov 2020 05:20:13.0477 (UTC) FILETIME=[D2FBED50:01D6BEFC]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-20_01:2020-11-19,2020-11-20 signatures=0
+X-Proofpoint-Spam-Reason: safe
+X-IncomingHeaderCount: 14
+Return-Path: DoNotReply@zellepay.com
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Nov 2020 05:20:16.5060
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id: 0cb29277-3281-409d-20fb-08d88d13f741
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource: VI1EUR06FT055.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 11/5/2020 8:22:13 AM
+X-MS-Office365-Filtering-Correlation-Id: 0cb29277-3281-409d-20fb-08d88d13f741
+X-MS-TrafficTypeDiagnostic: VI1EUR06HT250:
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 199.47.139.181
+X-SID-PRA: DONOTREPLY@ZELLEPAY.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 0
+X-Microsoft-Antispam: BCL:1;
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2020 05:20:16.1652
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cb29277-3281-409d-20fb-08d88d13f741
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT055.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1EUR06HT250
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.0076710
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.3589.020
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:0;pcwl:0;kl:0;iwl:0;ijl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000282)(90000117)(90010023)(91010020)(91040095)(9000001)(9050020)(9100272)(5061607266)(5061608174)(4900115)(98391011)(4920090)(6515079)(4950131)(4990090);
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+MIME-Version: 1.0
+
+<html>
+...
+DANCE F. has sent you $1325.00. Enjoy!
+...
+nov 2 to nov 15
+...
+</html>
