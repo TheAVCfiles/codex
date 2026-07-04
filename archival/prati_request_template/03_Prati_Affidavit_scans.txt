@@ -1,0 +1,9 @@
+-- PLACEHOLDER / INSTRUCTION --
+
+Attach high-resolution scanned PDFs (or JPGs) of handwritten family pages.
+Use exact names:
+- Prati_Affidavit_p1_highres.pdf
+- Prati_Affidavit_p2_highres.pdf
+- Prati_Affidavit_p3_highres.pdf
+
+Replace this placeholder file with the real scans before final submission.
