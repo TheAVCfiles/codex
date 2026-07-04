@@ -76,3 +76,12 @@ row_id,date,claim_brief,statute,element,evidence_type,evidence_location,hash_sha
 - Open this file in any Markdown viewer or text editor that can print.
 - Use **Print → Save as PDF** (or **Export → PDF**) and select a single‑page layout.
 - Title the file: `forensic-alignment-onepage.pdf` for easy handoff.
+
+---
+
+## 7) Latest intake addendum (2026-02-06)
+
+- Added a fact-only DOL/COVID + DV wage-theft intake update with four screenshot-based C1 rows:
+  - `docs/dol-covid-dv-wage-theft-intake-update-2026-02-06.md`
+- Use the CSV block in that file to paste directly into the evidence spine.
+- Replace `TO_COMPUTE` placeholders with SHA-256 values before filing.
