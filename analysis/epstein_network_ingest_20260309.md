@@ -154,3 +154,52 @@ AAG-STAFF-001,EFTA00366339,Misty Ferguson / John Cardenas,OPERATES,AAG corporate
 DUTCHESS-001,EFTA00366339 + Bard manifests,AAG / Hyperion Air,BASES_AT,Dutchess County Airport Wappingers Falls,2014,EFTA00366339,TRANSPORT,0.95
 FARKAS-002,public + invoices,Andrew Farkas,PROVIDES_HELI + MARINA,Epstein (Hamptons / USVI),2014-2016,TRANSPORT,0.90
 ```
+
+## Connectivity map updates (Wyden probe / IRS-DEA oversight ingest)
+
+Key additions:
+
+- Added a legal/oversight corridor around IRS non-audit findings from the 2025 Wyden letter.
+- Added DEA/OCDETF "Chain Reaction" investigation timeline and records-demand edge.
+- Reinforced finance → tax-planning pathway via Black $158–170M payments and trust-structure claims.
+- Reinforced finance → philanthropy overlap via Epstein's trustee role in the Black Family Foundation.
+
+Representative new edges (observable verbs):
+
+- IRS → FAILS_TO_AUDIT → Epstein-Black payments + trust structures.
+- IRS → FAILS_TO_REVIEW → 2006 GRAT and remainder trusts.
+- Senate Finance (Wyden) → DEMANDS → IRS audit/investigation records.
+- Leon Black → PAYS → Epstein $158–170M (2012–2017).
+- Epstein → STRUCTURES → Black tax-avoidance trusts.
+- DEA/OCDETF → INVESTIGATES → Epstein + 14 co-conspirators ("Chain Reaction").
+- Wyden Senate Finance → DEMANDS → unredacted DEA memo and co-conspirator details.
+
+### Wyden / IRS / Black / DEA additions
+
+```csv
+ingest_id,source_ref,proposed_subject,proposed_verb,proposed_object,proposed_date,proposed_doc_id,proposed_channel,proposed_confidence
+WYDEN-IRS-001,Wyden 31 Jul 2025 letter to IRS Comm. Long,IRS,FAILS_TO_AUDIT,Epstein-Black $158–170M payments + GRAT trusts,2012–2025,WYDEN_IRS_LETTER_2025,LEGAL,0.95
+WYDEN-IRS-002,Wyden 2025 letter + Black counsel memo,IRS,FAILS_TO_REVIEW,2006 GRAT & remainder trusts,2012–2025,WYDEN_IRS_LETTER_2025,LEGAL,0.95
+WYDEN-IRS-003,Wyden 31 Jul 2025 letter,Senate Finance,DEMANDS,IRS audit/investigation records on Epstein-Black transactions,2025,WYDEN_IRS_LETTER_2025,LEGAL,0.95
+BLACK-FIN-001,Dechert report + Wyden letters 2023–2026,Leon Black,PAYS,Epstein $158–170M tax/estate planning installments,2012–2017,BLACK_EPSTEIN_PAYMENTS,FINANCE,0.95
+BLACK-STRUCT-001,Wyden 2025 letter + Dechert report,Epstein,STRUCTURES,Black tax-avoidance trusts (>$1B avoided),2012–2017,BLACK_TRUSTS,TAX_PLANNING,0.90
+BLACK-FOUND-001,Black Foundation records,Epstein,SERVES_AS,trustee of Debra & Leon Black Family Foundation,1997–2007,BLACK_FOUNDATION,FINANCE,0.85
+DEA-CHAIN-001,2015 OCDETF memo (EFTA00173953),DEA / OCDETF,INVESTIGATES,Epstein + 14 co-conspirators ("Chain Reaction" – illicit wires),2010–2015,DEA_CHAIN_MEMO,LEGAL,0.95
+DEA-CHAIN-002,2015 OCDETF memo,DEA / OCDETF,COMPILES,Suspicious wire transfers tied to drug/prostitution (USVI/NYC),2010-2015,DEA_CHAIN_MEMO,LEGAL,0.90
+WYDEN-DEA-001,Wyden letter 25 Feb 2026 to DEA Admin Cole,Wyden Senate Finance,DEMANDS,unredacted "Chain Reaction" memo + co-conspirator names,2026-02-25,WYDEN_DEA_LETTER,LEGAL,0.95
+OCDETF-SHUT-001,Bloomberg/Reuters 2025 reports + Wyden letters,Trump DOJ,SHUTS_DOWN,OCDETF program (FY2026 budget zeroed out),2025,OCDETF_SHUTDOWN,LEGAL,0.90
+```
+
+### Deutsche Bank finance-corridor additions
+
+```csv
+ingest_id,source_ref,proposed_subject,proposed_verb,proposed_object,proposed_date,proposed_doc_id,proposed_channel,proposed_confidence
+DB-001,EFTA01471309 + valuation files,Deutsche Bank,VALUES,Southern Financial LLC portfolio ~$97M,2014-2017,DB_VALUATION,FINANCE,0.95
+DB-002,EFTA01471309,Paul Morris / Vahe Stepanian / Amanda Kirby,MANAGE_CLIENT,Jeffrey Epstein accounts,2014,DB_CLIENT_TEAM,FINANCE,0.90
+DB-003,EFTA01471309,Harry Beller,WORKS_ON,JE accounts in some capacity,2014,DB_CLIENT_TEAM,FINANCE,0.80
+DB-004,DBforce memo,Deutsche Bank,RESEARCHES,Epstein as Oracle lead,2013,DB_NETX360,FINANCE,0.85
+DB-EPSTEIN-001,Wyden probe + NYDFS 2020,Deutsche Bank,PROCESSES,Millions in suspicious Epstein transactions (cash/recruiter payments),2013-2018,DB_EPSTEIN_ACCOUNTS,FINANCE,0.95
+DB-EPSTEIN-002,Reuters 2026 files,Deutsche Bank,CONTINUES_SERVICES,Epstein after 2018 termination notice,2018-2019,DB_SLOW_SPLIT,FINANCE,0.90
+DB-EPSTEIN-003,2023 settlement,Deutsche Bank,SETTLES,Epstein victims $75M + NYDFS $150M fine,2020-2023,DB_SETTLEMENTS,LEGAL,0.95
+DB-EPSTEIN-004,Wyden 2025–2026 probe,Paul Morris,PITCHES,Epstein to Deutsche post-JPMorgan,2013,DB_ONBOARDING,FINANCE,0.85
+```
