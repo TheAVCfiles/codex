@@ -1,0 +1,17 @@
+name: codex-release-score
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - name: score musings
+        run: |
+          curl -X POST "${{ secrets.MUSINGS_SCORE_URL }}" \
+          -H "Authorization: Bearer ${{ secrets.MUSINGS_SCORE_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"repo":"TheAVCfiles/codex"}'
