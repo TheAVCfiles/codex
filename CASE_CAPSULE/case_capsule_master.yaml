@@ -58,3 +58,8 @@ EVIDENCE_LEDGER:
       file_reference: "00A288A0-A549-4B57-8F94-A6802D97BF18.jpeg"
       description_neutral: "Screenshot of step list creating a case pack ZIP with evidence and documentation."
       confidence_level: "medium"
+
+STRATEGY_NOTES:
+  stageport_lineage_brief: "CASE_CAPSULE/stageport_lineage_brief.md"
+  summary: "Command-center draft with problem/solution framing, pilot spec, timeline proof format, and institutional credential bridge path."
+
