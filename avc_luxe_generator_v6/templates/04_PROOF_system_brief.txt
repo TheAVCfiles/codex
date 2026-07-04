@@ -1,0 +1,12 @@
+STATUS: PHASE I COMPLETE
+
+SYSTEM:
+- behavior verified
+- structure stable
+- deployment pending
+
+LINE:
+{{PROOF_LINE}}
+
+OPERATOR:
+{{OPERATOR_NAME}}

@@ -1,0 +1,7 @@
+:root {
+  --bg: {{THEME_BG}};
+  --panel: {{THEME_PANEL}};
+  --text: {{THEME_TEXT}};
+  --muted: {{THEME_MUTED}};
+  --accent: {{THEME_ACCENT}};
+}

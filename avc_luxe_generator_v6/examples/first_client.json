@@ -1,0 +1,19 @@
+{
+  "client_name": "CLIENT",
+  "client_slug": "client",
+  "tagline": "Private operating environment",
+  "operator_name": "AVC Systems Studio / Intuition Labs R&D",
+  "theme": "obsidian",
+  "primary_color": "",
+  "background": "",
+  "archetype": "founder_safe",
+  "proof_line": "Phase I proves behavior. Phase II activates infrastructure.",
+  "activation_line": "Access requires activation.",
+  "modules": {
+    "session": true,
+    "interface": true,
+    "atlas": true,
+    "proof": true,
+    "next": true
+  }
+}
