@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PyRouette — Cross-Domain Receipt</title>
+<style>
+  body {
+    margin: 0;
+    background: #050507;
+    color: #f5f3f7;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .frame {
+    width: 1200px;
+    height: 675px;
+    padding: 48px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #8a8791;
+  }
+
+  .title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .pipeline {
+    margin-top: 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #d6c3a3;
+  }
+
+  .desc {
+    margin-top: 18px;
+    max-width: 860px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cfcdd3;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-top: 34px;
+  }
+
+  .panel {
+    background: #0f1014;
+    border: 1px solid #1a1a1f;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 270px;
+  }
+
+  .panel-title {
+    font-size: 11px;
+    color: #8a8791;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .accent {
+    color: #d6c3a3;
+  }
+
+  .ledger {
+    font-size: 11px;
+    color: #bcb9c6;
+    line-height: 1.55;
+    margin-top: 10px;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #8a8791;
+  }
+
+  .bottom-right {
+    font-size: 16px;
+    color: #d6c3a3;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <div>
+    <div class="top">
+      <div>PyRouette — Cross-Domain Receipt</div>
+      <div>ENGINEER LENS</div>
+    </div>
+
+    <div class="title">constraint_receipt_system_v1</div>
+
+    <div class="pipeline">
+      INTENT → DSL → STATE → CONSTRAINTS → EXECUTION → RECEIPT
+    </div>
+
+    <div class="desc">
+      Same structure, different domains. PyRouette treats embodied action as a constraint-governed execution problem,
+      then records the result as a receipt. Ballet, kitchen systems, and training environments all reduce to the same pattern:
+      movement, timing, validation, outcome.
+    </div>
+
+    <div class="grid">
+
+      <!-- BALLET -->
+      <div class="panel">
+        <div class="panel-title">BALLET RECEIPT</div>
+        Asset: <span class="accent">pyrouette_mock_ballet_v1</span><br>
+        State: Turn Sequence<br>
+        Constraint Set: Axis / Line / Tempo<br>
+        Solver: IK Converged<br>
+        Dynamics: Stable<br>
+        Score: <span class="accent">92.5%</span>
+
+        <div class="ledger">
+          [ PARSE ] phrase detected<br>
+          [ STATE ] transition resolved<br>
+          [ IK ] solved<br>
+          [ CHECK ] rotational dynamics pass<br>
+          [ RECEIPT ] committed
+        </div>
+      </div>
+
+      <!-- KITCHEN -->
+      <div class="panel">
+        <div class="panel-title">KITCHEN RECEIPT</div>
+        Asset: <span class="accent">recipe_motion_cycle_v1</span><br>
+        State: Prep → Heat → Plate<br>
+        Constraint Set: Time / Temp / Sequence<br>
+        Solver: Execution Valid<br>
+        Dynamics: Stable<br>
+        Score: <span class="accent">89.4%</span>
+
+        <div class="ledger">
+          [ PARSE ] motion sequence detected<br>
+          [ STATE ] prep cycle resolved<br>
+          [ CHECK ] heat curve within bounds<br>
+          [ CHECK ] timing sequence pass<br>
+          [ RECEIPT ] committed
+        </div>
+      </div>
+
+      <!-- TRAINING -->
+      <div class="panel">
+        <div class="panel-title">TRAINING RECEIPT</div>
+        Asset: <span class="accent">session_progression_v1</span><br>
+        State: Warmup → Load → Recovery<br>
+        Constraint Set: Range / Fatigue / Tempo<br>
+        Solver: Progression Valid<br>
+        Dynamics: Stable<br>
+        Score: <span class="accent">91.1%</span>
+
+        <div class="ledger">
+          [ PARSE ] training block loaded<br>
+          [ STATE ] progression resolved<br>
+          [ CHECK ] fatigue threshold pass<br>
+          [ CHECK ] timing alignment pass<br>
+          [ RECEIPT ] committed
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div>One system language: state transitions, constraint validation, and signed receipts across domains.</div>
+    <div class="bottom-right">receipt logic = reusable infrastructure</div>
+  </div>
+
+</div>
+</body>
+</html>
