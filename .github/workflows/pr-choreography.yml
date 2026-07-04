@@ -1,0 +1,125 @@
+name: PR Choreography
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Classify PR and apply stream labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const content = `${pr.title}\n${pr.body || ''}`.toLowerCase();
+            const branch = (pr.head.ref || '').toLowerCase();
+
+            const streams = [
+              {
+                label: 'vision',
+                patterns: [
+                  /\bvision\b/, /\bconcept\b/, /\bidea\b/, /\bexplore\b/, /\bprototype\b/, /\brfc\b/
+                ]
+              },
+              {
+                label: 'execution-ready',
+                patterns: [
+                  /\bfix\b/, /\bready\b/, /\bship\b/, /\bprod\b/, /\bdeploy\b/, /\bhotfix\b/, /\bfeat\b/
+                ]
+              },
+              {
+                label: 'creative-enhancement',
+                patterns: [
+                  /\bui\b/, /\bux\b/, /\bdesign\b/, /\bcopy\b/, /\btheme\b/, /\banimation\b/
+                ]
+              },
+              {
+                label: 'idea-incubator',
+                patterns: [
+                  /\bincubator\b/, /\bbacklog\b/, /\blater\b/, /\bdraft\b/, /\bparking lot\b/, /\bbrainstorm\b/
+                ]
+              },
+              {
+                label: 'documentation',
+                patterns: [
+                  /\breadme\b/, /\bdocs?\b/, /\bguide\b/, /\bplaybook\b/, /\bspec\b/, /\barchitecture\b/
+                ]
+              }
+            ];
+
+            const branchHints = {
+              'vision/': 'vision',
+              'exec/': 'execution-ready',
+              'docs/': 'documentation',
+              'creative/': 'creative-enhancement',
+              'incubator/': 'idea-incubator'
+            };
+
+            const matched = new Set();
+
+            for (const [prefix, label] of Object.entries(branchHints)) {
+              if (branch.startsWith(prefix)) matched.add(label);
+            }
+
+            for (const stream of streams) {
+              if (stream.patterns.some((re) => re.test(content))) {
+                matched.add(stream.label);
+              }
+            }
+
+            // Guarantee at least one stream so every PR is triaged.
+            if (matched.size === 0) {
+              matched.add('idea-incubator');
+            }
+
+            const labels = [...matched];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.getLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label,
+                    color: '1f6feb',
+                    description: 'Automatically assigned by PR Choreography.'
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels
+            });
+
+            const summary = [
+              '## PR Choreography classification',
+              '',
+              `Assigned stream label(s): ${labels.map((l) => `\`${l}\``).join(', ')}`,
+              '',
+              'If this classification is off, update the PR title/body or apply labels manually.'
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: summary
+            });
