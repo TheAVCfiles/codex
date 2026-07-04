@@ -92,3 +92,23 @@ The builder also prints a Merkle root over manifest lines. The PC.8 proof schema
    ```bash
    python avc_welcome_stack.py --output-dir ./dist
    ```
+
+## Generating evaluation + credential sales assets
+
+Use `stageport_eval_assets.py` to produce three client-facing deliverables in one run:
+
+- `StagePort_Evaluation_Report.pdf` (7-page structured report)
+- `StagePort_Credential_Certificate.pdf`
+- `stageport_landing.html` (single-page sales site)
+
+Example:
+
+```bash
+python stageport_eval_assets.py \
+  --output-dir ./dist/stageport_offer \
+  --system-name "Sample System" \
+  --submitted-by "Sample Name" \
+  --organization "Sample Organization"
+```
+
+The script computes a SHA-256 hash from the report metadata, injects it into both PDF artifacts, and writes all outputs to the selected directory.
