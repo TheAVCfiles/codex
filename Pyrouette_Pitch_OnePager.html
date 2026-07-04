@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Py.rouette — One-Page Pilot Brief</title>
+  <style>
+    :root {
+      --ink: #121826;
+      --muted: #4b5563;
+      --accent: #6d28d9;
+      --line: #e5e7eb;
+      --bg: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      padding: 32px;
+    }
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    h1 { margin: 0; font-size: 30px; }
+    h2 { margin: 22px 0 10px; font-size: 13px; color: var(--accent); letter-spacing: .08em; }
+    p, li { font-size: 14px; line-height: 1.45; color: var(--ink); }
+    .muted { color: var(--muted); }
+    .lede { margin-top: 8px; font-size: 16px; }
+    .meta { margin-top: 8px; font-size: 14px; color: var(--muted); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .panel { border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+    ul { padding-left: 18px; margin: 8px 0; }
+    hr { border: none; border-top: 1px solid var(--line); margin: 18px 0; }
+    @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { border: 0; border-radius: 0; max-width: 100%; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Py.rouette — Decision Gating for Noisy Systems</h1>
+    <div class="meta">Founder: Allison Van Cura (StagePort) · Ask: 20–30 minute review of an 8-week pilot (Standard: $75k)</div>
+    <p class="lede"><strong>Py.rouette converts expert movement training into auditable decision-gating logic for noisy environments.</strong> In an 8-week pilot, we deliver a scoring model, event receipts, and a stability audit designed to reduce false triggers and improve control-loop reliability.</p>
+
+    <hr />
+
+    <section class="cols">
+      <div class="panel">
+        <h2>Problem</h2>
+        <p>Operational decision systems frequently fail under noisy inputs: false triggers, oscillation, and inconsistent latency. Most gating logic is either too heuristic or too opaque for governance teams to inspect and trust.</p>
+        <h2>Solution</h2>
+        <ul>
+          <li><strong>Explicit states:</strong> named action and hold nodes.</li>
+          <li><strong>Guards and permission gates:</strong> thresholded decision envelopes.</li>
+          <li><strong>Risk-decay primitives:</strong> timed exits + hysteresis to prevent flip-flop behavior.</li>
+          <li><strong>Receipts:</strong> per-decision audit packet (timestamp, sensor snapshot, rationale).</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>Why this matters to an operating fund</h2>
+        <ul>
+          <li>More stable control behavior under noise.</li>
+          <li>Lower-latency scoring designed for high-sampling streams.</li>
+          <li>Forensic, auditable event trails for compliance and debugging.</li>
+          <li>Transferable governance IP across trading and robotics workflows.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Pilot scope (8 weeks, recommended)</h2>
+      <p><strong>Goal:</strong> deliver a transferable scoring model and audit report validating gating, latency, and stability.</p>
+      <p><strong>Cohort:</strong> 1–4 trained participants (Mika as paid founding pilot participant).<br>
+      <strong>Sensors:</strong> IMU 200–400Hz + synchronized video 30–60fps.</p>
+      <p><strong>Deliverables:</strong> labeled dataset, scoring model, receipts log, demo, and audit report (latency, gate precision/recall, stability index, false-trigger rate).</p>
+      <p><strong>Budget ladder:</strong> Basic $25k (4 weeks) · Standard $75k (8 weeks) · Full $200k (12 weeks + transfer testing).</p>
+    </section>
+
+    <section>
+      <h2>Commercial posture and controls</h2>
+      <p>Pilot participation and data licensing terms are set up for paid participants, limited pilot-use rights, and an option to license resulting scoring primitives. Security controls include encrypted storage, redaction workflow, consent handling, and explicit publicity language.</p>
+    </section>
+
+    <hr />
+    <p class="muted"><strong>Next step:</strong> 20–30 minutes to review the technical spec, pilot plan, and agreement template with a short receipts demo.</p>
+  </main>
+</body>
+</html>

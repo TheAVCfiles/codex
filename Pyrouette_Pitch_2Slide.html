@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Py.rouette — 2-Slide COO Brief</title>
+  <style>
+    :root { --ink:#0f172a; --muted:#475569; --accent:#7c3aed; --line:#e2e8f0; --bg:#f8fafc; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--ink);padding:24px}
+    .deck{max-width:1100px;margin:0 auto;display:grid;gap:18px}
+    .slide{background:#fff;border:1px solid var(--line);border-radius:12px;padding:30px;min-height:620px}
+    h1{margin:0 0 10px;font-size:32px}
+    h2{margin:0 0 16px;color:var(--accent);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+    h3{margin:16px 0 8px;font-size:18px}
+    p,li{font-size:16px;line-height:1.45}
+    ul{padding-left:20px;margin:8px 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .box{border:1px solid var(--line);border-radius:10px;padding:12px}
+    .muted{color:var(--muted)}
+    @media print {
+      body{background:#fff;padding:0}
+      .slide{border:0;border-radius:0;page-break-after:always;min-height:auto}
+      .deck{gap:0;max-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide">
+      <h1>Py.rouette</h1>
+      <h2>Slide 1 · Problem / Solution / Value</h2>
+      <p><strong>Decision systems break under noisy inputs.</strong> Teams pay for reduced false triggers, stable gating, and auditable events.</p>
+      <div class="grid">
+        <div class="box">
+          <h3>Problem</h3>
+          <ul>
+            <li>False triggers and oscillation in live loops.</li>
+            <li>Latency spikes under stress.</li>
+            <li>Action logic that is hard to audit and govern.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Py.rouette solution</h3>
+          <ul>
+            <li>Finite-state scoring layer from expert embodied training.</li>
+            <li>Explicit states, guards, and permission gates.</li>
+            <li>Risk-decay + hysteresis to prevent flip-flop behavior.</li>
+            <li>Per-decision receipts for forensic traceability.</li>
+          </ul>
+        </div>
+      </div>
+      <h3>Why it matters</h3>
+      <ul>
+        <li>Operational stability under noisy signals.</li>
+        <li>Low-latency scoring for high-frequency sensor streams.</li>
+        <li>Governance-ready audit trails and transferable control IP.</li>
+      </ul>
+      <p class="muted">Founder: Allison Van Cura · Py.rouette / StagePort</p>
+    </section>
+
+    <section class="slide">
+      <h1>Pilot Plan</h1>
+      <h2>Slide 2 · Pilot / KPIs / Budget / Ask</h2>
+      <h3>Recommended pilot</h3>
+      <p>8 weeks · 1–4 trained participants · IMU (200–400Hz) + synchronized video (30–60fps).</p>
+      <h3>Deliverables</h3>
+      <ul>
+        <li>Labeled dataset + transferable scoring model.</li>
+        <li>Audit report: latency, gate precision/recall, stability index, false-trigger rate.</li>
+        <li>Receipts log and short demonstration handoff.</li>
+      </ul>
+      <h3>Budget ladder</h3>
+      <ul>
+        <li><strong>Basic:</strong> $25k (4 weeks)</li>
+        <li><strong>Standard:</strong> $75k (8 weeks, recommended)</li>
+        <li><strong>Full:</strong> $200k (12 weeks + transfer testing)</li>
+      </ul>
+      <h3>Ask</h3>
+      <p>20–30 minutes to review the technical brief, 2-slide plan, and pilot agreement template.</p>
+      <p class="muted">Commercial posture: pilot data license + option to license resulting scoring primitives.</p>
+    </section>
+  </main>
+</body>
+</html>
