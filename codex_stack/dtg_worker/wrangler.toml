@@ -1,0 +1,15 @@
+name = "dtg-worker"
+main = "src/index.ts"
+compatibility_date = "2025-11-01"
+
+[[kv_namespaces]]
+binding = "DTG_EVENTS"
+id = "xxxx"
+
+[[d1_databases]]
+binding = "DTG_LEDGER"
+database_name = "dtg_ledger"
+database_id = "xxxx"
+
+[vars]
+SENTIENT_CENT_RATE = "0.01"

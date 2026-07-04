@@ -1,0 +1,10 @@
+{
+  "type": "narrative",
+  "name": "mythematics_docs",
+  "version": "0.1.0",
+  "docs": ["somatic_manifest.md", "glossary.md"],
+  "links": [
+    { "concept": "Glitch as Entry", "used_by": ["koll_core"] },
+    { "concept": "Poem as Proof", "used_by": ["koll_core", "mayfleur_core"] }
+  ]
+}

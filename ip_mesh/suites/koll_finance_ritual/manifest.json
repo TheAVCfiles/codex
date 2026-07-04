@@ -1,0 +1,13 @@
+{
+  "type": "suite",
+  "name": "koll_finance_ritual",
+  "version": "0.1.0",
+  "includes": ["koll_core", "mythematics_docs"],
+  "entrypoints": [
+    {
+      "cli": "python engines/koll_core/backtest.py --config engines/koll_core/configs/koll_config.yaml"
+    }
+  ],
+  "outputs": ["engines/koll_core/reports/*"],
+  "licensing": { "tier": "private-edition" }
+}

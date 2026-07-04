@@ -1,0 +1,7 @@
+{
+  "type": "site",
+  "name": "zero_loss_zero_surprise",
+  "version": "0.1.0",
+  "routes": ["/", "/policy", "/faq"],
+  "docs": ["README.md"]
+}

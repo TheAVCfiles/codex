@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    {
+      "name": "osc_in_lights",
+      "type": "oscin",
+      "port": 9004,
+      "outputs": ["lights_percent"]
+    },
+    {
+      "name": "uniform_percent",
+      "type": "glsluniform",
+      "uniforms": { "uPercent": "percent/100.0" }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  margin: 0;
+  padding: 2rem;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+h1, h2 {
+  color: #1e293b;
+}
+
+ul {
+  padding-left: 1.25rem;
+}
