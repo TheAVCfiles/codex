@@ -1,0 +1,2 @@
+chat_id,source,chat_date_utc,export_method,export_file_path,hash_sha256,notes
+CHAT-0001,"Chat export (source platform)",YYYY-MM-DDThh:mm:ssZ,"Manual export","01_CORE/01_EXHIBITS_RAW/chat_export.ext","sha256:...","[[GREEN]]Add export method details and platform info.[[/GREEN]]"

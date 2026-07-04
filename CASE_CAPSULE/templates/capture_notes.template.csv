@@ -1,0 +1,2 @@
+evidence_id,capture_method,source_location,captured_by,device_clock_time,timezone,original_export_available,original_export_path,notes
+E0001,"Screenshot","App view (e.g., email/DM)","Initials","YYYY-MM-DD hh:mm","UTC","no","","[[GREEN]]Add exact capture context (device/app/view).[[/GREEN]]"

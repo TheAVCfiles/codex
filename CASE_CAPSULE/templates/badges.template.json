@@ -1,0 +1,25 @@
+{
+  "exhibit_id": "EX-PLACEHOLDER-001",
+  "badges": [
+    {
+      "type": "PROVENANCE",
+      "value": "PRIMARY_SCREENSHOT",
+      "confidence": 95,
+      "reason": "Captured from device view; timestamp visible."
+    },
+    {
+      "type": "SENSITIVITY",
+      "value": "CONTAINS_PERSONAL_FINANCIAL_DATA",
+      "confidence": 90,
+      "action": "REDACT_BEFORE_PUBLIC_EXPORT"
+    },
+    {
+      "type": "AI_RECOGNIZER_EPHEMERAL",
+      "value": "VENMO_RECEIPT_LAYOUT_DETECTED",
+      "confidence": 88,
+      "model": "local-llm-name",
+      "expires_at": "YYYY-MM-DDThh:mm:ssZ",
+      "reason": "Detected payment ID + platform footer text."
+    }
+  ]
+}
