@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Privacy — Global AVC Systems</title>
+<style>
+:root { --max: 980px; --pad: 22px; --radius: 14px; --border: #e7e7e7; --muted:#666; }
+body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 0; color:#111; background:#fff; }
+header, main, footer { max-width: var(--max); margin: 0 auto; padding: var(--pad); }
+.pill { display:inline-block; border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size: 12px; background:#fafafa;}
+.muted { color: var(--muted); }
+nav a { margin-right: 14px; color: #222; text-decoration:none; }
+nav a:hover { text-decoration:underline; }
+.card { border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+ul { margin: 10px 0 0 18px; }
+li { margin: 6px 0; }
+</style>
+</head>
+<body>
+<header>
+<div class="pill">Privacy</div>
+<h1 style="margin:12px 0 10px;">Privacy Policy</h1>
+<p class="muted">Last updated: 2026-03-02</p>
+<nav>
+<a href="./index.html">Home</a>
+<a href="./downloads.html">Downloads</a>
+<a href="./refunds.html">Refunds</a>
+<a href="./terms.html">Terms</a>
+</nav>
+</header>
+
+<main class="card">
+<h2 style="margin-top:0;">What we collect</h2>
+<ul>
+<li>Contact information you provide (email, name) when you email us or purchase.</li>
+<li>Transaction information handled by Stripe (we do not store full payment card details).</li>
+<li>Basic site analytics may be collected by GitHub Pages and/or embedded analytics tools (if enabled).</li>
+</ul>
+
+<h2>How we use information</h2>
+<ul>
+<li>To deliver products and services you purchase.</li>
+<li>To communicate about delivery, scheduling, and support.</li>
+<li>To improve documentation and offerings.</li>
+</ul>
+
+<h2>Data sharing</h2>
+<ul>
+<li>Payments are processed by Stripe. Review Stripe’s policies in your Stripe checkout.</li>
+<li>We do not sell personal data.</li>
+</ul>
+
+<h2>Contact</h2>
+<p class="muted">Email <a href="mailto:avancura@globalavcsystems.com">avancura@globalavcsystems.com</a>.</p>
+</main>
+
+<footer class="muted">
+<div>© <span id="y"></span> Global AVC Systems.</div>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</footer>
+</body>
+</html>
