@@ -1,0 +1,1 @@
+export function ReservationDesk(){return <main><h1>Reservation Desk</h1><p>The House maintains a limited number of suites each month.</p><form><input placeholder='Organization'/><button>Submit Reservation Inquiry</button></form></main>;}
