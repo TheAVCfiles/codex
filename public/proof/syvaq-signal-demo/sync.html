@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Syvaq Signal — Secure Sync</title>
+<style>
+  :root {
+    --bg: #040612;
+    --panel: rgba(12, 17, 37, 0.9);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text: #f1f4ff;
+    --muted: #96a0c4;
+    --accent: #8b7cff;
+    --success: #4ce0b3;
+    --danger: #ff7ea8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top, rgba(139, 124, 255, 0.18), transparent 30%),
+      linear-gradient(180deg, #0a0f24, var(--bg));
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .card {
+    width: min(28rem, 100%);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.45);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 5vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0.9rem 0 0;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  ul {
+    margin: 1rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .status {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+  }
+
+  .status strong {
+    color: var(--text);
+  }
+
+  .ready {
+    margin-top: 0.8rem;
+    color: var(--success);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .button {
+    width: 100%;
+    margin-top: 1.4rem;
+    border: 0;
+    border-radius: 1rem;
+    padding: 0.95rem 1.15rem;
+    background: linear-gradient(135deg, var(--accent), #6ce6d6);
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1rem 2.5rem rgba(99, 102, 241, 0.25);
+  }
+
+  .locked {
+    margin-top: 0.75rem;
+    color: var(--danger);
+    font-size: 0.88rem;
+  }
+</style>
+</head>
+<body>
+<main class="card" id="sync-card">
+  <h1>Secure Sync Layer</h1>
+  <p>Secure Sync enables controlled escalation pathways:</p>
+  <ul>
+    <li>Verified contact routing</li>
+    <li>Device-bound signal integrity</li>
+    <li>Real-time escalation relay</li>
+  </ul>
+
+  <div class="status"><strong>Status:</strong> Locked (Protected deployment required)</div>
+  <div class="ready">System Ready — Awaiting Deployment</div>
+
+  <button class="button" type="button">Request Full Activation</button>
+  <div class="locked">Local build remains bounded to demonstration mode.</div>
+</main>
+
+<script>
+  const current = `${navigator.userAgent}:${screen.width}x${screen.height}`;
+  const stored = localStorage.getItem("syvaq_device");
+
+  if (stored && current !== stored) {
+    document.getElementById("sync-card").innerHTML = "<h1>Unauthorized environment</h1><p>This local build is bound to its original demonstration context.</p>";
+  }
+</script>
+</body>
+</html>

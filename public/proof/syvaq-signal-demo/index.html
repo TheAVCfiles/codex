@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Syvaq Signal — Local Instance</title>
+<style>
+  :root {
+    --bg-start: #17173a;
+    --bg-end: #090b1a;
+    --card: rgba(20, 24, 50, 0.78);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text: #f8f7ff;
+    --muted: rgba(248, 247, 255, 0.72);
+    --accent: #8b7cff;
+    --accent-soft: #b9b2ff;
+    --success: #5ef0c2;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top, rgba(145, 124, 255, 0.24), transparent 30%),
+      radial-gradient(circle at 20% 20%, rgba(94, 240, 194, 0.14), transparent 25%),
+      linear-gradient(180deg, var(--bg-start), var(--bg-end));
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .card {
+    width: min(28rem, 100%);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.38);
+    text-align: center;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--accent-soft);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 6vw, 2.35rem);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .subtitle {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  .status-panel {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+  }
+
+  .status-grid {
+    display: grid;
+    gap: 0.55rem;
+    font-size: 0.95rem;
+  }
+
+  .status-grid strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .status-grid span {
+    color: var(--muted);
+  }
+
+  .button {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0.95rem 1.25rem;
+    border: 0;
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), #6ce6d6);
+    box-shadow: 0 1rem 2.5rem rgba(114, 115, 255, 0.34);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .button:hover,
+  .button:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 1.2rem 2.8rem rgba(114, 115, 255, 0.42);
+  }
+
+  .button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 3px;
+  }
+
+  .foot {
+    margin-top: 1.25rem;
+    color: rgba(248, 247, 255, 0.45);
+    font-size: 0.76rem;
+  }
+
+  .confidence {
+    margin-top: 1rem;
+    color: var(--success);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<main class="card">
+  <p class="eyebrow">Phase I Proof Layer</p>
+  <h1>Syvaq Signal</h1>
+  <p class="subtitle">Confidence, carried with you.</p>
+
+  <section class="status-panel" aria-label="Local instance summary">
+    <div class="status-grid">
+      <div><strong>Mode:</strong> <span>Local secure instance</span></div>
+      <div><strong>Execution:</strong> <span>Offline demonstration</span></div>
+      <div><strong>Sync:</strong> <span>Protected deployment required</span></div>
+    </div>
+  </section>
+
+  <div class="confidence">System Confidence: 97.2%</div>
+
+  <button class="button" type="button" onclick="startExperience()">Initialize Secure Signal</button>
+
+  <p class="foot">Secure local demo · No installation required · No live transmission</p>
+</main>
+
+<script>
+  const startExperience = () => {
+    localStorage.setItem("syvaq_session", "active");
+    window.location.href = "signal.html";
+  };
+</script>
+</body>
+</html>
