@@ -1,0 +1,30 @@
+name: Deal Room Build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - data/musings.json
+      - scripts/build_deal_rooms.py
+      - scripts/build_witness.py
+
+permissions:
+  contents: write
+
+jobs:
+  build-deal-rooms:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python scripts/build_deal_rooms.py
+      - run: python scripts/build_witness.py
+      - name: Commit rooms and witness pages
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add site/rooms site/witness data/witness_tokens.json
+          git diff --cached --quiet || git commit -m "Rebuild deal rooms and witness window"
+          git push

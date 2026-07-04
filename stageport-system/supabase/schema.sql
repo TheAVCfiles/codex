@@ -1,0 +1,2 @@
+-- Future upgrade path: optional Supabase schema placeholder.
+-- Current scaffold is GitHub-only and does not require runtime database services.
