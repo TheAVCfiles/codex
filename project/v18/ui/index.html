@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Private Operating Environment</title>
+  <style>
+    :root {
+      --bg: #050507;
+      --panel: #12131a;
+      --text: #f5f5f7;
+      --muted: #9ca3af;
+      --accent: #f5a623;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(circle at 20% -20%, #1a1c26 0%, var(--bg) 45%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .container { max-width: 940px; margin: 0 auto; padding: 24px 16px 48px; }
+    .hero, .panel {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(18, 19, 26, 0.9);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+    .badge {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    h1 { margin: 6px 0 8px; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+    .muted { color: var(--muted); margin-top: 0; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .primary { background: var(--accent); color: #111; }
+    .secondary { background: #1f2937; color: #fff; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
+    textarea, input, select {
+      width: 100%;
+      background: #0e1015;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 8px;
+    }
+    .list { display: grid; gap: 8px; margin-top: 12px; }
+    .item { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div class="badge">Phase I Install</div>
+      <h1 id="companyName">Private Operating Environment</h1>
+      <p id="tagline" class="muted">Local-first decision workspace.</p>
+      <div class="actions">
+        <button class="primary" id="saveSession">Save session</button>
+        <button class="secondary" id="exportSession">Export JSON</button>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Intake</h2>
+        <label for="userInput">Current decision point</label>
+        <textarea id="userInput" rows="4" placeholder="Describe the issue, urgency, and desired outcome."></textarea>
+        <button class="primary" id="analyze">Generate direction</button>
+        <div id="response" class="list"></div>
+      </article>
+
+      <article class="panel">
+        <h2>Decision Ledger</h2>
+        <label for="riskBand">Risk band</label>
+        <select id="riskBand">
+          <option value="recovery">Recovery (existing failure)</option>
+          <option value="prevention">Prevention (risk-aware)</option>
+          <option value="institutional">Institutional (stakeholder-visible)</option>
+        </select>
+        <label for="note">Operator note</label>
+        <input id="note" type="text" placeholder="What must happen in the next 7 days?" />
+        <div id="ledger" class="list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+const state = {
+  sessions: JSON.parse(localStorage.getItem("v18_sessions") || "[]"),
+  decisions: JSON.parse(localStorage.getItem("v18_decisions") || "[]"),
+};
+
+const pricingByRisk = {
+  recovery: { price: "$5,800", path: "Phase I+" },
+  prevention: { price: "$3,000", path: "Phase I Install" },
+  institutional: { price: "$12,500+", path: "Institutional Pilot" },
+};
+
+function nowIso() {
+  return new Date().toISOString();
+}
+
+function scoreInput(text) {
+  const normalized = text.toLowerCase();
+  const urgencyWords = ["stuck", "blocked", "failed", "lost", "urgent", "deadline"];
+  const certaintyWords = ["specific", "timeline", "owner", "metric", "budget"];
+
+  const urgency = urgencyWords.filter((w) => normalized.includes(w)).length;
+  const certainty = certaintyWords.filter((w) => normalized.includes(w)).length;
+
+  const score = Math.min(95, 60 + urgency * 6 + certainty * 4);
+  const confidence = Math.min(96, 68 + certainty * 5);
+  const recommendation = score >= 80
+    ? "Proceed with defined scope and handoff checkpoints."
+    : "Run clarification pass before build commitment.";
+
+  return { score, confidence, recommendation };
+}
+
+function renderResponses() {
+  const box = document.getElementById("response");
+  box.innerHTML = "";
+  [...state.sessions].reverse().slice(0, 5).forEach((session) => {
+    const item = document.createElement("div");
+    item.className = "item";
+    item.innerHTML = `<strong>${session.score}/100</strong> · Confidence ${session.confidence}%<br>${session.recommendation}`;
+    box.appendChild(item);
+  });
+}
+
+function renderLedger() {
+  const box = document.getElementById("ledger");
+  box.innerHTML = "";
+  [...state.decisions].reverse().slice(0, 6).forEach((entry) => {
+    const item = document.createElement("div");
+    item.className = "item";
+    item.innerHTML = `<strong>${entry.path}</strong> (${entry.price})<br>${entry.note}<br><span style="opacity:.7">${entry.timestamp}</span>`;
+    box.appendChild(item);
+  });
+}
+
+async function applyConfig() {
+  const [systemRes, brandRes, productRes] = await Promise.all([
+    fetch("../system.json"),
+    fetch("../config/brand.json"),
+    fetch("../config/product.json"),
+  ]);
+
+  const system = await systemRes.json();
+  const brand = await brandRes.json();
+  const product = await productRes.json();
+
+  document.documentElement.style.setProperty("--accent", brand.primary_color || "#f5a623");
+  document.getElementById("companyName").textContent = `${system.client_name} — ${product.product_name}`;
+  document.getElementById("tagline").textContent = product.local_mode_line;
+}
+
+function bindEvents() {
+  document.getElementById("analyze").addEventListener("click", () => {
+    const input = document.getElementById("userInput").value.trim();
+    if (!input) return;
+
+    const result = scoreInput(input);
+    state.sessions.push({ ...result, input, timestamp: nowIso() });
+    localStorage.setItem("v18_sessions", JSON.stringify(state.sessions));
+    renderResponses();
+  });
+
+  document.getElementById("saveSession").addEventListener("click", () => {
+    const band = document.getElementById("riskBand").value;
+    const note = document.getElementById("note").value.trim();
+    if (!note) return;
+
+    const pricing = pricingByRisk[band];
+    state.decisions.push({
+      riskBand: band,
+      path: pricing.path,
+      price: pricing.price,
+      note,
+      timestamp: nowIso(),
+    });
+    localStorage.setItem("v18_decisions", JSON.stringify(state.decisions));
+    renderLedger();
+  });
+
+  document.getElementById("exportSession").addEventListener("click", () => {
+    const payload = {
+      exported_at: nowIso(),
+      sessions: state.sessions,
+      decisions: state.decisions,
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "v18-session-export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+applyConfig();
+bindEvents();
+renderResponses();
+renderLedger();
+
+  </script>
+</body>
+</html>

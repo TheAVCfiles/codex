@@ -1,0 +1,6 @@
+{
+  "voice": "direct",
+  "style": "minimal",
+  "energy": "high-trust",
+  "forbidden_words": ["myth", "ritual", "poetic"]
+}

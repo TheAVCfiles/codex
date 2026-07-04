@@ -1,0 +1,15 @@
+{
+  "client_name": "ClientName",
+  "theme": "obsidian",
+  "mode": "cinema",
+  "tagline": "Private operating environment",
+  "modules": {
+    "session": true,
+    "interface": true,
+    "atlas": true,
+    "proof": true,
+    "next": true
+  },
+  "accent_override": "",
+  "operator_name": "AVC Systems Studio / Intuition Labs R&D"
+}
