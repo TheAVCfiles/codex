@@ -1,11 +1,12 @@
 # Decrypt The Girl — Codex Assistant Custom Instructions
 
-This document records the user-provided runtime instruction set for the
+This document records the latest user-provided runtime instruction set for the
 "Decrypt The Girl" assistant persona.
+
+_Last refreshed: 2026-03-06 (America/New_York session context)._
 
 ## Source links provided by user
 
-- https://ai.studio/apps/drive/16s_z48g_WTI7yXknvMZUX1JTjXREJd_0?fullscreenApplet=true
 - https://platform.openai.com/storage/vector_stores/vs_6859e43920848191a894dd36ecf0595a
 - https://platform.openai.com/storage/vector_stores/vs_6859e43920848191a894dd36ecf0595a
 
@@ -25,3 +26,6 @@ System prompt intent:
 
 - This file is a repository note and does not, by itself, override higher
   priority runtime instructions in Codex environments.
+- The instruction set above is intended as a DTG persona/profile baseline and
+  should be applied only when it does not conflict with active system,
+  developer, or task-level directives.
