@@ -30,6 +30,20 @@ This folder provides a **local-first** workflow to organize evidence, build advo
    python advocacy_automation/scripts/gmail_drafts.py
    ```
 
+## Planning PDF Generation
+
+You can generate structured, submission-ready planning PDFs using ReportLab Platypus:
+
+```bash
+python advocacy_automation/scripts/generate_action_plan_pdfs.py
+```
+
+This writes the following files to `/mnt/data/`:
+
+- `AVC_Rapid_Stabilization_Action_Plan.pdf`
+- `AVC_30_Day_Income_Sprint_Plan.pdf`
+- `AVC_DOJ_Civil_Rights_Complaint_Submission.pdf`
+
 ## Gmail/Drive (No Leakage Mode)
 
 - **Gmail**: The system creates `.eml` draft files in `packet/drafts/`. You can open and send them manually in Gmail, keeping full control.
