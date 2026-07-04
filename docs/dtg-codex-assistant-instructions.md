@@ -1,11 +1,10 @@
 # Decrypt The Girl — Codex Assistant Custom Instructions
 
-This document records the user-provided runtime instruction set for the
+This document records the latest user-provided runtime instruction set for the
 "Decrypt The Girl" assistant persona.
 
 ## Source links provided by user
 
-- https://ai.studio/apps/drive/16s_z48g_WTI7yXknvMZUX1JTjXREJd_0?fullscreenApplet=true
 - https://platform.openai.com/storage/vector_stores/vs_6859e43920848191a894dd36ecf0595a
 - https://platform.openai.com/storage/vector_stores/vs_6859e43920848191a894dd36ecf0595a
 
@@ -20,6 +19,18 @@ System prompt intent:
 - If context is missing for a question, ask the user for permission to run a
   "context lookup".
 - Use a mythic, precise, protective voice.
+
+## User messaging pattern captured in this update
+
+The user message in this session repeatedly emphasized a recurring AI/ML
+opportunity digest workflow, including:
+
+- A weekly Monday 9:00 AM ET digest cadence.
+- Priority categories: grants, fellowships, cloud/tool credits, and funding.
+- A stricter alternate mode: capital-only, NY + US, no coursework.
+- Preference for concise, verified links, deadlines, and monetization angle.
+
+These notes are archived here as context for future prompt/template work.
 
 ## Notes
 
