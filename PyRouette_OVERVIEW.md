@@ -39,3 +39,70 @@ PyRouette is **not**:
 PyRouette **is**:
 
 - a domain-specific compiler for embodied choreography.
+
+## Initialization Invariant
+
+PyRouette can treat foundational movement primitives as initialization states for a choreography runtime. In the current framing, the root primitive is:
+
+```text
+INIT_STATE = TENDU
+```
+
+From that invariant, higher-order phrases are modeled as constraint-preserving expansions:
+
+```text
+TENDU -> JETE -> PASSE -> DEVELOPPE -> ARABESQUE -> TURN
+```
+
+The modeling principle is that each node extends the geometry and timing envelope of the root state rather than introducing unrelated mechanics.
+
+## Staged Learning / Compilation Analogy
+
+Classical training phases map cleanly onto staged compilation:
+
+```text
+BARRE -> CENTER -> ACROSS THE FLOOR -> VARIATION
+```
+
+```text
+LEXING -> PARSING -> COMPILATION -> EXECUTION
+```
+
+This gives PyRouette a pedagogically aligned runtime model where technical drills and computational passes share the same architecture.
+
+## Runtime Pipeline (Video to Score)
+
+A practical end-to-end pass can be implemented as:
+
+```text
+VIDEO
+ -> POSE TRACKING
+ -> MOVEMENT DETECTION
+ -> ELEMENT TIMELINE
+ -> PYROUETTE SCORER
+ -> REPORT
+```
+
+### Minimum viable prototype
+
+1. Extract pose landmarks from source video.
+2. Derive geometric features (joint angles, extension, rotation velocity, center of mass trace).
+3. Detect candidate primitives (`TENDU`, `JETE`, `ARABESQUE`, `TURN`) with threshold rules.
+4. Convert detected segments into element ledger entries.
+5. Apply scoring math:
+
+```text
+Raw_e = BV x DD x B
+Score_e = Raw_e + GOE
+TOTAL = TES + PCS - Deductions + Bonuses
+```
+
+## Why this architecture matters
+
+This approach allows choreography to be represented as:
+
+- a finite state machine (movement states + transitions)
+- a geometric transform tree (root primitive + expansions)
+- a transparent scoring ledger (TES/PCS decomposition)
+
+In short: PyRouette functions as a motion interpreter where a small seed state can expand into full phrase structure, timing, and score artifacts.
