@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>V20 Offline Operator Builder</title>
+  <style>
+    :root {
+      --bg: #050507;
+      --panel: #0f1014;
+      --text: #f5f3f7;
+      --muted: #8a8791;
+      --accent: #d6c3a3;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top right, #1a141f 0%, var(--bg) 45%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    h1 { margin: 0.25rem 0 0.75rem; font-size: 1.7rem; }
+    .sub { color: var(--muted); margin-bottom: 1rem; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    @media (min-width: 760px) {
+      .grid.two { grid-template-columns: repeat(2, 1fr); }
+      .grid.three { grid-template-columns: repeat(3, 1fr); }
+    }
+    label { font-size: 0.78rem; color: var(--muted); display: block; margin-bottom: 0.3rem; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #171920;
+      color: var(--text);
+      border-radius: 0.65rem;
+      padding: 0.62rem 0.7rem;
+      font: inherit;
+      margin-bottom: 0.55rem;
+    }
+    textarea { min-height: 4.7rem; }
+    .actions {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: 1fr;
+      margin-top: 0.6rem;
+    }
+    @media (min-width: 640px) { .actions { grid-template-columns: repeat(3, 1fr); } }
+    button {
+      border: 0;
+      padding: 0.75rem;
+      border-radius: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary { background: var(--accent); color: #111; }
+    .ghost { background: #23252d; color: var(--text); }
+    .warn { background: #54361f; color: #ffd8b5; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 0.6rem 0.7rem;
+      background: rgba(214, 195, 163, 0.08);
+      color: #e4ddd3;
+      border-radius: 0.45rem;
+      font-size: 0.88rem;
+    }
+    code { font-size: 0.82rem; }
+    #status { margin-top: 0.4rem; color: #d8cfbf; font-size: 0.9rem; min-height: 1.3rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>V20 Offline Operator Builder</h1>
+    <p class="sub">Single-file, no CDN, no dependencies. Generates Phase I package files for manual folder zip on iPhone/iPad.</p>
+
+    <div class="card">
+      <h2>Identity</h2>
+      <div class="grid two">
+        <div>
+          <label for="client_name">Client Name</label>
+          <input id="client_name" value="CLIENT NAME" />
+        </div>
+        <div>
+          <label for="theme_label">Theme Label</label>
+          <input id="theme_label" value="Obsidian" />
+        </div>
+        <div>
+          <label for="accent">Accent Color</label>
+          <input id="accent" value="#d6c3a3" />
+        </div>
+        <div>
+          <label for="industry">Industry</label>
+          <input id="industry" value="Founder Systems" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Language Mirror</h2>
+      <div class="grid two">
+        <div><label for="noun_client">Client Noun</label><input id="noun_client" value="members" /></div>
+        <div><label for="noun_operator">Operator Noun</label><input id="noun_operator" value="operators" /></div>
+        <div><label for="noun_product">System Noun</label><input id="noun_product" value="studio" /></div>
+        <div><label for="noun_location">Location Noun</label><input id="noun_location" value="locations" /></div>
+        <div><label for="verb_action">Action Verb</label><input id="verb_action" value="activate" /></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Decision Layer</h2>
+      <div class="grid two">
+        <div><label for="score">Score (0-100)</label><input id="score" type="number" min="0" max="100" value="84" /></div>
+        <div><label for="confidence">Confidence (0-100)</label><input id="confidence" type="number" min="0" max="100" value="78" /></div>
+      </div>
+      <label for="reason">Reasoning Fragment</label>
+      <input id="reason" value="Strong demand signal, weak positioning clarity." />
+      <div class="grid three">
+        <div><label for="risk1">Top Risk 1</label><input id="risk1" value="Inconsistent offer framing" /></div>
+        <div><label for="risk2">Top Risk 2</label><input id="risk2" value="Low systems readiness" /></div>
+        <div><label for="risk3">Top Risk 3</label><input id="risk3" value="No live routing path yet" /></div>
+      </div>
+      <label for="next_action">Next Action</label>
+      <input id="next_action" value="Approve activation scope." />
+    </div>
+
+    <div class="card">
+      <h2>Offer</h2>
+      <div class="grid two">
+        <div>
+          <label for="offer_name">Offer Tier</label>
+          <select id="offer_name">
+            <option value="Phase I Review Surface">Phase I Review Surface</option>
+            <option value="Phase I Install" selected>Phase I Install</option>
+            <option value="Phase I Executive Install">Phase I Executive Install</option>
+          </select>
+        </div>
+        <div>
+          <label for="price_usd">Price USD</label>
+          <input id="price_usd" type="number" value="5800" />
+        </div>
+      </div>
+      <label for="delivery_note">Delivery Note</label>
+      <input id="delivery_note" value="Open START_HERE.html first." />
+      <label for="activation_note">Activation Note</label>
+      <input id="activation_note" value="Live deployment is unavailable in contained mode." />
+    </div>
+
+    <div class="card">
+      <div class="note">
+        Browser-only offline mode cannot create a true .zip without an external library. This builder exports all package files directly.
+        On iPhone/iPad: save files into one folder named <code>CLIENT_PRIVATE_ENV</code> then use Files app → <code>Compress</code>.
+      </div>
+      <div class="actions">
+        <button class="primary" id="download_all">Download All Files</button>
+        <button class="ghost" id="preview_manifest">Preview File Manifest</button>
+        <button class="warn" id="reset_defaults">Reset Defaults</button>
+      </div>
+      <div id="status"></div>
+      <pre id="manifest" style="display:none; white-space:pre-wrap; color:#dfd9cb; background:#171920; border:1px solid var(--border); border-radius:0.7rem; padding:0.8rem;"></pre>
+    </div>
+  </div>
+
+  <script>
+    const defaults = {
+      client_name: "CLIENT NAME", theme_label: "Obsidian", accent: "#d6c3a3", industry: "Founder Systems",
+      noun_client: "members", noun_operator: "operators", noun_product: "studio", noun_location: "locations", verb_action: "activate",
+      score: "84", confidence: "78", reason: "Strong demand signal, weak positioning clarity.",
+      risk1: "Inconsistent offer framing", risk2: "Low systems readiness", risk3: "No live routing path yet",
+      next_action: "Approve activation scope.", offer_name: "Phase I Install", price_usd: "5800",
+      delivery_note: "Open START_HERE.html first.", activation_note: "Live deployment is unavailable in contained mode."
+    };
+
+    const byId = (id) => document.getElementById(id);
+    const safe = (v) => String(v).replace(/[&<>"']/g, (ch) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    const slug = (value) => String(value || "CLIENT").trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "client";
+
+    function collect() {
+      const v = {};
+      Object.keys(defaults).forEach((key) => { v[key] = byId(key).value.trim(); });
+      return v;
+    }
+
+    function buildFiles(v) {
+      const buildIso = new Date().toISOString();
+      const brand = {
+        client_name: v.client_name,
+        client_key: slug(v.client_name),
+        theme_label: v.theme_label,
+        accent: v.accent,
+        bg: "#050507",
+        panel: "#0f1014",
+        text: "#f5f3f7",
+        muted: "#8a8791",
+        industry: v.industry,
+        language_mirror: {
+          client_noun: v.noun_client,
+          operator_noun: v.noun_operator,
+          product_noun: v.noun_product,
+          location_noun: v.noun_location,
+          action_verb: v.verb_action
+        }
+      };
+
+      const tone = {
+        idle: "Session unavailable",
+        active_title: "Executive Review Active",
+        active_sub: "Contained runtime active. No live routing enabled.",
+        lock_title: "Activation Required",
+        lock_sub: v.activation_note
+      };
+
+      const product = {
+        offer_name: v.offer_name,
+        price_usd: Number(v.price_usd || 0),
+        tagline: "Phase I proves behavior. Phase II activates infrastructure.",
+        delivery_note: v.delivery_note,
+        next_action: v.next_action
+      };
+
+      const memory = {
+        score: Number(v.score || 0),
+        confidence: Number(v.confidence || 0),
+        reason: v.reason,
+        top_risks: [v.risk1, v.risk2, v.risk3],
+        best_idea_this_week: "Founder-safe contained review surface",
+        last_build: buildIso
+      };
+
+      const executiveSummary = [
+        "Executive Summary",
+        "",
+        `Client: ${v.client_name}`,
+        `Offer: ${v.offer_name}`,
+        `Score: ${v.score}`,
+        `Confidence: ${v.confidence}%`,
+        "",
+        "Reason:",
+        v.reason,
+        "",
+        "Top Risks:",
+        `1. ${v.risk1}`,
+        `2. ${v.risk2}`,
+        `3. ${v.risk3}`,
+        "",
+        "Next Action:",
+        v.next_action
+      ].join("\n");
+
+      const timeline = {
+        generated_at: buildIso,
+        input: {
+          client_name: v.client_name,
+          offer_name: v.offer_name
+        },
+        priority: v.next_action,
+        confidence: Number(v.confidence || 0),
+        next_action: v.next_action,
+        timestamp: buildIso
+      };
+
+      const status = [
+        "STATUS: PHASE I COMPLETE",
+        "SYSTEM: behavior verified",
+        "NEXT: activation required"
+      ].join("\n");
+
+      const blackCard = [
+        `Evaluation ceiling reached for ${v.noun_client}.`,
+        `${v.verb_action.charAt(0).toUpperCase() + v.verb_action.slice(1)} required to continue live routing.`
+      ].join("\n");
+
+      const startHereHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(v.client_name)} · Start Here</title><style>body{margin:0;background:#050507;color:#f5f3f7;font-family:-apple-system,system-ui;padding:24px;display:flex;align-items:center;justify-content:center;min-height:100vh}.card{background:#0f1014;border-radius:16px;padding:24px;max-width:680px;border:1px solid rgba(255,255,255,.1)}a{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:10px;background:${safe(v.accent)};color:#111;text-decoration:none;font-weight:700}</style></head><body><div class="card"><h1>${safe(v.client_name)}</h1><p>${safe(tone.active_sub)}</p><a href="ui/index.html">Open Operating Layer</a></div></body></html>`;
+
+      const indexHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(v.client_name)} · Phase I</title><link rel="stylesheet" href="theme.css"></head><body><main class="shell"><section class="card"><span class="badge">${safe(v.theme_label)}</span><h1>${safe(v.client_name)}</h1><p>${safe(tone.idle)}</p><p><strong>Offer:</strong> ${safe(v.offer_name)} · $${safe(v.price_usd)}</p><a class="button" href="executive_review.html">Open Executive Review</a><div class="lock"><strong>${safe(tone.lock_title)}</strong><p>${safe(tone.lock_sub)}</p></div></section></main></body></html>`;
+
+      const executiveHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(v.client_name)} · Executive Review</title><link rel="stylesheet" href="theme.css"></head><body><main class="shell"><section class="card"><h1>Executive Review</h1><p><strong>${safe(v.offer_name)}</strong> · $${safe(v.price_usd)}</p><p>Score: <strong>${safe(v.score)}</strong> · Confidence: <strong>${safe(v.confidence)}%</strong></p><p>${safe(v.reason)}</p><ol><li>${safe(v.risk1)}</li><li>${safe(v.risk2)}</li><li>${safe(v.risk3)}</li></ol><p><strong>Next Action:</strong> ${safe(v.next_action)}</p><p><strong>Status:</strong> Live routing unavailable in contained mode.</p><a class="button" href="handoff.html">Open Handoff</a></section></main></body></html>`;
+
+      const handoffHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(v.client_name)} · Handoff</title><link rel="stylesheet" href="theme.css"></head><body><main class="shell"><section class="card"><h1>Handoff Memo</h1><p>Delivery note: ${safe(v.delivery_note)}</p><p>System noun: ${safe(v.noun_product)} · Action: ${safe(v.verb_action)}</p><p>Next: ${safe(v.next_action)}</p><a class="button" href="../next/activate.html">Open Activation</a></section></main></body></html>`;
+
+      const activateHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(v.client_name)} · Activate</title><style>body{margin:0;background:#050507;color:#f5f3f7;font-family:-apple-system,system-ui;display:grid;place-items:center;min-height:100vh;padding:24px;text-align:center}a{display:inline-block;margin-top:14px;background:${safe(v.accent)};color:#111;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}</style></head><body><section><h1>Activation Required</h1><p>Evaluation ceiling reached.</p><p>${safe(v.next_action)}</p><a href="../ui/index.html">Return to Operating Layer</a></section></body></html>`;
+
+      const themeCss = `:root{--bg:#050507;--panel:#0f1014;--text:#f5f3f7;--muted:#8a8791;--accent:${v.accent}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,system-ui,sans-serif}.shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}.card{width:min(92vw,760px);background:var(--panel);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:24px}.badge{display:inline-block;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 10px;color:var(--muted);font-size:12px}.button{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:10px 14px;border-radius:10px;font-weight:700}.lock{margin-top:14px;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:12px}p{color:#d8d6de}`;
+
+      const files = {
+        "START_HERE.html": startHereHtml,
+        "config/brand.json": JSON.stringify(brand, null, 2),
+        "config/tone.json": JSON.stringify(tone, null, 2),
+        "config/product.json": JSON.stringify(product, null, 2),
+        "data/client_memory.json": JSON.stringify(memory, null, 2),
+        "ui/index.html": indexHtml,
+        "ui/executive_review.html": executiveHtml,
+        "ui/handoff.html": handoffHtml,
+        "ui/theme.css": themeCss,
+        "exports/executive_summary.txt": executiveSummary,
+        "exports/decision_timeline.json": JSON.stringify(timeline, null, 2),
+        "exports/handoff_memo.txt": `Client: ${v.client_name}\nOffer: ${v.offer_name}\nNext: ${v.next_action}\nMode: Contained`,
+        "proof/status.txt": status,
+        "proof/black_card_content.txt": blackCard,
+        "next/activate.html": activateHtml
+      };
+
+      return { files, buildIso };
+    }
+
+    function downloadFile(fileName, content) {
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderManifest(files) {
+      const lines = ["CLIENT_PRIVATE_ENV/"];
+      Object.keys(files).sort().forEach((path) => {
+        lines.push(`  ${path}`);
+      });
+      byId("manifest").textContent = lines.join("\n");
+    }
+
+    byId("download_all").addEventListener("click", () => {
+      const values = collect();
+      const { files } = buildFiles(values);
+      const prefix = `${slug(values.client_name)}__`;
+      Object.entries(files).forEach(([path, content], index) => {
+        setTimeout(() => downloadFile(prefix + path.replaceAll("/", "__"), content), index * 110);
+      });
+      renderManifest(files);
+      byId("status").textContent = `Generated ${Object.keys(files).length} files. Save into CLIENT_PRIVATE_ENV then compress.`;
+    });
+
+    byId("preview_manifest").addEventListener("click", () => {
+      const values = collect();
+      const { files } = buildFiles(values);
+      renderManifest(files);
+      const block = byId("manifest");
+      block.style.display = block.style.display === "none" ? "block" : "none";
+      byId("status").textContent = "Manifest preview refreshed.";
+    });
+
+    byId("reset_defaults").addEventListener("click", () => {
+      Object.entries(defaults).forEach(([key, value]) => {
+        byId(key).value = value;
+      });
+      byId("status").textContent = "Defaults restored.";
+    });
+  </script>
+</body>
+</html>
