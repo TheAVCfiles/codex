@@ -1,0 +1,15 @@
+[
+  {
+    "source_id": "dump-001",
+    "title": "GitHub-only witness rollout",
+    "content": "Launch demo this week with controlled preview and operator-safe workflow.",
+    "classification": "execution",
+    "intensity_score": 8,
+    "clarity_score": 21,
+    "market_score": 0,
+    "timeliness_score": 12,
+    "leak_risk_score": 0,
+    "release_score": 41,
+    "release_state": "private_hold"
+  }
+]
