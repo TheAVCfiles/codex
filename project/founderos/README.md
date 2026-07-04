@@ -5,10 +5,10 @@ FounderOS is a deterministic governance dashboard that tracks founder state tran
 ## Core features
 
 - Finite state machine (FSM) runtime for founder operating states
-- Role-based action gating (admin/founder/observer)
+- Authority-based action gating (role + credential + standing)
 - Multi-founder ledger isolation (`founders[founderId]` namespace)
 - SHA-256 hashing for each appended ledger entry
-- Four-lever control panel UI (`Run Engine`, `Trigger Throttle`, `Escalate`, `Reset`)
+- Governance control panel (`Run Engine`, `Trigger Throttle`, `Reset`, `Export Ledger`)
 
 ## Folder map
 
