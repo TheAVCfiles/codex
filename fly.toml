@@ -1,0 +1,39 @@
+# fly.toml app configuration file generated for pattern-scanner-api
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "pattern-scanner-api"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile.pattern_scanner"
+
+[env]
+  API_HOST = "0.0.0.0"
+  API_PORT = "8000"
+  PAYMENT_REQUIRED = "true"
+  CORS_ALLOW_ORIGINS = "*"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[deploy]
+  strategy = "rolling"
