@@ -31,6 +31,20 @@ The script centers the masthead, preserves the covenant language, and builds
 bullet lists for packet contents and corridor actions. Directories for the
 output path are created automatically.
 
+## Generating the StagePort Submission Packet PDF
+
+1. Install dependencies (if not already installed):
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Render the submission packet PDF:
+   ```bash
+   python submission_packet.py --output ./dist/StagePort_Submission_Packet.pdf
+   ```
+
+The script uses the same Unicode-capable font strategy as the other StagePort PDF
+helpers and creates parent directories for the destination automatically.
+
 ## PAS DE CHAT VAULT helper
 
 Use `pas_de_chat_vault.py` for Airtable capture + rinse workflows aligned with the
