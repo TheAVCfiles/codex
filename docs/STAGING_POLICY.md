@@ -23,6 +23,11 @@ The purpose of this system is not to make the creator cleaner. The purpose is to
 - ScoutSignals must include evidence, a plain-language explanation, recommended staging moves, and a confidence score.
 - Do not allow ScoutSignals to write raw Runoff or change canonical state. They are attention artifacts only.
 
+## Structured Weakness Accommodation (partner-agent handoff)
+- Agents must not collapse at capability boundaries. When an agent cannot perform a requested write or action, it must produce a Structured Weakness Accommodation handoff.
+- The handoff must include the required fields documented in `docs/STRUCTURED_WEAKNESS_ACCOMMODATION.md` and must be recorded in the provenance_chain for the relevant CapturePacket or artifacts.
+- The handoff directs the next agent with explicit prepared artifacts and clear `do_not_change` constraints. The next agent may execute the blocked action only after explicit human authorization.
+
 ## Preflight & write gating (strict)
 Agents must run the preflight check before any write:
 
@@ -80,6 +85,7 @@ Do not use this system to launder raw process into polish. Public artifacts must
 
 ## Operational checklist (for agents)
 - Always run repo-inspector (read-only) to gather candidate destinations and visibility before proposing any writes.
+- If the agent hits a capability boundary, produce a Structured Weakness Accommodation handoff immediately and record it in provenance.
 - Do not author any write into `codex` with raw content.
 - When in doubt, default to preserving and refusing to write to a public surface.
 - Even private-repo writes are not allowed until Phase 2 chooses the private runoff repo and defines authorized operators; Phase 1 is documentation only.
