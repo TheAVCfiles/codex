@@ -15,6 +15,14 @@ The purpose of this system is not to make the creator cleaner. The purpose is to
 - Staging is non-destructive: move → relabel → archive → supersede → link.
 - Never: delete → overwrite → flatten → regenerate raw sources.
 
+## Talent Scout / Applause Layer
+- The system must not merely reduce noise. It must also detect and surface high-value buried work.
+- During staging, agents should identify artifacts that appear unusually innovative, expressive, technically useful, commercially promising, architecturally reusable, or conceptually original.
+- These findings create a ScoutSignal (ApplauseEvent) that routes attention to human reviewers and appears in an Applause Card in the staging dashboard.
+- A ScoutSignal does NOT promote the artifact to Canon. It signals: "This deserves human review with elevated attention."
+- ScoutSignals must include evidence, a plain-language explanation, recommended staging moves, and a confidence score.
+- Do not allow ScoutSignals to write raw Runoff or change canonical state. They are attention artifacts only.
+
 ## Preflight & write gating (strict)
 Agents must run the preflight check before any write:
 
