@@ -33,15 +33,22 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.8.1
+          run_install: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
           
       - name: Install dependencies
         run: |
-          npm install -g zx
+          pnpm add --global zx
           # Install any additional dependencies if needed
           
       - name: Configure git
@@ -288,6 +295,13 @@ jobs:
       - name: Summary
         if: always()
         run: |
+          if [[ "${{ job.status }}" != "success" ]]; then
+            echo "## ❌ Ingestion Workflow Failed"
+            echo ""
+            echo "The ingestion pipeline did not complete successfully. Review the failed step above; empty outputs must not be interpreted as no new data."
+            exit 0
+          fi
+
           echo "## 🎉 Ingestion Workflow Complete"
           echo ""
           echo "**Results:**"
